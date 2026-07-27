@@ -1,0 +1,4 @@
+GitHub Pages deployment trigger
+Repository: mslade50/gpt_coach
+Triggered: 2026-07-27
+Purpose: cause the Pages workflow to run after GitHub Pages was enabled.

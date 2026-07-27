@@ -2,24 +2,25 @@ window.EXERCISES = window.EXERCISES || [];
 window.EXERCISES.push(...[
   {
     "id": "trap-bar-deadlift",
-    "name": "Trap-Bar Deadlift",
+    "name": "Straight-Bar Deadlift",
     "aliases": [
-      "hex bar deadlift"
+      "conventional deadlift",
+      "barbell deadlift"
     ],
     "category": "Strength",
     "block": "Strength",
     "order": 25,
     "dosage": "Warm-ups, then 3 × 3 at 80–85% or RPE 7–8; 3 min rest",
-    "equipment": "Trap bar, plates, collars",
+    "equipment": "Straight barbell, plates, collars",
     "purpose": "Maintain high-force lower-body strength with controlled fatigue after sprinting.",
     "steps": [
-      "Stand centered in the bar with feet around hip width and brace before gripping.",
-      "Set the ribs over the pelvis, push the floor away and keep the bar traveling vertically.",
-      "Finish tall with hips and knees extended, then lower under control."
+      "Set the bar over the midfoot with feet around hip width, then hinge down and take a secure grip.",
+      "Brace before the pull, keep the bar close, and push the floor away while the shoulders and hips rise together.",
+      "Finish tall without leaning back, then return the bar under control while keeping it close to the legs."
     ],
-    "cue": "Brace, then push the floor away.",
-    "avoid": "Jerking the bar, knees collapsing, overextending at lockout or grinding reps.",
-    "videoQuery": "Juggernaut Training Systems trap bar deadlift technique",
+    "cue": "Brace, keep it close, push the floor away.",
+    "avoid": "Jerking the bar, letting it drift forward, hips shooting up first, overextending at lockout or grinding reps.",
+    "videoQuery": "Juggernaut Training Systems conventional deadlift technique",
     "intensity": "Heavy",
     "monday": true
   },

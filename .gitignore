@@ -1,0 +1,11 @@
+# Local previews and delivery archives
+dashboard-desktop.png
+dashboard-mobile.png
+*.zip
+*.bundle
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

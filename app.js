@@ -2,7 +2,10 @@
   "use strict";
 
   const exercises = Array.isArray(window.EXERCISES) ? window.EXERCISES : [];
+  const weeklyPlans = Array.isArray(window.WEEK_PLANS) ? window.WEEK_PLANS : [];
   const primaryExercises = exercises.filter((exercise) => exercise.order <= 30);
+  const programStart = new Date(2026, 6, 27);
+  const msPerDay = 24 * 60 * 60 * 1000;
 
   const storageGet = (key, fallback = "[]") => {
     try { return window.localStorage.getItem(key) || fallback; }
@@ -13,12 +16,29 @@
     catch { /* The dashboard still works when storage is disabled. */ }
   };
 
+  function startOfLocalDay(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
+  function getAutoProgramWeek(now = new Date()) {
+    const today = startOfLocalDay(now);
+    const elapsedDays = Math.floor((today - programStart) / msPerDay);
+    let week = Math.floor(Math.max(elapsedDays, 0) / 7) + 1;
+
+    // Saturday night preview: show the next planned week after 6:00 PM local time.
+    if (now.getDay() === 6 && now.getHours() >= 18) week += 1;
+
+    if (!weeklyPlans.length) return 1;
+    return Math.min(Math.max(week, 1), weeklyPlans.length);
+  }
+
   const state = {
     category: "All",
     query: "",
     favoritesOnly: false,
     favorites: new Set(JSON.parse(storageGet("hybrid400-favorites"))),
-    completed: new Set(JSON.parse(storageGet("hybrid400-completed-w1d1")))
+    completed: new Set(JSON.parse(storageGet("hybrid400-completed-w1d1"))),
+    displayedWeek: getAutoProgramWeek()
   };
 
   const categoryFilters = document.getElementById("categoryFilters");
@@ -31,6 +51,12 @@
   const progressText = document.getElementById("progressText");
   const progressBar = document.getElementById("progressBar");
   const resetProgress = document.getElementById("resetProgress");
+  const weekPlanMeta = document.getElementById("weekPlanMeta");
+  const weekSummary = document.getElementById("weekSummary");
+  const weekGrid = document.getElementById("weekGrid");
+  const previousWeek = document.getElementById("previousWeek");
+  const autoWeek = document.getElementById("autoWeek");
+  const nextWeek = document.getElementById("nextWeek");
   const dialog = document.getElementById("exerciseDialog");
   const dialogContent = document.getElementById("dialogContent");
   const dialogClose = document.getElementById("dialogClose");
@@ -46,6 +72,36 @@
 
   function saveSet(key, set) {
     storageSet(key, JSON.stringify([...set]));
+  }
+
+  function weekStartDate(weekNumber) {
+    const date = new Date(programStart);
+    date.setDate(programStart.getDate() + ((weekNumber - 1) * 7));
+    return date;
+  }
+
+  function formatShortDate(date) {
+    return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).format(date);
+  }
+
+  function formatDateRange(weekNumber) {
+    const start = weekStartDate(weekNumber);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+    return `${formatShortDate(start)}–${formatShortDate(end)}`;
+  }
+
+  function dayDateLabel(weekNumber, dayIndex) {
+    const date = weekStartDate(weekNumber);
+    date.setDate(date.getDate() + dayIndex);
+    return formatShortDate(date);
+  }
+
+  function dayClass(type) {
+    const normalized = String(type).toLowerCase();
+    if (normalized.includes("high")) return "is-high";
+    if (normalized.includes("recovery")) return "is-recovery";
+    return "";
   }
 
   function renderFilters() {
@@ -141,6 +197,49 @@
     progressBar.style.width = `${percent}%`;
   }
 
+  function renderWeekPlan() {
+    if (!weekGrid || !weekSummary || !weekPlanMeta || !weeklyPlans.length) return;
+
+    const plan = weeklyPlans.find((item) => item.week === state.displayedWeek) || weeklyPlans[0];
+    const autoSelectedWeek = getAutoProgramWeek();
+    const range = formatDateRange(plan.week);
+    const viewMode = plan.week === autoSelectedWeek ? "auto view" : "manual view";
+
+    weekPlanMeta.textContent = `Week ${plan.week} · ${range} · ${viewMode}. Auto-rolls Saturday after 6 PM local time.`;
+
+    weekSummary.innerHTML = `
+      <article class="week-summary-card">
+        <div>
+          <p class="eyebrow">WEEK ${escapeHtml(plan.week)}</p>
+          <h3>${escapeHtml(plan.title)}</h3>
+          <p>${escapeHtml(plan.focus)}</p>
+        </div>
+        <div class="week-note">${escapeHtml(plan.statusNote)}</div>
+      </article>
+    `;
+
+    weekGrid.innerHTML = plan.days.map((day, index) => `
+      <article class="week-day-card ${dayClass(day.type)}">
+        <div class="week-day-top">
+          <div>
+            <span class="week-day-name">${escapeHtml(day.day)}</span>
+            <span class="week-day-date">${escapeHtml(dayDateLabel(plan.week, index))}</span>
+          </div>
+          <div class="week-badges">
+            <span class="week-badge">${escapeHtml(day.type)}</span>
+            <span class="status-badge">${escapeHtml(day.status)}</span>
+          </div>
+        </div>
+        <h3>${escapeHtml(day.title)}</h3>
+        <p>${escapeHtml(day.detail)}</p>
+        <div class="week-volume"><strong>Volume:</strong> ${escapeHtml(day.volume)}</div>
+      </article>
+    `).join("");
+
+    if (previousWeek) previousWeek.disabled = plan.week <= 1;
+    if (nextWeek) nextWeek.disabled = plan.week >= weeklyPlans.length;
+  }
+
   function openExercise(exercise) {
     dialogContent.innerHTML = `
       <div class="dialog-inner">
@@ -230,6 +329,27 @@
     renderTimeline();
   });
 
+  if (previousWeek) {
+    previousWeek.addEventListener("click", () => {
+      state.displayedWeek = Math.max(1, state.displayedWeek - 1);
+      renderWeekPlan();
+    });
+  }
+
+  if (nextWeek) {
+    nextWeek.addEventListener("click", () => {
+      state.displayedWeek = Math.min(weeklyPlans.length, state.displayedWeek + 1);
+      renderWeekPlan();
+    });
+  }
+
+  if (autoWeek) {
+    autoWeek.addEventListener("click", () => {
+      state.displayedWeek = getAutoProgramWeek();
+      renderWeekPlan();
+    });
+  }
+
   dialogClose.addEventListener("click", () => dialog.close());
   dialog.addEventListener("click", (event) => {
     const rect = dialog.getBoundingClientRect();
@@ -240,4 +360,5 @@
   renderFilters();
   renderLibrary();
   renderTimeline();
+  renderWeekPlan();
 })();

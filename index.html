@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="McKinley’s Hybrid 400 exercise and drill reference library." />
-  <title>Hybrid 400 — Exercise Library</title>
+  <meta name="description" content="McKinley’s Hybrid 400 exercise, drill and weekly schedule reference." />
+  <title>Hybrid 400 — Coach Dashboard</title>
   <link rel="preconnect" href="https://www.youtube.com" />
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="schedule.css" />
 </head>
 <body>
   <a class="skip-link" href="#library">Skip to exercise library</a>
@@ -19,6 +20,7 @@
       </a>
       <div class="top-actions">
         <button class="ghost-button" id="resetProgress" type="button">Reset checklist</button>
+        <a class="ghost-button" href="#week-plan">Week plan</a>
         <a class="ghost-button" href="#safety">Stop rules</a>
       </div>
     </nav>
@@ -26,10 +28,10 @@
     <div class="hero-grid" id="top">
       <section>
         <p class="eyebrow">PROJECT: BECOME FAST</p>
-        <h1>Exercise Library</h1>
-        <p class="hero-copy">A permanent visual and written reference for every drill, jump, lift and recovery movement used in the 14-week speed-conversion block.</p>
+        <h1>Coach Dashboard</h1>
+        <p class="hero-copy">A permanent visual and written reference for the active weekly plan, current session checklist, and every drill, jump, lift and recovery movement used in the 14-week speed-conversion block.</p>
         <div class="hero-tags" aria-label="Library status">
-          <span>Week 1 seeded</span>
+          <span>Week plan added</span>
           <span>34 movements</span>
           <span>Mobile ready</span>
         </div>
@@ -61,6 +63,25 @@
       </div>
       <div class="progress-track" aria-hidden="true"><div id="progressBar"></div></div>
       <div class="timeline" id="sessionTimeline"></div>
+    </section>
+
+    <section class="week-section" id="week-plan" aria-labelledby="week-plan-heading">
+      <div class="section-heading week-heading-row">
+        <div>
+          <p class="eyebrow">CURRENT TRAINING WEEK</p>
+          <h2 id="week-plan-heading">Planned weekly schedule</h2>
+        </div>
+        <p id="weekPlanMeta" class="muted">Auto-selects the active program week.</p>
+      </div>
+
+      <div class="week-toolbar" aria-label="Week schedule controls">
+        <button class="week-nav-button" id="previousWeek" type="button">← Previous week</button>
+        <button class="week-nav-button" id="autoWeek" type="button">Auto current week</button>
+        <button class="week-nav-button" id="nextWeek" type="button">Next week →</button>
+      </div>
+
+      <div class="week-summary" id="weekSummary"></div>
+      <div class="week-grid" id="weekGrid"></div>
     </section>
 
     <section class="library-section" id="library" aria-labelledby="library-heading">
@@ -119,8 +140,8 @@
   </main>
 
   <footer>
-    <p>Hybrid 400 Exercise Library · Coaching descriptions are the source of truth; video links are visual references.</p>
-    <p>External demonstrations open as targeted YouTube searches so the library remains resilient when individual videos move or disappear.</p>
+    <p>Hybrid 400 Coach Dashboard · Coaching descriptions are the source of truth; video links are visual references.</p>
+    <p>The weekly plan view is a public, non-private schedule reference. Daily readiness decisions and the latest athlete state still govern prescriptions.</p>
   </footer>
 
   <dialog id="exerciseDialog" aria-labelledby="dialogTitle">
@@ -134,6 +155,7 @@
   <script src="data/exercises-04.js"></script>
   <script src="data/exercises-05.js"></script>
   <script src="data/exercises-06.js"></script>
+  <script src="data/week-plans.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

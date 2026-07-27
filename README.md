@@ -2,7 +2,7 @@
 
 A durable exercise and drill reference for McKinley’s 14-week speed-conversion block.
 
-## What is included now
+## Included now
 
 The initial release contains all **34 movements and contingency exercises** used in **Week 1, Day 1 — acceleration foundation + lower-body strength**:
 
@@ -15,7 +15,7 @@ The initial release contains all **34 movements and contingency exercises** used
 - Amber-day medicine-ball alternative
 - Red-day recovery isometrics and easy cycling
 
-The data structure is designed to accept every new exercise introduced later in the 14-week plan without rebuilding the interface.
+The exercise registry is split into small ordered files under `data/` so it can expand throughout the 14-week project without making one monolithic source file.
 
 ## Dashboard features
 
@@ -33,8 +33,7 @@ The data structure is designed to accept every new exercise introduced later in 
 ## Open it
 
 - **Hosted site:** `https://mslade50.github.io/gpt_coach/` after GitHub Pages is enabled; see [`DEPLOY.md`](DEPLOY.md).
-- **Immediate offline dashboard:** open [`dashboard.html`](dashboard.html). This file contains the HTML, CSS, exercise data and application logic in one file.
-- **Development version:** open `index.html` from a local static server.
+- **Local use:** open [`index.html`](index.html), or use [`dashboard.html`](dashboard.html) as an alias. All application assets are stored in this repository; video demonstrations require internet access.
 
 ## Source structure
 
@@ -42,16 +41,16 @@ The data structure is designed to accept every new exercise introduced later in 
 .github/workflows/deploy-pages.yml  # automatic GitHub Pages deployment
 index.html                          # dashboard markup
 styles.css                          # responsive visual system
-data.js                             # exercise library and coaching content
+data/exercises-01.js ... -06.js     # 34-exercise registry
 app.js                              # search, filters, shortlist, modal and checklist
-dashboard.html                      # self-contained offline build
+dashboard.html                      # convenience alias to index.html
 DEPLOY.md                           # publishing instructions
 .nojekyll                           # static-host compatibility
 ```
 
-## Add a future exercise
+## Add future exercises
 
-Add one object to `window.EXERCISES` in `data.js`, preserving these fields:
+Add a new object to the final ordered file in `data/`, or start the next numbered file. Preserve these fields:
 
 ```js
 {
@@ -73,7 +72,7 @@ Add one object to `window.EXERCISES` in `data.js`, preserving these fields:
 }
 ```
 
-After editing `data.js`, regenerate `dashboard.html` by inlining `styles.css`, `data.js` and `app.js`, or use the development version normally. A future build script can automate that step if the library grows substantially.
+Then add a new `<script>` tag in `index.html` before `app.js` only when creating a new data file.
 
 ## Coaching safeguard
 

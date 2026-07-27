@@ -1,0 +1,100 @@
+.session-heading-row .progress-label {
+  max-width: 260px;
+  margin: 0;
+  text-align: right;
+}
+
+.session-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: -8px 0 18px;
+}
+
+.session-nav-button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 9px 13px;
+  color: var(--muted);
+  background: rgba(255,255,255,0.03);
+  cursor: pointer;
+}
+
+.session-nav-button:hover,
+.session-nav-button:focus-visible {
+  color: var(--ink);
+  border-color: rgba(255,255,255,0.3);
+}
+
+.session-nav-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.session-selection-meta {
+  flex: 1 1 300px;
+  color: var(--muted);
+  font-size: 0.83rem;
+  text-align: right;
+}
+
+.session-notice {
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 177, 92, 0.24);
+  border-radius: 14px;
+  color: #d4dde4;
+  background: rgba(255, 122, 47, 0.08);
+}
+
+.session-notice[hidden] {
+  display: none;
+}
+
+.week-day-card {
+  cursor: pointer;
+  transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.week-day-card:hover,
+.week-day-card:focus-visible {
+  outline: 0;
+  transform: translateY(-3px);
+  border-color: rgba(255, 177, 92, 0.5);
+}
+
+.week-day-card.is-selected {
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 2px rgba(255, 177, 92, 0.18);
+}
+
+.week-open {
+  margin-top: 12px;
+  color: var(--accent-2);
+  font-size: 0.78rem;
+  font-weight: 820;
+}
+
+@media (max-width: 680px) {
+  .session-heading-row .progress-label,
+  .session-selection-meta {
+    text-align: left;
+  }
+
+  .session-toolbar {
+    align-items: flex-start;
+  }
+}
+
+@media print {
+  .session-toolbar,
+  .week-open {
+    display: none !important;
+  }
+
+  .session-notice {
+    color: #444;
+    background: #fff;
+  }
+}

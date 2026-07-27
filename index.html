@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="McKinley’s Hybrid 400 exercise and drill reference library." />
+  <title>Hybrid 400 — Exercise Library</title>
+  <link rel="preconnect" href="https://www.youtube.com" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#library">Skip to exercise library</a>
+
+  <header class="hero">
+    <nav class="topbar" aria-label="Primary">
+      <a class="brand" href="#top" aria-label="Hybrid 400 home">
+        <span class="brand-mark" aria-hidden="true">400</span>
+        <span>HYBRID PERFORMANCE</span>
+      </a>
+      <div class="top-actions">
+        <button class="ghost-button" id="resetProgress" type="button">Reset checklist</button>
+        <a class="ghost-button" href="#safety">Stop rules</a>
+      </div>
+    </nav>
+
+    <div class="hero-grid" id="top">
+      <section>
+        <p class="eyebrow">PROJECT: BECOME FAST</p>
+        <h1>Exercise Library</h1>
+        <p class="hero-copy">A permanent visual and written reference for every drill, jump, lift and recovery movement used in the 14-week speed-conversion block.</p>
+        <div class="hero-tags" aria-label="Library status">
+          <span>Week 1 seeded</span>
+          <span>34 movements</span>
+          <span>Mobile ready</span>
+        </div>
+      </section>
+
+      <aside class="session-card" aria-labelledby="session-title">
+        <div class="session-kicker">Current session</div>
+        <h2 id="session-title">Week 1 · Day 1</h2>
+        <p>Acceleration foundation + lower-body strength</p>
+        <dl>
+          <div><dt>Date</dt><dd>Mon, Jul 27</dd></div>
+          <div><dt>Duration</dt><dd>95–110 min</dd></div>
+          <div><dt>Sprint volume</dt><dd>160 m</dd></div>
+          <div><dt>Footwear</dt><dd>Trainers / flats</dd></div>
+        </dl>
+        <a class="primary-button" href="#session">Open session checklist</a>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section class="session-section" id="session" aria-labelledby="session-heading">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">MONDAY AT A GLANCE</p>
+          <h2 id="session-heading">Run the session in order</h2>
+        </div>
+        <p id="progressText" class="progress-label">0 of 30 primary items checked</p>
+      </div>
+      <div class="progress-track" aria-hidden="true"><div id="progressBar"></div></div>
+      <div class="timeline" id="sessionTimeline"></div>
+    </section>
+
+    <section class="library-section" id="library" aria-labelledby="library-heading">
+      <div class="section-heading library-heading-row">
+        <div>
+          <p class="eyebrow">REFERENCE LIBRARY</p>
+          <h2 id="library-heading">Know exactly what each movement is</h2>
+        </div>
+        <p class="muted">Select a card for full setup, execution, cue and error checks.</p>
+      </div>
+
+      <div class="toolbox" aria-label="Exercise filters">
+        <label class="search-wrap">
+          <span class="sr-only">Search exercises</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
+          <input id="searchInput" type="search" placeholder="Search wall march, Achilles, broad jump…" autocomplete="off" />
+        </label>
+        <div class="filter-row" id="categoryFilters" role="group" aria-label="Filter by category"></div>
+      </div>
+
+      <div class="results-row">
+        <p id="resultCount" aria-live="polite"></p>
+        <button class="text-button" id="showFavorites" type="button" aria-pressed="false">☆ Show shortlist only</button>
+      </div>
+
+      <div class="exercise-grid" id="exerciseGrid"></div>
+      <div class="empty-state" id="emptyState" hidden>
+        <h3>No movement found</h3>
+        <p>Try a body area, exercise alias or broader category.</p>
+      </div>
+    </section>
+
+    <section class="safety-section" id="safety" aria-labelledby="safety-heading">
+      <div>
+        <p class="eyebrow">NON-NEGOTIABLE</p>
+        <h2 id="safety-heading">Quality governs volume</h2>
+      </div>
+      <div class="safety-grid">
+        <article>
+          <span class="rule-number">01</span>
+          <h3>Sprint performance</h3>
+          <p>End or modify acceleration work when times deteriorate about 3–4%, projection meaningfully worsens, or two consecutive reps lose quality.</p>
+        </article>
+        <article>
+          <span class="rule-number">02</span>
+          <h3>Plyometric contacts</h3>
+          <p>Stop or regress when output drops about 5%, contacts become slow or loud, landing position deteriorates, or asymmetry appears.</p>
+        </article>
+        <article>
+          <span class="rule-number">03</span>
+          <h3>Tissue response</h3>
+          <p>Sharp, localized, worsening or gait-altering pain is not normal fatigue. Do not sprint or perform intensive jumps through it.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Hybrid 400 Exercise Library · Coaching descriptions are the source of truth; video links are visual references.</p>
+    <p>External demonstrations open as targeted YouTube searches so the library remains resilient when individual videos move or disappear.</p>
+  </footer>
+
+  <dialog id="exerciseDialog" aria-labelledby="dialogTitle">
+    <button class="dialog-close" id="dialogClose" type="button" aria-label="Close">×</button>
+    <div id="dialogContent"></div>
+  </dialog>
+
+  <script src="data/exercises-01.js"></script>
+  <script src="data/exercises-02.js"></script>
+  <script src="data/exercises-03.js"></script>
+  <script src="data/exercises-04.js"></script>
+  <script src="data/exercises-05.js"></script>
+  <script src="data/exercises-06.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -3,14 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="McKinley’s Hybrid 400 exercise, drill and weekly schedule reference." />
+  <meta name="description" content="McKinley’s Hybrid 400 exercise, drill, session and weekly schedule reference." />
   <title>Hybrid 400 — Coach Dashboard</title>
   <link rel="preconnect" href="https://www.youtube.com" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="schedule.css" />
+  <link rel="stylesheet" href="session.css" />
 </head>
 <body>
-  <a class="skip-link" href="#library">Skip to exercise library</a>
+  <a class="skip-link" href="#session">Skip to current session</a>
 
   <header class="hero">
     <nav class="topbar" aria-label="Primary">
@@ -29,23 +30,23 @@
       <section>
         <p class="eyebrow">PROJECT: BECOME FAST</p>
         <h1>Coach Dashboard</h1>
-        <p class="hero-copy">A permanent visual and written reference for the active weekly plan, current session checklist, and every drill, jump, lift and recovery movement used in the 14-week speed-conversion block.</p>
-        <div class="hero-tags" aria-label="Library status">
-          <span>Week plan added</span>
-          <span>34 movements</span>
+        <p class="hero-copy">A permanent visual and written reference for the active session, weekly plan, and every drill, jump, lift and recovery movement used in the 14-week speed-conversion block.</p>
+        <div class="hero-tags" aria-label="Dashboard status">
+          <span>Auto-selects today</span>
+          <span>Manual day selector</span>
           <span>Mobile ready</span>
         </div>
       </section>
 
       <aside class="session-card" aria-labelledby="session-title">
-        <div class="session-kicker">Current session</div>
+        <div class="session-kicker">Selected session</div>
         <h2 id="session-title">Week 1 · Day 1</h2>
-        <p>Acceleration foundation + lower-body strength</p>
+        <p id="session-name">Acceleration foundation + lower-body strength</p>
         <dl>
-          <div><dt>Date</dt><dd>Mon, Jul 27</dd></div>
-          <div><dt>Duration</dt><dd>95–110 min</dd></div>
-          <div><dt>Sprint volume</dt><dd>160 m</dd></div>
-          <div><dt>Footwear</dt><dd>Trainers / flats</dd></div>
+          <div><dt>Date</dt><dd id="session-date">Mon, Jul 27</dd></div>
+          <div><dt>Duration</dt><dd id="session-duration">95–110 min</dd></div>
+          <div><dt>Primary volume</dt><dd id="session-volume">160 m acceleration + 80 m buildups</dd></div>
+          <div><dt>Footwear</dt><dd id="session-footwear">Trainers / flats</dd></div>
         </dl>
         <a class="primary-button" href="#session">Open session checklist</a>
       </aside>
@@ -54,13 +55,22 @@
 
   <main>
     <section class="session-section" id="session" aria-labelledby="session-heading">
-      <div class="section-heading">
+      <div class="section-heading session-heading-row">
         <div>
-          <p class="eyebrow">MONDAY AT A GLANCE</p>
-          <h2 id="session-heading">Run the session in order</h2>
+          <p class="eyebrow" id="sessionEyebrow">MONDAY AT A GLANCE</p>
+          <h2 id="session-heading">Acceleration foundation + lower-body strength</h2>
         </div>
-        <p id="progressText" class="progress-label">0 of 30 primary items checked</p>
+        <p id="progressText" class="progress-label">0 of 30 session items checked</p>
       </div>
+
+      <div class="session-toolbar" aria-label="Session controls">
+        <button class="session-nav-button" id="previousSession" type="button">← Previous session</button>
+        <button class="session-nav-button" id="todaySession" type="button">Today</button>
+        <button class="session-nav-button" id="nextSession" type="button">Next session →</button>
+        <span class="session-selection-meta" id="sessionSelectionMeta">Use the arrows or click a day in the weekly schedule.</span>
+      </div>
+
+      <div class="session-notice" id="sessionNotice" hidden></div>
       <div class="progress-track" aria-hidden="true"><div id="progressBar"></div></div>
       <div class="timeline" id="sessionTimeline"></div>
     </section>
@@ -141,7 +151,7 @@
 
   <footer>
     <p>Hybrid 400 Coach Dashboard · Coaching descriptions are the source of truth; video links are visual references.</p>
-    <p>The weekly plan view is a public, non-private schedule reference. Daily readiness decisions and the latest athlete state still govern prescriptions.</p>
+    <p>The dashboard is a public schedule reference. Daily readiness decisions and the latest athlete state still govern prescriptions.</p>
   </footer>
 
   <dialog id="exerciseDialog" aria-labelledby="dialogTitle">
@@ -156,6 +166,7 @@
   <script src="data/exercises-05.js"></script>
   <script src="data/exercises-06.js"></script>
   <script src="data/week-plans.js"></script>
+  <script src="data/session-plans.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

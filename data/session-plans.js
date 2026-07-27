@@ -2,36 +2,44 @@ window.SESSION_PLANS = {
   w1d1: {
     purpose: "Acceleration foundation + lower-body strength",
     duration: "95–110 min",
-    volume: "160 m acceleration + 80 m buildups",
+    volume: "160 m acceleration + 80 m buildups; 11 lower/core working sets",
     footwear: "Trainers / flats",
-    note: "Completed official high-output session. Straight-bar deadlift: 455 lb × 3 × 3. No extra work and no make-up hill session.",
+    note: "Completed official high-output session. Straight-bar deadlift: 455 lb × 3 × 3. The planned primary upper-body exposure was not included in the completed session; do not add it today. Upper A is moved to Tuesday for Week 1 only.",
     source: "week1Day1Exercises"
   },
   w1d2: {
-    purpose: "Easy aerobic support + tissue circulation",
-    duration: "45–55 min",
-    volume: "35–45 min easy",
+    purpose: "Easy aerobic support + Upper A",
+    duration: "80–100 min total; split friendly",
+    volume: "35–45 min easy + 10 upper-body working sets",
     footwear: "Trainers",
-    note: "Keep this genuinely easy with no fast finish. If a noteworthy tissue issue appears, replace the run with 25–35 min easy cycling.",
+    note: "Week 1 exception: Upper A moves here because Monday's completed session did not include upper-body work. This is not extra lower-body volume. Keep the run genuinely easy. Log the bench working load and total completed volume; accessory loads only need reporting if something is noteworthy.",
     blocks: [
       {
         name: "Readiness gate",
         items: [
-          { id: "readiness", name: "Quick tissue check", dosage: "Proceed if there is no sharp, worsening, or gait-altering hamstring, calf/Achilles, foot/ankle, or adductor issue" }
+          { id: "readiness", name: "Quick tissue check", dosage: "Proceed with the run if there is no sharp, worsening, or gait-altering hamstring, calf/Achilles, foot/ankle, or adductor issue" }
         ]
       },
       {
         name: "Aerobic work",
         items: [
-          { id: "easy-run", name: "Easy run", dosage: "35–45 min at conversational effort / RPE 2–3 on flat or gently rolling terrain" }
+          { id: "easy-run", name: "Easy run", dosage: "35–45 min at conversational effort / RPE 2–3 on flat or gently rolling terrain; no fast finish" }
         ]
       },
       {
-        name: "Light maintenance",
+        name: "Upper A — primary strength",
+        items: [
+          { id: "bench-press", name: "Barbell bench press", dosage: "Warm-ups, then 3 × 5 at RPE 7 / 2–3 reps in reserve; 2½–3 min rest" },
+          { id: "vertical-pull", name: "Pull-up or lat pulldown", dosage: "3 × 6–8 at RPE 7–8; 90–120 sec rest" },
+          { id: "chest-supported-row", name: "Chest-supported row", dosage: "2 × 8–10 at RPE 7–8; 90 sec rest" },
+          { id: "triceps-pressdown", name: "Cable triceps pressdown", dosage: "2 × 10–15 at RPE 8; 60–75 sec rest" }
+        ]
+      },
+      {
+        name: "Light tissue maintenance",
         items: [
           { id: "ankle-rocker", name: "Ankle rocker", dosage: "1 × 10 each side" },
-          { id: "calf-iso", name: "Straight-knee calf isometric", dosage: "1 × 20 sec each side" },
-          { id: "soleus-iso", name: "Bent-knee soleus isometric", dosage: "1 × 20 sec each side" },
+          { id: "calf-soleus-iso", name: "Calf + soleus isometrics", dosage: "1 × 20 sec straight-knee and 1 × 20 sec bent-knee each side" },
           { id: "adductor-rockback", name: "Adductor rock-back", dosage: "1 × 8 each side" }
         ]
       }
@@ -65,11 +73,11 @@ window.SESSION_PLANS = {
     ]
   },
   w1d4: {
-    purpose: "Controlled sprint rhythm",
-    duration: "55–70 min",
-    volume: "Provisional: 5 × 100 m at ~75–80%",
+    purpose: "Controlled sprint rhythm + power / Upper B",
+    duration: "85–110 min total; split preferred",
+    volume: "Provisional 5 × 100 m + 9 power contacts + 10 upper-body working sets",
     footwear: "Trainers",
-    note: "Provisional only. The final sprint dose must be confirmed after the next-morning tissue response; do not treat this card as clearance for high-output work.",
+    note: "The sprint dose and lower-body power primer remain provisional until tissue response is reviewed. Upper B is the second primary upper-body exposure. If the day is red because of general illness or systemic fatigue, skip all training; if sprinting is withheld for a localized lower-body issue, retain upper work only after coach confirmation.",
     blocks: [
       {
         name: "Readiness gate",
@@ -84,9 +92,24 @@ window.SESSION_PLANS = {
         ]
       },
       {
+        name: "Power primer — green only",
+        items: [
+          { id: "low-box-jump", name: "Low box jump with stick", dosage: "3 × 3, full reset between reps, 60–90 sec between sets; omit on amber" }
+        ]
+      },
+      {
         name: "Provisional main set",
         items: [
           { id: "hundreds", name: "Controlled 100s", dosage: "Planned 5 × 100 m at ~75–80% velocity with 3–4 min recovery" }
+        ]
+      },
+      {
+        name: "Upper B — secondary upper",
+        items: [
+          { id: "incline-db-press", name: "Incline dumbbell press", dosage: "3 × 6–8 at RPE 7; 2 min rest" },
+          { id: "cable-row", name: "Cable or chest-supported row", dosage: "3 × 8–10 at RPE 7–8; 90–120 sec rest" },
+          { id: "landmine-press", name: "Landmine or machine shoulder press", dosage: "2 × 8–10 at RPE 7; 90 sec rest" },
+          { id: "rear-delt-fly", name: "Rear-delt fly", dosage: "2 × 15–20 at RPE 8; 60 sec rest" }
         ]
       }
     ]
@@ -94,7 +117,7 @@ window.SESSION_PLANS = {
   w1d5: {
     purpose: "Recovery and absorption",
     duration: "0–35 min",
-    volume: "No required running",
+    volume: "No required running or lifting",
     footwear: "Everyday shoes or cycling shoes",
     note: "Rest is acceptable. Walking, very easy cycling, and light mobility are optional only if they improve how you feel.",
     blocks: [
@@ -107,11 +130,11 @@ window.SESSION_PLANS = {
     ]
   },
   w1d6: {
-    purpose: "Longer easy aerobic support",
-    duration: "45–70 min",
-    volume: "45–55 min easy",
+    purpose: "Longer easy aerobic support + optional arms",
+    duration: "45–90 min total",
+    volume: "45–55 min easy + optional 8 arm / shoulder sets",
     footwear: "Trainers",
-    note: "Optional upper-body accessories are allowed only if the legs and trunk are quiet. Do not add lower-body volume.",
+    note: "The arm session is optional, not a third primary upper day. Skip it if it would create shoulder, chest, or lat soreness that could interfere with Monday sprint mechanics.",
     blocks: [
       {
         name: "Aerobic work",
@@ -120,9 +143,11 @@ window.SESSION_PLANS = {
         ]
       },
       {
-        name: "Optional upper body",
+        name: "Optional arm hypertrophy",
         items: [
-          { id: "upper", name: "Upper-body accessories", dosage: "Optional, moderate volume, and stop well short of systemic fatigue" }
+          { id: "cable-curl", name: "Cable or dumbbell curl", dosage: "3 × 10–15 at RPE 8; 60–75 sec rest" },
+          { id: "triceps-extension", name: "Rope pressdown or overhead cable extension", dosage: "3 × 10–15 at RPE 8; 60–75 sec rest" },
+          { id: "lateral-raise", name: "Lateral raise", dosage: "2 × 15–20 at RPE 8; 60 sec rest" }
         ]
       }
     ]

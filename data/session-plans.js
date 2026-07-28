@@ -48,26 +48,52 @@ window.SESSION_PLANS = {
   w1d3: {
     purpose: "Extensive tempo / relaxed rhythm",
     duration: "40–55 min",
-    volume: "800–1,000 m tempo total or equivalent",
-    footwear: "Trainers",
-    note: "Keep the work smooth enough to protect Thursday. The exact rep structure can be refined after Tuesday's response.",
+    volume: "2 sets of 4 × 100 m / 800 m tempo total",
+    footwear: "Trainers on a track or predictable flat grass",
+    note: "Simplified does not mean improvised: follow the listed preparation in order. Generalized DOMS is acceptable only when gait is normal and the soreness stays stable or eases as you warm up. Stop if it increases, localizes, or changes your stride.",
     blocks: [
       {
-        name: "Preparation",
+        name: "Readiness gate",
         items: [
-          { id: "warmup", name: "Simple warm-up", dosage: "8–10 min easy movement plus only the mobility needed to feel loose" }
+          { id: "walk-jog-check", name: "Walk and easy-jog check", dosage: "Normal gait; no sharp, localized, worsening, or one-sided tissue issue. Generalized DOMS may proceed only if stable or improving." }
         ]
       },
       {
-        name: "Tempo",
+        name: "Raise temperature",
         items: [
-          { id: "tempo", name: "Extensive tempo", dosage: "800–1,000 m total at relaxed, repeatable rhythm; do not chase pace" }
+          { id: "easy-jog", name: "Easy jog", dosage: "6 minutes, beginning very easy and gradually settling into normal easy-run rhythm" }
+        ]
+      },
+      {
+        name: "Mobility / activation",
+        items: [
+          { id: "ankle-rocker", name: "Ankle rocker", dosage: "1 × 8 each side; heel stays down" },
+          { id: "adductor-rockback", name: "Adductor rock-back", dosage: "1 × 6 each side; controlled range" },
+          { id: "walking-lunge-reach", name: "Walking lunge + overhead reach", dosage: "1 × 5 each side; tall trunk" },
+          { id: "leg-swing-front-back", name: "Leg swing — front to back", dosage: "1 × 8 each leg; pelvis stays quiet" }
+        ]
+      },
+      {
+        name: "Technical preparation",
+        items: [
+          { id: "a-march", name: "A-march", dosage: "1 × 20 m. Cue: Tall, then step down under the hip. Purpose: rehearse posture and foot placement beneath the body." },
+          { id: "a-skip", name: "A-skip", dosage: "1 × 20 m. Cue: Bounce down, not forward. Purpose: add rhythm and a light elastic contact without sprint effort." },
+          { id: "buildup-60", name: "Progressive buildup 1", dosage: "1 × 60 m at about 60% velocity; walk back" },
+          { id: "buildup-70", name: "Progressive buildup 2", dosage: "1 × 60 m at about 70% velocity; 60–90 sec before the first tempo rep" }
+        ]
+      },
+      {
+        name: "Extensive tempo",
+        items: [
+          { id: "tempo-set-1", name: "Set 1", dosage: "4 × 100 m at approximately 65–70% of velocity; 60–75 sec between reps" },
+          { id: "set-recovery", name: "Set recovery", dosage: "3 minutes walking / standing; begin Set 2 only if rhythm and soreness are stable" },
+          { id: "tempo-set-2", name: "Set 2", dosage: "4 × 100 m at approximately 65–70% of velocity; 60–75 sec between reps" }
         ]
       },
       {
         name: "Cooldown",
         items: [
-          { id: "cooldown", name: "Easy cooldown", dosage: "5–10 min walk or easy jog" }
+          { id: "cooldown", name: "Easy cooldown", dosage: "5–8 minutes easy jog-to-walk; finish relaxed, not conditioned" }
         ]
       }
     ]

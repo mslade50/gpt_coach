@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="McKinley’s Hybrid 400 exercise, drill, session and weekly schedule reference." />
+  <meta name="description" content="McKinley’s Hybrid 400 session, weekly schedule, exercise library and copy-ready coach reporting dashboard." />
   <title>Hybrid 400 — Coach Dashboard</title>
   <link rel="preconnect" href="https://www.youtube.com" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="schedule.css" />
   <link rel="stylesheet" href="session.css" />
+  <link rel="stylesheet" href="session-log.css" />
 </head>
 <body>
   <a class="skip-link" href="#session">Skip to current session</a>
@@ -21,6 +22,7 @@
       </a>
       <div class="top-actions">
         <button class="ghost-button" id="resetProgress" type="button">Reset checklist</button>
+        <a class="ghost-button" href="#session-log">Session log</a>
         <a class="ghost-button" href="#week-plan">Week plan</a>
         <a class="ghost-button" href="#library">Exercise library</a>
         <a class="ghost-button" href="#safety">Stop rules</a>
@@ -31,11 +33,11 @@
       <section>
         <p class="eyebrow">PROJECT: BECOME FAST</p>
         <h1>Coach Dashboard</h1>
-        <p class="hero-copy">A permanent visual and written reference for the active session, weekly plan, and every drill, jump, lift and recovery movement used in the 14-week speed-conversion block.</p>
+        <p class="hero-copy">A permanent visual and written reference for the active session, weekly plan, exercise library and copy-ready coach reporting throughout the 14-week speed-conversion block.</p>
         <div class="hero-tags" aria-label="Dashboard status">
           <span>Auto-selects today</span>
           <span>Running + lifting</span>
-          <span>Mobile ready</span>
+          <span>Copy-ready reports</span>
         </div>
       </section>
 
@@ -74,6 +76,77 @@
       <div class="session-notice" id="sessionNotice" hidden></div>
       <div class="progress-track" aria-hidden="true"><div id="progressBar"></div></div>
       <div class="timeline" id="sessionTimeline"></div>
+    </section>
+
+    <section class="log-section" id="session-log" aria-labelledby="session-log-heading">
+      <div class="section-heading log-heading-row">
+        <div>
+          <p class="eyebrow">SESSION LOG</p>
+          <h2 id="session-log-heading">Build the coach report</h2>
+        </div>
+        <p class="muted" id="logSessionMeta">Loads the selected session automatically.</p>
+      </div>
+
+      <div class="log-shell">
+        <form class="log-form" id="sessionLogForm" autocomplete="off">
+          <div class="log-form-intro">
+            <h3>Enter only the useful data</h3>
+            <p>Daily volume, timed work, main lift(s), and anything noteworthy. This saves on your current browser as you type.</p>
+          </div>
+
+          <div class="log-field-grid">
+            <label class="log-field">
+              <span>Session status</span>
+              <select id="logStatus">
+                <option value="">Choose status</option>
+                <option value="completed">Completed as prescribed</option>
+                <option value="modified">Completed with modification</option>
+                <option value="partial">Partially completed</option>
+                <option value="skipped">Skipped</option>
+              </select>
+            </label>
+
+            <label class="log-field">
+              <span>Run / total volume</span>
+              <input id="logVolume" type="text" placeholder="42 min easy / 5.2 mi, or 5 × 100 m / 500 m" />
+            </label>
+
+            <label class="log-field log-field-wide">
+              <span>Timed reps / intervals</span>
+              <textarea id="logTimes" placeholder="13.9 / 13.8 / 13.9 / 14.0 / 14.1 — leave blank when nothing was timed"></textarea>
+            </label>
+
+            <label class="log-field log-field-wide">
+              <span>Main lift(s)</span>
+              <input id="logLift" type="text" placeholder="Bench 245 × 5 × 3, or straight-bar deadlift 455 × 3 × 3" />
+            </label>
+
+            <label class="log-field log-field-wide">
+              <span>Anything noteworthy</span>
+              <textarea id="logNotes" placeholder="Meaningful modification, tissue issue, cramping, or relevant conditions. Leave blank if none."></textarea>
+            </label>
+          </div>
+
+          <div class="log-form-actions">
+            <span id="logSaveState" aria-live="polite">Not logged yet</span>
+            <button class="log-clear-button" id="clearSessionLog" type="button">Clear this log</button>
+          </div>
+        </form>
+
+        <aside class="coach-report-card" aria-labelledby="coach-report-heading">
+          <div class="coach-report-top">
+            <div>
+              <p class="eyebrow">PASTE INTO CHAT</p>
+              <h3 id="coach-report-heading">Coach report</h3>
+            </div>
+            <span class="local-only">Local only</span>
+          </div>
+
+          <textarea id="coachReportPreview" readonly aria-label="Generated coach report">Select a session to build a coach report.</textarea>
+          <button class="primary-button" id="copyCoachReport" type="button" disabled>Copy coach report</button>
+          <p class="copy-status" id="copyReportStatus" aria-live="polite">Nothing is sent automatically.</p>
+        </aside>
+      </div>
     </section>
 
     <section class="week-section" id="week-plan" aria-labelledby="week-plan-heading">
@@ -152,7 +225,7 @@
 
   <footer>
     <p>Hybrid 400 Coach Dashboard · Coaching descriptions are the source of truth; video links are visual references.</p>
-    <p>The dashboard is a public schedule reference. Daily readiness decisions and the latest athlete state still govern prescriptions.</p>
+    <p>Session logs remain on the current browser until you copy and paste the generated coach report into chat.</p>
   </footer>
 
   <dialog id="exerciseDialog" aria-labelledby="dialogTitle">
@@ -172,5 +245,6 @@
   <script src="data/week1-strength-override.js"></script>
   <script src="data/future-macro-expectations.js"></script>
   <script src="app.js"></script>
+  <script src="session-log.js"></script>
 </body>
 </html>

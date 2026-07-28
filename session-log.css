@@ -1,0 +1,271 @@
+.log-section {
+  border-top: 1px solid var(--line);
+}
+
+.log-heading-row .muted {
+  max-width: 480px;
+  margin: 0;
+  text-align: right;
+}
+
+.log-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(330px, 0.85fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.log-form,
+.coach-report-card {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: linear-gradient(155deg, var(--surface-2), var(--surface));
+  box-shadow: var(--shadow);
+}
+
+.log-form {
+  padding: 22px;
+}
+
+.log-form-intro {
+  display: flex;
+  justify-content: space-between;
+  gap: 28px;
+  align-items: start;
+  margin-bottom: 20px;
+}
+
+.log-form-intro h3 {
+  font-size: 1.3rem;
+  letter-spacing: -0.025em;
+}
+
+.log-form-intro p {
+  max-width: 520px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.log-field-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.log-field {
+  display: grid;
+  gap: 7px;
+}
+
+.log-field-wide {
+  grid-column: 1 / -1;
+}
+
+.log-field > span {
+  color: #dbe4ea;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.log-field input,
+.log-field select,
+.log-field textarea,
+#coachReportPreview {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--ink);
+  background: rgba(11, 17, 23, 0.72);
+  outline: none;
+}
+
+.log-field input,
+.log-field select {
+  min-height: 48px;
+  padding: 0 13px;
+}
+
+.log-field textarea {
+  min-height: 88px;
+  padding: 12px 13px;
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.log-field input:focus,
+.log-field select:focus,
+.log-field textarea:focus,
+#coachReportPreview:focus {
+  border-color: rgba(255, 177, 92, 0.7);
+  box-shadow: 0 0 0 3px rgba(255, 122, 47, 0.10);
+}
+
+.log-field input::placeholder,
+.log-field textarea::placeholder {
+  color: #6f7e89;
+}
+
+.log-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+#logSaveState {
+  color: var(--green);
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.log-clear-button {
+  border: 0;
+  padding: 0;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.log-clear-button:hover,
+.log-clear-button:focus-visible {
+  color: var(--danger);
+  text-decoration: underline;
+}
+
+.coach-report-card {
+  position: sticky;
+  top: 18px;
+  padding: 22px;
+}
+
+.coach-report-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: start;
+  margin-bottom: 16px;
+}
+
+.coach-report-top .eyebrow {
+  margin-bottom: 5px;
+}
+
+.coach-report-top h3 {
+  font-size: 1.45rem;
+  letter-spacing: -0.035em;
+}
+
+.local-only {
+  display: inline-flex;
+  align-items: center;
+  min-height: 27px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  color: var(--green);
+  background: rgba(139, 232, 176, 0.09);
+  font-size: 0.68rem;
+  font-weight: 820;
+  white-space: nowrap;
+}
+
+#coachReportPreview {
+  min-height: 248px;
+  padding: 14px;
+  resize: vertical;
+  color: #dbe4ea;
+  line-height: 1.55;
+}
+
+.coach-report-card .primary-button {
+  border: 0;
+  margin-top: 14px;
+  cursor: pointer;
+}
+
+.coach-report-card .primary-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.copy-status {
+  min-height: 38px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+.top-actions {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+@media (max-width: 980px) {
+  .log-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .coach-report-card {
+    position: static;
+  }
+}
+
+@media (max-width: 680px) {
+  .log-heading-row .muted {
+    text-align: left;
+  }
+
+  .log-form,
+  .coach-report-card {
+    padding: 18px;
+  }
+
+  .log-form-intro,
+  .log-form-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .log-field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .log-field-wide {
+    grid-column: auto;
+  }
+
+  .top-actions {
+    gap: 6px;
+  }
+
+  .top-actions .ghost-button {
+    padding: 7px 9px;
+    font-size: 0.73rem;
+  }
+}
+
+@media print {
+  .log-form-actions,
+  #copyCoachReport {
+    display: none !important;
+  }
+
+  .log-form,
+  .coach-report-card {
+    color: #111;
+    background: #fff;
+    box-shadow: none;
+  }
+
+  #coachReportPreview {
+    color: #111;
+    background: #fff;
+  }
+}

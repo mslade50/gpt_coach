@@ -6,7 +6,7 @@
   if (!week1 || !Array.isArray(week1.days) || week1.days.length < 7) return;
 
   week1.focus = "Controlled acceleration exposure, submaximal sprint rhythm, one primary lower-body maintenance exposure, two primary upper-body exposures, and aerobic support.";
-  week1.statusNote = "Monday's official session included the primary lower-body work but omitted Upper A. For Week 1 only, Upper A moved to Tuesday. Thursday retains the second upper exposure and remains readiness-gated; Saturday arms are optional.";
+  week1.statusNote = "Monday's official session included the primary lower-body work but omitted Upper A. For Week 1 only, Upper A moved to Tuesday. Thursday retained the second upper exposure. Saturday's longer easy run moved to Friday morning because of a weekend conflict; Saturday and Sunday are now off.";
 
   Object.assign(week1.days[0], {
     title: "Acceleration foundation + lower strength",
@@ -22,18 +22,24 @@
 
   Object.assign(week1.days[3], {
     title: "Controlled sprint rhythm + Upper B",
-    detail: "Exact session is loaded. Five relaxed 100s are planned; Thursday morning readiness determines green, amber or red execution.",
+    detail: "Exact session is loaded. Five relaxed 100s were completed; Thursday morning readiness governed green, amber or red execution.",
     volume: "Running: 5 × 100 m / 500 m · Primer: 2 × 8 low pogos · Lifting: 10 Upper B sets"
   });
 
   Object.assign(week1.days[4], {
-    detail: "Rest, walking, or very easy cycling only. No lifting is required."
+    type: "Low",
+    status: "Planned",
+    title: "Moved longer easy aerobic support",
+    detail: "Schedule swap: Saturday's longer easy run moves to Friday morning. Proceed only with normal gait and no localized or worsening sprint-tissue issue. No lifting and no fast finish.",
+    volume: "50–55 min easy; trainers; flat or gently rolling route"
   });
 
   Object.assign(week1.days[5], {
-    title: "Longer easy + optional arms",
-    detail: "Low-stress aerobic maintenance with optional direct arm and shoulder volume if it will not create Monday soreness.",
-    volume: "45–55 min easy + optional 8 arm/shoulder sets"
+    type: "Recovery",
+    status: "Planned",
+    title: "Off / normal daily movement",
+    detail: "Weekend conflict. Saturday's aerobic work was moved to Friday. No make-up training and optional arms are omitted this week.",
+    volume: "No training required"
   });
 
   window.SESSION_PLANS = window.SESSION_PLANS || {};
@@ -118,6 +124,60 @@
         items: [
           { id: "amber", name: "Amber modification", dosage: "Omit pogos; perform 3 × 100 m at approximately 75% with 4–5 min recovery. If general fatigue is present, reduce Upper B to 2 sets for each press and row and omit rear delts." },
           { id: "red", name: "Red alternative", dosage: "No sprinting or plyometrics. Full rest, or 25–35 min very easy cycling only when it does not provoke the issue. Upper B only when the red flag is isolated to the lower body and systemic readiness is otherwise normal." }
+        ]
+      }
+    ]
+  };
+
+  window.SESSION_PLANS.w1d5 = {
+    purpose: "Moved longer easy aerobic support",
+    duration: "50–55 min",
+    volume: "50–55 min easy running",
+    footwear: "Trainers on a flat or gently rolling, predictable route",
+    note: "This replaces Saturday's longer easy run; it is not additional volume. Because it occurs the morning after Thursday's high-output session, cap the run at 55 minutes and keep it strictly conversational. No strides, hills, fast finish or lifting.",
+    blocks: [
+      {
+        name: "Readiness gate",
+        items: [
+          { id: "morning-gait", name: "Walk / first-steps check", dosage: "Normal gait; no sharp, localized, worsening or one-sided hamstring, calf/Achilles, foot/ankle or adductor/hip issue" },
+          { id: "first-ten", name: "First 10-minute check", dosage: "Begin extremely easy. Continue only if stiffness stays stable or improves and your stride remains symmetrical" }
+        ]
+      },
+      {
+        name: "Easy aerobic work",
+        items: [
+          { id: "easy-run", name: "Easy run", dosage: "50 minutes target, 55-minute hard cap; conversational effort / RPE 2–3; no fast finish" },
+          { id: "surface", name: "Route", dosage: "Flat or gently rolling and predictable; avoid steep hills and technical terrain" }
+        ]
+      },
+      {
+        name: "No added work",
+        items: [
+          { id: "no-strides", name: "No strides or drills", dosage: "The purpose is low-cost aerobic support and circulation, not another speed exposure" },
+          { id: "no-lifting", name: "No lifting", dosage: "Upper B was completed Thursday; optional Saturday arm volume is omitted this week" }
+        ]
+      },
+      {
+        name: "Readiness alternatives",
+        items: [
+          { id: "amber", name: "Amber modification", dosage: "30–40 min easy, or 25–35 min very easy cycling if generalized soreness is more than expected but gait is normal" },
+          { id: "red", name: "Red alternative", dosage: "Full rest for localized, worsening, sharp or gait-altering symptoms" }
+        ]
+      }
+    ]
+  };
+
+  window.SESSION_PLANS.w1d6 = {
+    purpose: "Off / normal daily movement",
+    duration: "All day",
+    volume: "No training required",
+    footwear: "Not applicable",
+    note: "Saturday's planned longer easy run was completed Friday because of weekend conflicts. Do not compensate with extra work. Optional arms are omitted this week.",
+    blocks: [
+      {
+        name: "Recovery",
+        items: [
+          { id: "normal-movement", name: "Normal daily movement only", dosage: "Walking is fine; no planned run, conditioning or lifting" }
         ]
       }
     ]

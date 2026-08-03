@@ -211,3 +211,82 @@ window.EXERCISES.push(...[
     monday: false
   }
 ]);
+
+// Week 2 required arm-volume adjustment.
+// This file loads before the session-plan files, so wrap SESSION_PLANS and
+// amend Week 2 prescriptions as they are published later in the page load.
+(() => {
+  "use strict";
+
+  const enhanceWeek2Session = (key, session) => {
+    if (!session || !Array.isArray(session.blocks)) return session;
+    const week2 = Array.isArray(window.WEEK_PLANS)
+      ? window.WEEK_PLANS.find((plan) => plan && plan.week === 2)
+      : null;
+
+    if (key === "w2d1") {
+      const strength = session.blocks.find((block) => block && String(block.name).includes("Full Body A"));
+      if (strength && Array.isArray(strength.items) && !strength.items.some((item) => item.id === "triceps-pressdown")) {
+        strength.items.push({
+          id: "triceps-pressdown",
+          name: "Cable triceps pressdown",
+          dosage: "2 × 10–15 at RPE 8; 60–75 sec rest. Direct arm volume; stop with 1–2 clean reps in reserve."
+        });
+      }
+      session.duration = "120–140 min total; split track and strength when possible";
+      session.volume = "4 × 20 m acceleration + 4 × flying 10 m; 16 low-pogo contacts + 4 broad jumps; 17 strength sets";
+      session.note = `${session.note} Two direct triceps sets are included so required upper-body volume progresses rather than depending entirely on Saturday.`;
+      if (week2 && week2.days && week2.days[0]) {
+        week2.days[0].volume = "4 × 20 m acceleration + 4 × flying 10 m; 16 low-pogo contacts + 4 broad jumps; 17 strength sets";
+      }
+    }
+
+    if (key === "w2d4") {
+      const upper = session.blocks.find((block) => block && String(block.name).includes("Upper B"));
+      if (upper && Array.isArray(upper.items) && !upper.items.some((item) => item.id === "cable-curl")) {
+        upper.items.push({
+          id: "cable-curl",
+          name: "Cable or dumbbell curl",
+          dosage: "2 × 10–15 at RPE 8; 60–75 sec rest. Direct arm volume with no torso swing."
+        });
+      }
+      session.duration = "105–130 min total; split preferred";
+      session.volume = "5 × 120 m / 600 m + 3 × 2 low box jumps + 12 upper-body sets";
+      session.note = `${session.note} Two direct biceps sets complete a modest required upper-body progression while lower-body volume remains unchanged.`;
+      if (week2 && week2.days && week2.days[3]) {
+        week2.days[3].volume = "5 × 120 m / 600 m; 3 × 2 low box jumps; 12 upper-body sets";
+      }
+    }
+
+    return session;
+  };
+
+  const makeSessionProxy = (value) => {
+    if (value && value.__week2ArmVolumeProxy) return value;
+    const target = value && typeof value === "object" ? value : {};
+    const proxy = new Proxy(target, {
+      set(object, property, valueToSet) {
+        object[property] = enhanceWeek2Session(String(property), valueToSet);
+        return true;
+      }
+    });
+    Object.defineProperty(proxy, "__week2ArmVolumeProxy", {
+      value: true,
+      enumerable: false,
+      configurable: false
+    });
+    return proxy;
+  };
+
+  let sessionPlans = makeSessionProxy(window.SESSION_PLANS);
+  Object.defineProperty(window, "SESSION_PLANS", {
+    configurable: true,
+    enumerable: true,
+    get() {
+      return sessionPlans;
+    },
+    set(value) {
+      sessionPlans = makeSessionProxy(value);
+    }
+  });
+})();

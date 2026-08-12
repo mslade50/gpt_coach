@@ -153,3 +153,10 @@
     saturday.blocks = saturday.blocks.filter((block) => !String(block && block.name).includes("Upper C"));
   }
 })();
+
+// This file is already loaded before app.js. Insert the schedule override scripts
+// synchronously so the dashboard renders the current Week 3 plan on first paint.
+if (document.readyState === "loading") {
+  document.write('<script src="data/week3-threshold-swap.js"><\/script>');
+  document.write('<script src="data/week3-w3d3-complete.js"><\/script>');
+}

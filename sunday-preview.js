@@ -20,11 +20,34 @@
     applySundayPreview();
   };
 
-  // Load the approved Week 3 threshold-replacement schedule after the core app,
-  // then trigger the app's existing Today handler so the mutated session plan renders.
-  const script = document.createElement("script");
-  script.src = "data/week3-threshold-swap.js";
-  script.onload = rerenderCurrentSession;
-  script.onerror = applySundayPreview;
-  document.head.appendChild(script);
+  const overrideSources = [
+    "data/week3-threshold-swap.js",
+    "data/week3-w3d3-complete.js",
+    "data/week3-w3d4-complete.js"
+  ];
+
+  const loadSequentially = (index = 0) => {
+    if (index >= overrideSources.length) {
+      rerenderCurrentSession();
+      return;
+    }
+
+    const src = overrideSources[index];
+    const existing = [...document.scripts].find((script) => script.getAttribute("src") === src);
+    if (existing) {
+      loadSequentially(index + 1);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = false;
+    script.onload = () => loadSequentially(index + 1);
+    script.onerror = () => loadSequentially(index + 1);
+    document.head.appendChild(script);
+  };
+
+  // Load the approved current-week overrides after the core app, then trigger
+  // the app's existing Today handler so the mutated plans render immediately.
+  loadSequentially();
 })();

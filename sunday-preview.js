@@ -24,7 +24,8 @@
     "data/week3-threshold-swap.js",
     "data/week3-w3d3-complete.js",
     "data/week3-w3d4-complete.js",
-    "data/week4-w4d1-results.js"
+    "data/week4-w4d1-results.js",
+    "data/week4-w4d2-complete.js"
   ];
 
   const loadSequentially = (index = 0) => {

@@ -30,7 +30,8 @@
     "data/week4-w4d4-complete.js",
     "data/week5-w5d1-complete.js",
     "data/week5-w5d2-complete.js",
-    "data/week5-w5d4-sprints-complete.js"
+    "data/week5-w5d4-sprints-complete.js",
+    "data/week5-w5d6-complete.js"
   ];
 
   const loadSequentially = (index = 0) => {

@@ -31,7 +31,8 @@
     "data/week5-w5d1-complete.js",
     "data/week5-w5d2-complete.js",
     "data/week5-w5d4-sprints-complete.js",
-    "data/week5-w5d6-complete.js"
+    "data/week5-w5d6-complete.js",
+    "data/week6-plan.js"
   ];
 
   const loadSequentially = (index = 0) => {
@@ -55,7 +56,7 @@
     document.head.appendChild(script);
   };
 
-  // Load the approved current-week overrides after the core app, then trigger
+  // Load approved current-week overrides after the core app, then trigger
   // the app's existing Today handler so the mutated plans render immediately.
   loadSequentially();
 })();

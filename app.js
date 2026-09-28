@@ -276,7 +276,7 @@
     const totalPosition = ((week - 1) * 7) + dayIndex;
     const finalPosition = Math.max((weeklyPlans.length * 7) - 1, 0);
 
-    if (sessionTitle) sessionTitle.textContent = `Week ${week} · Day ${dayIndex + 1}`;
+    if (sessionTitle) { const plan = getWeekPlan(week); sessionTitle.textContent = plan && plan.blockWeekLabel ? `${plan.blockWeekLabel} · Day ${dayIndex + 1}` : `Week ${week} · Day ${dayIndex + 1}`; }
     if (sessionName) sessionName.textContent = definition.purpose || (day ? day.title : "Planned session");
     if (sessionDate) sessionDate.textContent = formatSessionDate(date);
     if (sessionDuration) sessionDuration.textContent = definition.duration || "See plan";
@@ -336,12 +336,12 @@
     const range = formatDateRange(plan.week);
     const viewMode = plan.week === autoSelectedWeek ? "auto view" : "manual view";
 
-    weekPlanMeta.textContent = `Week ${plan.week} · ${range} · ${viewMode}. Auto-rolls Saturday after 6 PM local time.`;
+    weekPlanMeta.textContent = `${plan.blockWeekLabel || `Week ${plan.week}`} · ${range} · ${viewMode}. Auto-rolls Saturday after 6 PM local time.`;
 
     weekSummary.innerHTML = `
       <article class="week-summary-card">
         <div>
-          <p class="eyebrow">WEEK ${escapeHtml(plan.week)}</p>
+          <p class="eyebrow">${escapeHtml(plan.blockWeekLabel || `WEEK ${plan.week}`)}</p>
           <h3>${escapeHtml(plan.title)}</h3>
           <p>${escapeHtml(plan.focus)}</p>
         </div>

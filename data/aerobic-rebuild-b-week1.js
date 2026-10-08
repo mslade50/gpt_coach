@@ -10,7 +10,7 @@
     programPosition: "Aerobic Rebuild + Speed Retention — B Week 1",
     readiness: "All training from the prior week was completed. Thursday threshold felt substantially harder than intended after Tuesday speed + lifting, so the weekly architecture is revised to one true lower-body high day.",
     primaryGoal: "Rebuild aerobic/10K capacity while retaining speed, elasticity and strength.",
-    weeklyRhythm: "Monday upper + easy run; Tuesday threshold + primary strength; Wednesday low-impact aerobic recovery; Thursday speed microdose; Friday upper + easy aerobic; Saturday long run; Sunday rest.",
+    weeklyRhythm: "Monday upper + easy run; Tuesday threshold + primary strength; Wednesday low-impact aerobic recovery; Thursday medium-long easy running + optional short uphill strides; Friday upper + easy aerobic; Saturday long run; Sunday rest.",
     keyChange: "Wednesday is now the low-impact recovery day. Thursday has no lifting. Tuesday is the only true two-a-day."
   };
 
@@ -18,14 +18,14 @@
   if (!week || !Array.isArray(week.days) || week.days.length < 7) return;
 
   week.blockWeekLabel = "AEROBIC REBUILD · B WEEK 1";
-  week.title = "One high day, one speed touch, one long aerobic anchor";
-  week.focus = "Tuesday is the only genuinely hard lower-body day. Wednesday becomes low-impact cross-training to improve recovery. Thursday retains speed with a small submaximal microdose. Friday combines Upper B and easy aerobic work so only Tuesday requires two separate training windows.";
+  week.title = "One high day, aerobic volume, and speed retention";
+  week.focus = "Tuesday is the only genuinely hard lower-body day. Wednesday becomes low-impact cross-training to improve recovery. Thursday now builds aerobic durability through a medium-long easy run, with a few short uphill strides only if tissue response is fully green. True high-speed exposure remains on A-week Tuesday. Friday combines Upper B and easy aerobic work so only Tuesday requires two separate training windows.";
   week.statusNote = "Architecture revised after the prior Thursday threshold felt disproportionately hard 48 hours after Tuesday sprint + lifting. The goal is better recovery and adherence, not less training.";
   week.days = [
     { day: "Mon", type: "Low–moderate", status: "Planned", title: "Upper A + easy run", detail: "Lift first, then easy running in one session. Keep the run genuinely easy so Tuesday threshold quality is protected.", volume: "Upper A + 45 min easy run" },
     { day: "Tue", type: "High", status: "Planned", title: "Threshold + primary strength", detail: "The week's one true high-output lower-body day and only planned two-a-day.", volume: "4 × 6 min threshold / 2 min jog + primary strength later" },
     { day: "Wed", type: "Recovery", status: "Planned", title: "Low-impact aerobic recovery", detail: "Bike or elliptical only. Use this day to improve leg recovery after Tuesday.", volume: "50–60 min easy cross-training at RPE 2–3" },
-    { day: "Thu", type: "Low–moderate", status: "Planned", title: "Speed microdose + easy jogging", detail: "Smooth fast contacts without turning Thursday into another high day. No lifting.", volume: "2 × 20 m accel + 2 × flying 20 m at ~90–92% + 15–20 min easy jog" },
+    { day: "Thu", type: "Low–moderate", status: "Planned", title: "Medium-long easy run + optional hills", detail: "65–70 min easy aerobic with four very short controlled uphill strides only if Tuesday has been fully absorbed. No lifting.", volume: "65–70 min easy + optional 4 × 8 sec uphill strides" },
     { day: "Fri", type: "Low–moderate", status: "Planned", title: "Upper B + easy aerobic", detail: "Lift first, then easy run. Use bike/elliptical if lower-leg or leg fatigue would compromise Saturday.", volume: "Upper B + 40–45 min easy run OR 50–60 min easy bike/elliptical" },
     { day: "Sat", type: "Moderate–high aerobic", status: "Planned", title: "Long easy run", detail: "Primary weekly aerobic-volume anchor. No fast finish.", volume: "90 min easy if recovery is normal; 70–75 min amber" },
     { day: "Sun", type: "Recovery", status: "Locked", title: "Full rest + weekly review", detail: "No make-up work. Review the week and publish the following week's plan.", volume: "No training" }
@@ -108,37 +108,36 @@
   };
 
   sessions.w11d4 = {
-    purpose: "Speed microdose + easy jogging",
-    duration: "Approximately 50–60 min",
-    volume: "2 × 20 m acceleration + 2 × flying 20 m at ~90–92% + 15–20 min easy jog",
-    footwear: "Trainers on a dry, predictable track",
-    note: "Do not time the fast reps. Thursday is a speed reminder, not a test and not a second high day.",
+    purpose: "Medium-long easy run + conditional uphill strides",
+    duration: "Approximately 65–75 min including four optional hills and recovery",
+    volume: "65–70 min easy at RPE 2–3 + optional 4 × 8 sec controlled uphill strides",
+    footwear: "Supportive trainers on predictable flat-to-rolling running terrain; safe, dry moderate hill for optional strides",
+    note: "Aerobic durability is the priority, not another speed session. Hill strides are optional ONLY with green tissue response after Tuesday threshold + strength. Uphill work provides a small acceleration reminder but does not replace A-week flying sprints for true maximum velocity. Count any time spent doing hills inside the total run duration; do not add 15–20 extra minutes.",
     blocks: [
-      { name: "Warm-up", items: [
-        { id: "ba-th-jog", name: "Easy jog", dosage: "10 min easy." },
-        { id: "ba-th-mob", name: "Mobility", dosage: "Ankle rocker 8/side, adductor rockback 6/side, walking lunge 5/side." },
-        { id: "ba-th-drills", name: "Sprint drills", dosage: "A-march 20 m, A-skip 20 m, low dribble 20 m." }
+      { name: "Readiness and terrain gate", items: [
+        { id: "ba-th-ready", name: "Morning and warm-up check", dosage: "Proceed with the full run if gait is normal, sleep/general readiness acceptable and hamstring, calf/Achilles, foot and adductor/hip feel quiet. Tuesday's squat/RFESS soreness must be improving." },
+        { id: "ba-th-terrain", name: "Footwear and surfaces", dosage: "Trainers on flat or gentle rolling paths; choose a dry, predictable moderate hill with clear walk-back and enough space to stop." }
       ]},
-      { name: "Primer and buildups", items: [
-        { id: "ba-th-pogo", name: "Low pogos", dosage: "2 × 8 contacts; 45–60 sec rest." },
-        { id: "ba-th-build", name: "Buildups", dosage: "40 m ~60%, 50 m ~75%, 50 m ~85%." }
+      { name: "Aerobic main work", items: [
+        { id: "ba-th-start", name: "Progressive easy start", dosage: "10–15 min deliberately very easy jogging, gradually settling to normal conversational rhythm." },
+        { id: "ba-th-run", name: "Medium-long easy run", dosage: "Total planned aerobic duration 65–70 min including warm-up and post-stride jogging; RPE 2–3, full sentences comfortable, no steady/threshold segment or fast finish." },
+        { id: "ba-th-cue", name: "Primary cue", dosage: "Relax and accumulate comfortable time; the strides are a brief technique reminder, not a workout." }
       ]},
-      { name: "Speed microdose", items: [
-        { id: "ba-th-accel", name: "2 × 20 m acceleration", dosage: "Approximately 90–92%; 4–5 min recovery. Smooth, not maximal." },
-        { id: "ba-th-fly", name: "2 × flying 20 m", dosage: "30 m progressive buildup + 20 m fast zone; approximately 90–92%; 5–6 min recovery. Do not time." },
-        { id: "ba-th-cue", name: "Primary cue", dosage: "Tall and easy." }
+      { name: "Optional hill strides — green only", items: [
+        { id: "ba-th-hillcheck", name: "Decision point near the end of the run", dosage: "Only add hills if gait remains normal, legs feel springy and Achilles/calf/hamstring are 0–1/10. Otherwise continue easy and finish. Do not chase a quota." },
+        { id: "ba-th-hills", name: "4 × 8 sec uphill strides", dosage: "Smooth progressive build toward approximately 85–90% effort on a moderate hill, not maximal sprinting. Walk back with at least 2–3 min between. No aggressive bounding, racing, timing or straining." },
+        { id: "ba-th-finish", name: "Easy finish", dosage: "5–10 min very easy jogging after hills, contained within the 65–70 min run target." },
+        { id: "ba-th-stop", name: "Stop rule", dosage: "Stop hills if mechanics change, push-off feels forced, steps become loud or asymmetrical, or any localized pain appears or increases. Never perform hills through altered gait or sharp pain." }
       ]},
-      { name: "Aerobic finish", items: [
-        { id: "ba-th-easy", name: "Very easy jog", dosage: "15–20 min at RPE 2." }
-      ]},
-      { name: "Alternatives", items: [
-        { id: "ba-th-amber", name: "Amber", dosage: "Two buildups + 2 × 20 m acceleration only." },
-        { id: "ba-th-red", name: "Red", dosage: "35–45 min easy non-impact aerobic work." }
+      { name: "Fueling and alternatives", items: [
+        { id: "ba-th-fuel", name: "Fuel and fluids", dosage: "Normal carbohydrate-containing pre-run meal or snack, fluids appropriate to conditions; normal carb/protein meal afterward. For ~65–70 min easy, midrun carbohydrate is optional unless arriving underfueled." },
+        { id: "ba-th-amber", name: "Amber", dosage: "45–55 min very easy run with no hill strides; choose bike/elliptical if impact soreness is present." },
+        { id: "ba-th-red", name: "Red", dosage: "No running or hills for sharp, worsening, or gait-altering symptoms. Rest or comfortable non-impact aerobic activity if appropriate; seek evaluation for concerning symptoms." }
       ]}
     ]
   };
 
-  sessions.w11d5 = {
+    sessions.w11d5 = {
     purpose: "Upper B + easy aerobic",
     duration: "Approximately 100–115 min in one training window",
     volume: "18 upper-body work sets + 40–45 min easy run OR 50–60 min easy bike/elliptical",

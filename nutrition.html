@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101820">
+  <meta name="description" content="Mobile nutrition and training logger for the Become Fast project. Entries stay private on this device until shared.">
+  <title>Nutrition Log | Hybrid Performance</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="nutrition.css">
+</head>
+<body>
+  <a class="skip-link" href="#nutritionForm">Skip to daily log</a>
+  <header class="nutrition-hero">
+    <nav class="topbar" aria-label="Primary">
+      <a class="brand" href="index.html"><span class="brand-mark">400</span><span>HYBRID PERFORMANCE</span></a>
+      <div class="top-actions">
+        <a class="ghost-button" href="index.html">Training dashboard</a>
+        <a class="ghost-button active-link" href="nutrition.html" aria-current="page">Nutrition log</a>
+      </div>
+    </nav>
+    <div class="nutrition-hero-inner">
+      <p class="eyebrow">BECOME FAST / DAILY CHECK-IN</p>
+      <h1>Nutrition Log</h1>
+      <p>Fast logging for food, weight and training. Automatically selects today's Eastern-time date.</p>
+      <div class="nutrition-status"><span class="privacy-dot" aria-hidden="true"></span><strong>Local to this device</strong><span> · Not yet synchronized to Google Sheets</span></div>
+    </div>
+  </header>
+
+  <main class="nutrition-main">
+    <section class="nutrition-intro" aria-label="Daily progress">
+      <article class="nutrition-stat">
+        <span>Calorie goal</span>
+        <strong>4,000 <small>kcal</small></strong>
+        <p>Experimental maintenance target</p>
+      </article>
+      <article class="nutrition-stat">
+        <span>Today's logged intake</span>
+        <strong id="calorieStat">—</strong>
+        <p id="calorieDetail">Enter total calories below</p>
+      </article>
+      <article class="nutrition-stat">
+        <span>Past 7 days</span>
+        <strong id="weightStat">—</strong>
+        <p id="weightDetail">Average body weight</p>
+      </article>
+    </section>
+
+    <div class="nutrition-layout">
+      <section class="nutrition-panel" aria-labelledby="logHeading">
+        <div class="panel-head">
+          <div><p class="eyebrow">DAILY ENTRY</p><h2 id="logHeading">Record your day</h2></div>
+          <span id="saveState" class="save-state" aria-live="polite">Ready</span>
+        </div>
+        <form id="nutritionForm" autocomplete="on">
+          <div class="nutrition-date-controls">
+            <button type="button" class="secondary-control" id="previousDay" aria-label="Previous date">←</button>
+            <label class="nutrition-field date-field"><span>Date</span><input type="date" id="entryDate" aria-label="Log date" required></label>
+            <button type="button" class="secondary-control" id="nextDay" aria-label="Next date">→</button>
+            <button type="button" class="secondary-control today-control" id="jumpToday">Today</button>
+          </div>
+
+          <fieldset>
+            <legend>Morning</legend>
+            <div class="nutrition-fields two">
+              <label class="nutrition-field"><span>Weight <small>lb</small></span><input name="weight" type="number" min="80" max="450" step="0.1" inputmode="decimal" placeholder="203.0"></label>
+              <label class="nutrition-field"><span>Sleep <small>hours</small></span><input name="sleep" type="number" min="0" max="24" step="0.1" inputmode="decimal" placeholder="7.5"></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Evening</legend>
+            <div class="nutrition-fields two">
+              <label class="nutrition-field"><span>Total calories <small>kcal</small></span><input name="calories" type="number" min="0" max="12000" step="1" inputmode="numeric" placeholder="4000"></label>
+              <label class="nutrition-field"><span>Walking steps <small>not running</small></span><input name="steps" type="number" min="0" max="100000" step="1" inputmode="numeric" placeholder="8000"></label>
+              <label class="nutrition-field"><span>Running <small>miles</small></span><input name="miles" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="6.0"></label>
+              <label class="nutrition-field"><span>Training type</span>
+                <select name="training"><option value="">Optional</option><option>Easy run</option><option>Long run</option><option>Threshold + strength</option><option>Sprint / speed</option><option>Run + upper body</option><option>Bike / row / cross-train</option><option>Recovery</option><option>Rest</option><option>Other</option></select>
+              </label>
+            </div>
+            <p class="help">Walking steps exclude all running steps. Total calories include pre-run treats, BPN/Gatorade, gels, drinks, cooking oils and restaurant food.</p>
+          </fieldset>
+
+          <details class="nutrition-optional">
+            <summary>Macros, training fuel &amp; notes <span>Optional</span></summary>
+            <div class="nutrition-fields two optional-fields">
+              <label class="nutrition-field"><span>Protein <small>g</small></span><input name="protein" type="number" min="0" max="500" step="1" inputmode="numeric"></label>
+              <label class="nutrition-field"><span>Carbs <small>g</small></span><input name="carbs" type="number" min="0" max="1200" step="1" inputmode="numeric"></label>
+              <label class="nutrition-field"><span>Fat <small>g</small></span><input name="fat" type="number" min="0" max="500" step="1" inputmode="numeric"></label>
+              <label class="nutrition-field"><span>Fiber <small>g</small></span><input name="fiber" type="number" min="0" max="120" step="1" inputmode="numeric"></label>
+              <label class="nutrition-field"><span>Intra-workout carbs <small>g</small></span><input name="intra" type="number" min="0" max="400" step="1" inputmode="numeric"></label>
+              <label class="nutrition-field"><span>Lifting <small>min</small></span><input name="lift" type="number" min="0" max="480" step="1" inputmode="numeric"></label>
+              <label class="nutrition-field"><span>Bike/row <small>min</small></span><input name="bike" type="number" min="0" max="480" step="1" inputmode="numeric"></label>
+              <label class="nutrition-field"><span>Readiness <small>1–5</small></span><input name="readiness" type="number" min="1" max="5" step="1" inputmode="numeric"></label>
+              <label class="nutrition-field"><span>Restaurant meal</span><select name="restaurant"><option value="">Not recorded</option><option value="Yes">Yes</option><option value="No">No</option></select></label>
+              <label class="nutrition-field wide"><span>Notes / changes</span><textarea name="notes" rows="3" placeholder="Fueling changes, hunger, recovery, restaurant estimate…"></textarea></label>
+            </div>
+          </details>
+
+          <div class="nutrition-actions">
+            <button type="button" class="nutrition-primary" id="saveEntry">Save on this device</button>
+            <button type="button" class="nutrition-copy" id="copyEntry">Copy log for ChatGPT</button>
+            <button type="button" class="nutrition-clear" id="clearEntry">Clear selected day</button>
+          </div>
+          <p class="help bottom-help" id="copyStatus" aria-live="polite">Changes auto-save on this browser. Copy the report into our coaching chat to update the private Google Sheet.</p>
+        </form>
+      </section>
+
+      <aside class="nutrition-side">
+        <section class="nutrition-panel small-panel">
+          <p class="eyebrow">7-DAY SNAPSHOT</p>
+          <h2>Weekly signal</h2>
+          <div class="snapshot-row"><span>Average calories</span><strong id="avgCalories">—</strong></div>
+          <div class="snapshot-row"><span>Logged calorie days</span><strong id="calorieDays">0 / 7</strong></div>
+          <div class="snapshot-row"><span>Running total</span><strong id="totalMiles">—</strong></div>
+          <div class="snapshot-row"><span>Walking-only steps (avg)</span><strong id="avgSteps">—</strong></div>
+          <p class="help">Seven days ending on the selected date. Missing entries are excluded rather than counted as zero.</p>
+        </section>
+        <section class="nutrition-panel small-panel">
+          <p class="eyebrow">RECENT ENTRIES</p>
+          <h2>Last seven days</h2>
+          <div id="recentDays" class="recent-days"></div>
+        </section>
+        <section class="nutrition-panel small-panel sync-panel">
+          <p class="eyebrow">PRIVATE DATA</p>
+          <h2>Google Sheet sync</h2>
+          <p>Automatic sheet sync is not configured yet. Data entered here are saved in this browser only; they will <strong>not</strong> appear in the private Google Sheet until you share the copied entry in ChatGPT.</p>
+          <button type="button" id="copyAll" class="nutrition-copy wide-button">Copy 7-day report</button>
+          <button type="button" id="exportCsv" class="secondary-control wide-button">Export a local CSV backup</button>
+          <p class="help">Avoid using a shared device. Clearing browser data can remove locally saved entries. No private health data are stored in the public GitHub repository.</p>
+        </section>
+      </aside>
+    </div>
+  </main>
+  <footer class="nutrition-footer"><a href="index.html">← Back to training dashboard</a><span>Become Fast · Local nutrition log</span></footer>
+  <script src="nutrition.js" defer></script>
+</body>
+</html>

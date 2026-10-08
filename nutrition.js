@@ -55,6 +55,7 @@
     if (!validateDate(activeDate)) return;
     const values = currentFields();
     const ok = stored(activeDate, values);
+    if (ok) window.dispatchEvent(new CustomEvent("nutrition:local-saved", { detail: { date: activeDate } }));
     document.getElementById("saveState").textContent = ok ? "Saved on device" : "Storage unavailable";
     render();
   }

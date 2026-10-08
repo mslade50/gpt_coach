@@ -22,8 +22,8 @@
     <div class="nutrition-hero-inner">
       <p class="eyebrow">BECOME FAST / DAILY CHECK-IN</p>
       <h1>Nutrition Log</h1>
-      <p>Fast logging for food, weight and training. Automatically selects today's Eastern-time date.</p>
-      <div class="nutrition-status"><span class="privacy-dot" aria-hidden="true"></span><strong>Local to this device</strong><span> · Not yet synchronized to Google Sheets</span></div>
+      <p>Fast logging for food, weight and training. Automatically selects today's Eastern-time date. Connect Google once to sync entries.</p>
+      <div class="nutrition-status"><span class="privacy-dot" aria-hidden="true"></span><strong>Local save available</strong><span> · Connect Google below for Sheets sync</span></div>
     </div>
   </header>
 
@@ -102,7 +102,7 @@
             <button type="button" class="nutrition-copy" id="copyEntry">Copy log for ChatGPT</button>
             <button type="button" class="nutrition-clear" id="clearEntry">Clear selected day</button>
           </div>
-          <p class="help bottom-help" id="copyStatus" aria-live="polite">Changes auto-save on this browser. Copy the report into our coaching chat to update the private Google Sheet.</p>
+          <p class="help bottom-help" id="copyStatus" aria-live="polite">Entries save locally as you type. When Google is connected they also sync to your private spreadsheet.</p>
         </form>
       </section>
 
@@ -122,17 +122,33 @@
           <div id="recentDays" class="recent-days"></div>
         </section>
         <section class="nutrition-panel small-panel sync-panel">
-          <p class="eyebrow">PRIVATE DATA</p>
-          <h2>Google Sheet sync</h2>
-          <p>Automatic sheet sync is not configured yet. Data entered here are saved in this browser only; they will <strong>not</strong> appear in the private Google Sheet until you share the copied entry in ChatGPT.</p>
-          <button type="button" id="copyAll" class="nutrition-copy wide-button">Copy 7-day report</button>
-          <button type="button" id="exportCsv" class="secondary-control wide-button">Export a local CSV backup</button>
-          <p class="help">Avoid using a shared device. Clearing browser data can remove locally saved entries. No private health data are stored in the public GitHub repository.</p>
+          <p class="eyebrow">PRIVATE GOOGLE CONNECTION</p>
+          <h2>Automatic Sheets sync</h2>
+          <p>Your data stay on this device until you authorize Google. Once connected, saving or editing a day's entry also updates your private spreadsheet.</p>
+          <p class="help">One-time setup: <a href="https://console.cloud.google.com/apis/library/sheets.googleapis.com" target="_blank" rel="noopener noreferrer">enable Google Sheets API</a>, then <a href="https://console.cloud.google.com/auth/clients" target="_blank" rel="noopener noreferrer">create a Web application OAuth client</a> with authorized JavaScript origin <code>https://mslade50.github.io</code>. Use your Google account as a test user if prompted. <a href="NUTRITION-LOGGER.md" target="_blank" rel="noopener noreferrer">Detailed setup instructions</a>.</p>
+          <div class="nutrition-fields oauth-fields">
+            <label class="nutrition-field"><span>Google OAuth client ID</span><input id="googleClientId" type="text" autocapitalize="off" spellcheck="false" placeholder="…apps.googleusercontent.com"></label>
+            <label class="nutrition-field"><span>Private Google Sheet URL</span><input id="googleSheetId" type="text" autocapitalize="off" spellcheck="false" placeholder="https://docs.google.com/spreadsheets/d/…"></label>
+          </div>
+          <div class="nutrition-sync-controls">
+            <button type="button" class="nutrition-primary" id="connectGoogle">Connect Google</button>
+            <button type="button" class="nutrition-copy" id="syncGoogleNow" disabled>Save &amp; sync now</button>
+          </div>
+          <span class="cloud-status-label" id="googleConnectionLabel">Local-only until Google connected</span>
+          <p id="cloudSyncStatus" class="cloud-status" aria-live="polite">Not connected to Google Sheets.</p>
+          <p class="help">After authorization, entries sync when you edit them. Your Google access token is kept only in browser memory and expires; use Connect Google again when necessary. The site never stores a Google password or secret.</p>
+          <div class="sync-fallback">
+            <button type="button" id="copyAll" class="nutrition-copy wide-button">Copy 7-day report for ChatGPT</button>
+            <button type="button" id="exportCsv" class="secondary-control wide-button">Export a local CSV backup</button>
+          </div>
+          <p class="help">Important: This is a public website, but the spreadsheet remains private to accounts with permission. Avoid using a shared device; local records and nonsecret connection settings are stored in this browser. Only the Oct 8–Dec 30, 2026 prefilled Sheet dates are supported until the spreadsheet is extended.</p>
         </section>
       </aside>
     </div>
   </main>
-  <footer class="nutrition-footer"><a href="index.html">← Back to training dashboard</a><span>Become Fast · Local nutrition log</span></footer>
+  <footer class="nutrition-footer"><a href="index.html">← Back to training dashboard</a><span>Become Fast · Private nutrition logging</span></footer>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="nutrition.js" defer></script>
+  <script src="nutrition-sync.js" defer></script>
 </body>
 </html>

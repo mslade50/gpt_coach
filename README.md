@@ -48,6 +48,13 @@ DEPLOY.md                           # publishing instructions
 .nojekyll                           # static-host compatibility
 ```
 
+## Nutrition logger
+
+- [Mobile nutrition log](nutrition.html) is on the same GitHub Pages site as the training dashboard.
+- Entries auto-save **on the device only**; daily and seven-day reports can be copied to ChatGPT for private Google Sheet updates.
+- Direct Google Sheets sync is **not configured**; the public GitHub repository contains no personal logs or Google credentials.
+- Read [nutrition setup and privacy notes](NUTRITION-LOGGER.md).
+
 ## Add future exercises
 
 Add a new object to the final ordered file in `data/`, or start the next numbered file. Preserve these fields:

@@ -71,3 +71,20 @@
 .nutrition-footer{flex-direction:column;gap:6px}
 }
 @media(max-width:350px){.nutrition-fields.two{grid-template-columns:1fr}.nutrition-actions{grid-template-columns:1fr}.nutrition-clear{grid-column:auto}}
+
+
+/* Google OAuth connection, no tokens or personal data embedded in markup */
+.oauth-fields{margin:16px 0;gap:13px}
+.oauth-fields .nutrition-field input{font-size:14px}
+.nutrition-sync-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+.nutrition-sync-controls button{border-radius:11px;min-height:46px;padding:9px 10px;cursor:pointer;font:inherit;font-size:.83rem;font-weight:780}
+.nutrition-sync-controls button:disabled{opacity:.42;cursor:not-allowed}
+.cloud-status-label{display:block;margin-top:16px;font-size:.78rem;font-weight:750;color:#ffba7b}
+.cloud-status-label[data-connected="true"]{color:var(--green)}
+.cloud-status{background:#0e1a23;border:1px solid var(--line);border-radius:10px;padding:11px 12px!important;min-height:46px;color:#b6cbd4!important;font-size:.8rem!important;line-height:1.5!important;margin:8px 0 12px!important}
+.cloud-status[data-state="success"]{border-color:rgba(139,232,176,.45);color:var(--green)!important}
+.cloud-status[data-state="error"]{border-color:rgba(255,142,142,.4);color:#ffb2b2!important}
+.sync-panel .help a{color:var(--accent-2);text-decoration:underline}
+.sync-panel code{word-break:break-all;color:#e6eff4}
+.sync-fallback{border-top:1px solid var(--line);margin-top:20px;padding-top:4px}
+@media(max-width:410px){.nutrition-sync-controls{grid-template-columns:1fr}}

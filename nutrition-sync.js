@@ -190,7 +190,7 @@
           status("Google authorization window was closed or blocked.","error");
         }
       });
-      tokenClient.requestAccessToken({prompt:"consent"});
+      tokenClient.requestAccessToken({prompt:""});
     }catch(e){
       authorizing=false;connectButton.disabled=false;
       status("Could not start Google authorization: "+(e.message||"unknown error"),"error");

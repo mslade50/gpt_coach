@@ -15,6 +15,7 @@
   if (!form || !dateInput) return;
   let canStore = true;
   let saveHandle = null;
+  let activeDate = null;
   function todayEastern() {
     const parts = new Intl.DateTimeFormat("en-US", { timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit" }).formatToParts(new Date());
     const get = t => parts.find(x => x.type === t).value;
@@ -50,9 +51,10 @@
   }
   function save() {
     clearTimeout(saveHandle);
-    if (!validateDate(dateInput.value)) return;
+    saveHandle = null;
+    if (!validateDate(activeDate)) return;
     const values = currentFields();
-    const ok = stored(dateInput.value, values);
+    const ok = stored(activeDate, values);
     document.getElementById("saveState").textContent = ok ? "Saved on device" : "Storage unavailable";
     render();
   }
@@ -63,7 +65,10 @@
   }
   function selectDate(date) {
     if (!validateDate(date)) return;
+    if (saveHandle !== null && activeDate && activeDate !== date) save();
     clearTimeout(saveHandle);
+    saveHandle = null;
+    activeDate = date;
     dateInput.value = date;
     form.reset();
     dateInput.value = date;
@@ -173,6 +178,7 @@
     const a=document.createElement("a");a.href=url;a.download="become-fast-nutrition-"+todayEastern()+".csv";document.body.appendChild(a);a.click();a.remove();
     setTimeout(()=>URL.revokeObjectURL(url),1000);
   }
+  form.addEventListener("submit",e=>{e.preventDefault();save();});
   form.addEventListener("input", e=> {if(e.target!==dateInput)scheduleSave();});
   form.addEventListener("change",e=> {if(e.target!==dateInput)scheduleSave();});
   dateInput.addEventListener("change",()=>selectDate(dateInput.value));

@@ -22,6 +22,8 @@ For permanent hands-off, multi-day authorization, a separate authenticated backe
 
 ## One-time Google setup (done in the Sheet owner's account)
 
+The deployed logger includes a public browser OAuth client ID and the nutrition Sheet ID by default. The client permits `https://mslade50.github.io` and `http://localhost:8787`; Sheets API is enabled. The app stays in testing mode with the Sheet owner's account on its test-user list. On an iPhone, open the logger, tap **Connect Google**, choose that account, and approve Sheets permission. The steps below are for maintaining or replacing the configuration.
+
 This cannot be completed by the ChatGPT Google Drive connector, which can edit Sheets but cannot create Google Cloud OAuth credentials.
 
 1. Open [Google Cloud Console](https://console.cloud.google.com/) and select or create a Google Cloud project under your account.

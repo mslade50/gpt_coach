@@ -5,7 +5,7 @@
   const CONFIG_KEY = "become-fast-google-oauth-config-v1";
   const DATA_PREFIX = "become-fast-nutrition-v1:";
   const DEFAULT_SHEET = "1kcFtPe_-5ng3wdKaEA720P7e9vbjXhvJDBf8wMVwK8Y";
-  const DEFAULT_CLIENT = ""; // Public OAuth client identifier; never a client secret.
+  const DEFAULT_CLIENT = "198647292636-ada505h67lnob9ldu5baf4jno9vdj9f0.apps.googleusercontent.com"; // Public identifier, not a secret.
   const $ = id => document.getElementById(id);
   let token = "", expires = 0, engine, busy = false, authorizing = false;
   let timer, expiryTimer, attempts = 0, generation = 0;

@@ -1,8 +1,9 @@
 /* Cache only the public logger shell. Never cache OAuth or Google API responses. */
-const CACHE = "nutrition-shell-v2";
+const CACHE = "nutrition-shell-v3";
 const ASSETS = ["nutrition.html", "nutrition.css", "styles.css", "nutrition.js", "nutrition-sync-core.js", "nutrition-sync.js"];
 self.addEventListener("install", event => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS.map(asset =>
+    new Request(asset + (asset.endsWith(".js") ? "?v=20261009" : ""), { cache: "reload" })))));
 });
 self.addEventListener("activate", event => {
   // This worker owns only nutrition-shell-* caches; other apps' caches are untouched.
@@ -19,5 +20,5 @@ self.addEventListener("fetch", event => {
       event.waitUntil(caches.open(CACHE).then(cache => cache.put(event.request, copy)));
     }
     return response;
-  }).catch(() => caches.match(event.request).then(cached => cached || Response.error())));
+  }).catch(() => caches.match(event.request, { ignoreSearch: true }).then(cached => cached || Response.error())));
 });

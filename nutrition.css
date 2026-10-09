@@ -1,6 +1,8 @@
 .nutrition-hero{background:radial-gradient(circle at 85% -15%,rgba(255,122,47,.21),transparent 42%),linear-gradient(145deg,#13202a,#0b1117);border-bottom:1px solid var(--line)}
 .nutrition-hero-inner,.nutrition-main,.nutrition-footer{width:min(calc(100% - 32px),1120px);margin-inline:auto}
 .nutrition-hero-inner{padding:48px 0 47px}
+.nutrition-hero .topbar{gap:12px;padding-block:12px}
+.nutrition-hero .top-actions .ghost-button:first-child{display:inline-flex}
 .nutrition-hero h1{font-size:clamp(3rem,8vw,5rem);line-height:.98}
 .nutrition-hero-inner>p:not(.eyebrow){color:#b9c7d2;max-width:600px;margin:17px 0}
 .nutrition-status{display:inline-flex;flex-wrap:wrap;align-items:center;font-size:.8rem;color:#9fb8c6;margin-top:6px}

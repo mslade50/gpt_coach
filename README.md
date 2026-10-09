@@ -51,8 +51,9 @@ DEPLOY.md                           # publishing instructions
 ## Nutrition logger
 
 - [Mobile nutrition log](nutrition.html) is on the same GitHub Pages site as the training dashboard.
-- Entries auto-save **on the device only**; daily and seven-day reports can be copied to ChatGPT for private Google Sheet updates.
-- Direct Google Sheets sync is **not configured**; the public GitHub repository contains no personal logs or Google credentials.
+- Entries auto-save on the device and sync directly to the private Google Sheet while Google is connected. Offline changes queue for retry; reconnect after a browser reload or token expiry.
+- The public GitHub repository contains no personal logs, access tokens, or OAuth secrets.
+- [Example weekly meal plan](meal-plan.html) includes the existing meal-template portions, a seven-day dinner rotation, and shopping/prep quantities. It is a reference, not tracked intake.
 - Read [nutrition setup and privacy notes](NUTRITION-LOGGER.md).
 
 ## Add future exercises

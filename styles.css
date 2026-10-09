@@ -92,7 +92,7 @@ footer {
   font-size: 0.9rem;
   letter-spacing: 0.02em;
 }
-.top-actions { display: flex; gap: 10px; }
+.top-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; }
 .ghost-button,
 .text-button {
   border: 0;

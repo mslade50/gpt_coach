@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101820">
+  <meta name="description" content="Example weekly meal plan with daily meals, a seven-day dinner rotation, and a simple prep list.">
+  <title>Weekly Meal Plan | Hybrid Performance</title>
+  <link rel="stylesheet" href="styles.css?v=20261009">
+  <link rel="stylesheet" href="nutrition.css?v=20261009">
+  <link rel="stylesheet" href="meal-plan.css?v=20261009">
+</head>
+<body>
+  <a class="skip-link" href="#weekly-plan">Skip to weekly meal plan</a>
+  <header class="nutrition-hero">
+    <nav class="topbar" aria-label="Primary">
+      <a class="brand" href="index.html"><span class="brand-mark">400</span><span>HYBRID PERFORMANCE</span></a>
+      <div class="top-actions">
+        <a class="ghost-button" href="index.html">Training dashboard</a>
+        <a class="ghost-button" href="nutrition.html">Nutrition log</a>
+        <a class="ghost-button active-link" href="meal-plan.html" aria-current="page">Meal plan</a>
+      </div>
+    </nav>
+    <div class="nutrition-hero-inner">
+      <p class="eyebrow">BECOME FAST / FOOD FOR THE WEEK</p>
+      <h1>Weekly Meal Plan</h1>
+      <p>A repeatable daily base, a little dinner variety, and one simple prep session. Built from our example meal templates.</p>
+      <div class="meal-jumps" aria-label="Meal plan sections">
+        <a href="#weekly-plan">The week ↓</a><a href="#daily-base">Daily meals ↓</a><a href="#prep">Shopping &amp; prep ↓</a>
+      </div>
+    </div>
+  </header>
+  <main class="meal-main">
+    <section class="meal-estimates" aria-label="Illustrative daily nutrition estimate">
+      <article><span>Daily template</span><strong>3,995 <small>kcal</small></strong><p>Near the 4,000 kcal experiment</p></article>
+      <article><span>Estimated protein</span><strong>221 <small>g</small></strong><p>From the reference portions</p></article>
+      <article><span>Estimated fiber</span><strong>50 <small>g</small></strong><p>From the reference portions</p></article>
+    </section>
+    <p class="meal-note">An example week, not a record of what you ate. Calories, protein, and fiber are estimates; brands, portions, and dinner swaps change the totals. <a href="nutrition.html">Log actual intake in the nutrition logger →</a></p>
+
+    <section id="weekly-plan" class="meal-section" aria-labelledby="week-title">
+      <div class="meal-section-heading"><p class="eyebrow">SEVEN-DAY ROTATION</p><h2 id="week-title">Same base. Dinner variety.</h2><p>Use the daily meals below each day. Every dinner starts with 160 g cooked protein, 80 g dry rice, and 200 g vegetables. Choose fats to fit the dinner estimate; salmon replaces chicken.</p></div>
+      <div class="meal-week">
+        <article class="day-card"><span class="day-label">Monday</span><h3>Chicken &amp; rice</h3><p>Chicken, rice, and vegetables. Finish with a measured portion of feta or olive oil.</p><span class="day-detail">Snack rotation: walnuts</span></article>
+        <article class="day-card"><span class="day-label">Tuesday</span><h3>Salmon rice bowl</h3><p>Salmon, rice, and vegetables. Recalibrate added fats for the salmon swap.</p><span class="day-detail">Snack rotation: almonds</span></article>
+        <article class="day-card"><span class="day-label">Wednesday</span><h3>Chicken &amp; vegetables</h3><p>Chicken and rice with a different vegetable mix. Use a measured olive-oil serving.</p><span class="day-detail">Snack rotation: pistachios</span></article>
+        <article class="day-card"><span class="day-label">Thursday</span><h3>Chicken &amp; feta bowl</h3><p>Chicken, rice, and vegetables with calibrated feta. Count feta toward the dinner fats.</p><span class="day-detail">Snack rotation: walnuts</span></article>
+        <article class="day-card"><span class="day-label">Friday</span><h3>Chicken rice plate</h3><p>Chicken, rice, and vegetables. An egg can replace part of the added-fat allowance.</p><span class="day-detail">Snack rotation: almonds</span></article>
+        <article class="day-card"><span class="day-label">Saturday</span><h3>Salmon &amp; vegetables</h3><p>Salmon with rice and vegetables. Adjust oil or cheese rather than adding all fats together.</p><span class="day-detail">Snack rotation: pistachios</span></article>
+        <article class="day-card"><span class="day-label">Sunday</span><h3>Simple chicken bowl</h3><p>Chicken, rice, and vegetables. Use the remaining calibrated fats and prep the next batch.</p><span class="day-detail">Snack rotation: walnuts</span></article>
+      </div>
+      <p class="meal-note">The rotation is an example built from the template options. Nut swaps use equal calories, not automatically equal gram weights. Add the sports-fuel swap only on a day when you actually use it.</p>
+    </section>
+
+    <section id="daily-base" class="meal-section" aria-labelledby="base-title">
+      <div class="meal-section-heading"><p class="eyebrow">THE DAILY BASE</p><h2 id="base-title">Meals &amp; portions</h2><p>Keep the base simple, then log the portions and labels you actually use.</p></div>
+      <div class="meal-grid">
+        <article class="meal-card"><div class="meal-card-head"><h3>Pre-run</h3><strong>410 kcal</strong></div><p>2 Welch’s pouches + 3 Rice Krispies Treats.</p><div class="meal-macros">4 g protein · 0 g fiber</div><p class="meal-small">Regular bars and pouches assumed; check labels. This block is included in the daily estimate.</p></article>
+        <article class="meal-card"><div class="meal-card-head"><h3>Breakfast</h3><strong>945 kcal</strong></div><ul><li>80 g oats + 200 g nonfat yogurt + 150 g berries</li><li>250 ml skim milk + 60 g Cinnamon Toast Crunch</li><li>240 ml orange juice</li></ul><div class="meal-macros">50 g protein · 16 g fiber</div><p class="meal-small">After the morning run; the day’s one yogurt meal.</p></article>
+        <article class="meal-card"><div class="meal-card-head"><h3>Lunch</h3><strong>815 kcal</strong></div><ul><li>125 g cooked chicken</li><li>3 wheat bread slices, each about 110 kcal and 4 g fiber</li><li>40 g peanut butter + 15 g honey</li></ul><div class="meal-macros">60 g protein · 16 g fiber</div><p class="meal-small">The template does not require extra vegetables or oil at lunch.</p></article>
+        <article class="meal-card"><div class="meal-card-head"><h3>Afternoon snack</h3><strong>530 kcal</strong></div><p>A 300 kcal serving of pretzels + approximately 35 g walnuts, or another nut serving calibrated to the same calories.</p><div class="meal-macros">12 g protein · 5 g fiber</div><p class="meal-small">On big days, replace some pretzels with sports fuel using the swap below.</p></article>
+        <article class="meal-card"><div class="meal-card-head"><h3>Dinner</h3><strong>890 kcal</strong></div><ul><li>160 g cooked chicken or salmon</li><li>80 g dry rice + 200 g vegetables</li><li>Measured fats or cheese chosen to meet the dinner calories</li></ul><div class="meal-macros">60 g protein · 7 g fiber</div><p class="meal-small">This is the template estimate. Calibrate oil, feta, eggs, or salmon; avoid double-counting fats.</p></article>
+        <article class="meal-card"><div class="meal-card-head"><h3>Dessert smoothie</h3><strong>405 kcal</strong></div><ul><li>250 ml skim milk + 1 whey scoop</li><li>30 g ice cream</li><li>150 g mango + 150 g strawberries</li></ul><div class="meal-macros">35 g protein · 6 g fiber</div><p class="meal-small">No second yogurt serving needed.</p></article>
+      </div>
+      <aside class="fuel-swap" aria-labelledby="fuel-title"><p class="eyebrow">BIG-DAY SWAP</p><h3 id="fuel-title">Sports fuel counts toward the day</h3><p>An 80 kcal sports-powder serving + a gel with 50 g carbohydrate (about 200 kcal) totals about <strong>280 kcal</strong>. Replace about 280 kcal of pretzels to keep the example day near its original total. Log the actual products and amounts.</p></aside>
+    </section>
+
+    <section id="prep" class="meal-section" aria-labelledby="prep-title">
+      <div class="meal-section-heading"><p class="eyebrow">ONE WEEK AT A TIME</p><h2 id="prep-title">Shopping &amp; prep</h2><p>Quantities below cover seven days of the example base and the five-chicken / two-salmon dinner rotation. Adjust for meals you replace.</p></div>
+      <div class="prep-grid">
+        <article class="prep-card"><h3>Breakfast &amp; lunch</h3><ul><li>560 g oats · 1.4 kg nonfat yogurt · 1.05 kg berries</li><li>420 g Cinnamon Toast Crunch · 1.68 L orange juice</li><li>21 wheat bread slices · 280 g peanut butter · 105 g honey</li><li>875 g cooked chicken for lunches</li></ul></article>
+        <article class="prep-card"><h3>Dinner batch</h3><ul><li>560 g dry rice total; divide the cooked yield into seven portions</li><li>800 g cooked chicken + 320 g cooked salmon for dinners</li><li>1.4 kg vegetables</li><li>Measured olive oil, feta, or eggs as chosen</li></ul><p class="meal-small">Protein amounts are cooked weights. Freeze later portions.</p></article>
+        <article class="prep-card"><h3>Snacks &amp; smoothies</h3><ul><li>14 Welch’s pouches + 21 Rice Krispies Treats</li><li>2,100 kcal worth of pretzels before sports-fuel swaps</li><li>About 245 g walnuts if using walnuts every day; calibrate other nuts by calories</li><li>3.5 L skim milk total for breakfasts and smoothies</li><li>7 whey scoops · 210 g ice cream · 1.05 kg mango · 1.05 kg strawberries</li></ul></article>
+      </div>
+    </section>
+    <section class="meal-next"><h2>Plan here. Log what happened.</h2><p>The example stays the same until we revise it. Your actual meals, totals, and notes belong in the daily logger.</p><a class="primary-button" href="nutrition.html">Open nutrition log →</a></section>
+  </main>
+  <footer class="nutrition-footer"><a href="index.html">← Back to training dashboard</a><span>Become Fast · Example meal reference</span></footer>
+</body>
+</html>

@@ -1,0 +1,38 @@
+.meal-main{width:min(calc(100% - 32px),1120px);margin-inline:auto;padding:24px 0 64px}
+.meal-main>section{width:100%;padding:0;margin:0}
+.meal-jumps{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.meal-jumps a{padding:9px 14px;border:1px solid var(--line);border-radius:999px;font-size:.84rem;text-decoration:none;color:#e4ecef}
+.meal-jumps a:hover,.meal-jumps a:focus-visible{border-color:var(--accent)}
+.meal-estimates{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.meal-estimates article,.meal-card,.day-card,.prep-card{border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,var(--surface-2),var(--surface));padding:22px;min-width:0}
+.meal-estimates span,.day-label{display:block;font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent-2)}
+.meal-estimates strong{display:block;font-size:2.4rem;letter-spacing:-.045em;margin:5px 0}
+.meal-estimates small{font-size:1rem;color:var(--muted)}
+.meal-estimates p,.meal-small{font-size:.8rem;color:var(--muted);margin:6px 0 0}
+.meal-note{color:#aebfca;font-size:.85rem;line-height:1.65;margin:18px 0}
+.meal-note a{color:var(--accent-2);display:inline-block}
+.meal-main>.meal-section{padding-top:42px;scroll-margin-top:20px}
+.meal-section-heading{max-width:750px;margin-bottom:22px}
+.meal-section-heading h2,.meal-next h2{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.1}
+.meal-section-heading>p:last-child,.meal-next p{color:#b4c3ce;margin:14px 0 0}
+.meal-week{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:12px}
+.day-card h3{font-size:1.15rem;margin:13px 0 9px;letter-spacing:-.02em}
+.day-card p{color:#becbd5;font-size:.9rem;margin:0 0 18px}
+.day-detail{font-size:.78rem;color:var(--green)}
+.meal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.meal-card-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:16px}
+.meal-card-head h3,.prep-card h3{font-size:1.2rem;letter-spacing:-.025em;margin:0}
+.meal-card-head strong{font-size:.85rem;color:var(--accent-2);white-space:nowrap}
+.meal-card p:not(.meal-small),.meal-card li,.prep-card li{color:#c1cdd5;font-size:.92rem}
+.meal-card ul,.prep-card ul{padding-left:20px;margin:0 0 16px}
+.meal-card li+li,.prep-card li+li{margin-top:8px}
+.meal-macros{font-size:.82rem;color:var(--green);border-top:1px solid var(--line);padding-top:12px;margin-top:16px}
+.fuel-swap{margin-top:16px;padding:24px;border:1px solid rgba(255,177,92,.35);border-radius:17px;background:rgba(255,122,47,.06)}
+.fuel-swap h3{margin:0;font-size:1.25rem}.fuel-swap p:last-child{color:#c5d0d8;margin-bottom:0}
+.prep-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.prep-card h3{margin-bottom:18px}
+.meal-main>.meal-next{border-top:1px solid var(--line);margin-top:42px;padding-top:32px}
+.meal-next .primary-button{display:inline-flex;margin-top:22px}
+@media(max-width:700px){.meal-grid,.prep-grid{grid-template-columns:1fr}.meal-estimates{gap:8px}.meal-estimates article{padding:15px}.meal-estimates strong{font-size:1.9rem}.meal-estimates span{font-size:.65rem}.meal-estimates p{font-size:.72rem}.meal-card,.day-card,.prep-card{padding:20px}}
+@media(max-width:420px){.meal-estimates{grid-template-columns:1fr 1fr}.meal-estimates article:first-child{grid-column:1/-1}.meal-card-head{align-items:flex-start}.meal-card-head strong{padding-top:3px}}
+@media print{.nutrition-hero,.meal-estimates article,.meal-card,.day-card,.prep-card,.fuel-swap{background:white;color:#111;box-shadow:none}.meal-jumps,.meal-next,.nutrition-footer{display:none}.nutrition-hero-inner{padding:24px 0}.meal-main{width:100%;padding:0}.meal-main>.meal-section{padding-top:24px}.meal-card,.day-card,.prep-card{break-inside:avoid}.meal-main p,.meal-main li,.meal-main span,.meal-main strong,.meal-main small{color:#222!important}.meal-grid,.prep-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}

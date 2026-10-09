@@ -1,217 +1,181 @@
 (() => {
   "use strict";
-  const BASE = "https://sheets.googleapis.com/v4/spreadsheets/";
+  const { Engine, SyncError } = window.NutritionSyncCore;
   const SCOPE = "https://www.googleapis.com/auth/spreadsheets";
   const CONFIG_KEY = "become-fast-google-oauth-config-v1";
   const DATA_PREFIX = "become-fast-nutrition-v1:";
-  const START_DAY = "2026-10-08";
-  const LAST_DAY = "2026-12-30";
-  const fields = {
-    weight:"B", calories:"C", steps:"D", miles:"E", sleep:"F", training:"G",
-    protein:"H", carbs:"I", fat:"J", fiber:"K", intra:"L", restaurant:"M",
-    lift:"N", bike:"O", readiness:"P", notes:"Q"
-  };
-  const numeric = new Set(["weight","calories","steps","miles","sleep","protein","carbs","fat","fiber","intra","lift","bike","readiness"]);
-  const appStatus = document.getElementById("cloudSyncStatus");
-  const idInput = document.getElementById("googleClientId");
-  const sheetInput = document.getElementById("googleSheetId");
-  const connectButton = document.getElementById("connectGoogle");
-  const syncButton = document.getElementById("syncGoogleNow");
-  const modeLabel = document.getElementById("googleConnectionLabel");
-  if (!appStatus || !idInput || !sheetInput || !connectButton || !syncButton) return;
-  let accessToken = "";
-  let expiry = 0;
-  let tokenClient = null;
-  let authorizing = false;
-  let connecting = false;
-  let busy = false;
-  let timer = null;
-  const pending = new Set();
-
-  function status(text, level="idle") {
-    appStatus.textContent = text;
-    appStatus.dataset.state = level;
+  const DEFAULT_SHEET = "1kcFtPe_-5ng3wdKaEA720P7e9vbjXhvJDBf8wMVwK8Y";
+  const DEFAULT_CLIENT = ""; // Public OAuth client identifier; never a client secret.
+  const $ = id => document.getElementById(id);
+  let token = "", expires = 0, engine, busy = false, authorizing = false;
+  let timer, expiryTimer, attempts = 0, generation = 0;
+  let storageError = false;
+  let hydrationRevision = 0;
+  function status(message, level = "idle") {
+    $("cloudSyncStatus").textContent = message;
+    $("cloudSyncStatus").dataset.state = level;
+  }
+  function hasToken() { return token && Date.now() < expires - 60000; }
+  function updateUI() {
+    const count = engine?.dates().length || 0;
+    $("connectGoogle").disabled = authorizing || busy;
+    $("googleClientId").disabled = authorizing || busy;
+    $("googleSheetId").disabled = authorizing || busy;
+    $("clearEntry").disabled = busy;
+    $("syncGoogleNow").disabled = busy || authorizing || storageError;
+    $("googleConnectionLabel").textContent = (hasToken() ? "Google connected" : "Google connection needed") + (count ? " · " + count + " day(s) waiting" : "");
+    $("googleConnectionLabel").dataset.connected = String(Boolean(hasToken()));
   }
   function config() {
-    const clientId=idInput.value.trim();
-    const raw=sheetInput.value.trim();
-    const hit=raw.match(/\/spreadsheets\/d\/([\w-]+)/);
-    return {clientId, spreadsheetId: hit ? hit[1] : raw};
+    const raw = $("googleSheetId").value.trim();
+    return { clientId: $("googleClientId").value.trim(), spreadsheetId: raw.match(/\/spreadsheets\/d\/([\w-]+)/)?.[1] || raw };
   }
-  function loadConfig() {
-    try {
-      const cfg=JSON.parse(localStorage.getItem(CONFIG_KEY)||"{}");
-      idInput.value=cfg.clientId||"";
-      sheetInput.value=cfg.spreadsheetId||"";
-    } catch {}
-  }
-  function persistConfig() {
-    try { localStorage.setItem(CONFIG_KEY,JSON.stringify(config())); } catch {}
-  }
-  function hasToken() {
-    return Boolean(accessToken) && Date.now()<expiry-60000;
-  }
-  function updateAuthUI() {
-    const ok=hasToken();
-    syncButton.disabled=!ok;
-    modeLabel.textContent=ok?"Google connected for this session":"Local-only until Google connected";
-    modeLabel.dataset.connected=String(ok);
-  }
-  function dayDiff(date, origin) {
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(date)) return NaN;
-    return Math.round((Date.parse(date+"T00:00:00Z")-Date.parse(origin+"T00:00:00Z"))/86400000);
-  }
-  function getRow(date) {
-    const days=dayDiff(date,START_DAY);
-    if (!Number.isInteger(days) || days<0 || date>LAST_DAY) {
-      throw new Error("This Google Sheet has dates prefilled only from Oct 8 to Dec 30, 2026. Enter later dates in Sheets or extend the sheet before syncing.");
-    }
-    return days+2;
-  }
-  function serial(date) {
-    return Math.round((Date.parse(date+"T00:00:00Z")-Date.UTC(1899,11,30))/86400000);
-  }
-  async function googleRequest(url, init={}) {
-    if (!hasToken()) {updateAuthUI();throw new Error("Google session expired. Tap Connect Google to authorize again.");}
+  function clearToken() { token = ""; expires = 0; clearTimeout(expiryTimer); updateUI(); }
+  async function request(url, init = {}) {
+    if (!hasToken()) { clearToken(); throw new SyncError("Saved on device. Tap Connect Google to resume sync."); }
     let response;
+    const abort = new AbortController();
+    const timeout = setTimeout(() => abort.abort(), 20000);
     try {
-      response=await fetch(url,{...init,headers:{"Authorization":"Bearer "+accessToken,...(init.headers||{})},cache:"no-store"});
-    } catch {
-      throw new Error("Could not reach Google Sheets. Check your internet connection.");
-    }
-    if(!response.ok) {
-      if(response.status===401){accessToken="";expiry=0;updateAuthUI();throw new Error("Google authorization expired. Tap Connect Google again.");}
-      if(response.status===403) throw new Error("Google refused access. Check that Sheets API is enabled and your signed-in Google account can edit the sheet.");
-      if(response.status===404) throw new Error("The spreadsheet was not found by this Google account. Check its URL and sharing permissions.");
-      throw new Error("Google Sheets returned HTTP "+response.status+". Local data remain saved.");
-    }
+      response = await fetch(url, { ...init, signal: abort.signal, cache: "no-store",
+        headers: { Authorization: "Bearer " + token, ...(init.body ? { "Content-Type": "application/json" } : {}) } });
+    } catch { throw new SyncError("Connection interrupted. Saved on device; automatic retry is queued.", true); }
+    finally { clearTimeout(timeout); }
+    if (response.status === 401) { clearToken(); throw new SyncError("Google session expired. Tap Connect Google; queued entries are safe."); }
+    if (response.status === 403) throw new SyncError("Google denied access. Enable Sheets API, approve Sheets permission, and use the account that owns this Sheet.");
+    if (response.status === 404) throw new SyncError("Sheet not found. Check the Sheet URL and signed-in account.");
+    if (!response.ok) throw new SyncError("Google Sheets returned HTTP " + response.status + ". Saved on device; tap Retry sync.", response.status === 429 || response.status >= 500);
     return response.json();
   }
-  async function verifySheet(date) {
-    const {spreadsheetId}=config();
-    const row=getRow(date);
-    const range=encodeURIComponent("'Daily Log'!A"+row);
-    const url=BASE+encodeURIComponent(spreadsheetId)+"/values/"+range+"?valueRenderOption=UNFORMATTED_VALUE";
-    const result=await googleRequest(url);
-    const actual=result?.values?.[0]?.[0];
-    if (Number(actual)!==serial(date)) {
-      throw new Error("Date-row verification failed. No data were written; confirm this is the original Become Fast spreadsheet.");
-    }
-    return row;
-  }
-  async function syncEntry(date) {
-    const cfg=config();
-    const row=await verifySheet(date);
-    let local={};
-    try { local=JSON.parse(localStorage.getItem(DATA_PREFIX+date)||"{}")||{}; }catch {}
-    const data=[];
-    for (const [key,col] of Object.entries(fields)) {
-      const raw=local[key];
-      if(raw===undefined||raw===null||String(raw).trim()==="")continue;
-      const value=numeric.has(key)?Number(raw):String(raw);
-      if(numeric.has(key)&&!Number.isFinite(value))continue;
-      data.push({range:"'Daily Log'!"+col+row,values:[[value]]});
-    }
-    if(!data.length) return false;
-    const url=BASE+encodeURIComponent(cfg.spreadsheetId)+"/values:batchUpdate";
-    await googleRequest(url,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({valueInputOption:"USER_ENTERED",data})
-    });
-    return true;
-  }
-  function queue(date) {
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return;
-    pending.add(date);
-    if(!hasToken())return;
+  function schedule(delay = 1000) {
     clearTimeout(timer);
-    timer=setTimeout(drain,1800);
+    if (hasToken() && navigator.onLine && engine?.dates().length) timer = setTimeout(drain, delay);
+  }
+  async function hydrate(date) {
+    if (!hasToken() || busy || !navigator.onLine) return;
+    const source = engine;
+    const revision = hydrationRevision;
+    try {
+      const remote = await source.read(date);
+      if (engine !== source || hydrationRevision !== revision || busy) return;
+      window.dispatchEvent(new CustomEvent("nutrition:cloud-loaded", { detail: {
+        date, entry: remote.entry, pending: Object.keys(source.state.outbox[date] || {})
+      } }));
+    } catch (error) { status(error.message, "error"); }
   }
   async function drain() {
     clearTimeout(timer);
-    if(busy||!hasToken())return;
-    busy=true;
+    if (busy || !engine || storageError) return;
+    if (!navigator.onLine) { status("Offline · saved on device. Queued entries retry when this page is online."); updateUI(); return; }
+    if (!hasToken()) { status("Saved on device. Tap Connect Google to sync queued entries."); updateUI(); return; }
+    busy = true; updateUI();
+    const failed = [];
     try {
-      while(pending.size&&hasToken()){
-        const date=pending.values().next().value;
-        pending.delete(date);
-        status("Syncing "+date+" to Google Sheets…","idle");
-        try{
-          const saved=await syncEntry(date);
-          status(saved?"Saved to Google Sheets: "+date:"No filled fields to sync.","success");
-        }catch(e){
-          pending.add(date);
-          status(e.message||"Sync failed. Entry remains on this device.","error");
-          break;
+      for (const date of engine.dates()) {
+        status("Syncing " + date + "…");
+        try {
+          const row = await engine.sync(date);
+          attempts = 0;
+          status("Verified in Google Sheets: " + date + " · Daily Log row " + row, "success");
+        } catch (error) {
+          failed.push(error);
+          status(error.message, "error");
+          if (error.retryable || !hasToken()) break;
         }
       }
-    }finally{busy=false;updateAuthUI();}
+    } finally { busy = false; updateUI(); }
+    if (failed.length) {
+      status(failed[0].message + " " + engine.dates().length + " day(s) still waiting.", "error");
+      if (failed.some(error => error.retryable)) schedule(Math.min(60000, 2000 * 2 ** Math.min(attempts++, 5)));
+    } else {
+      if (engine.dates().length) schedule(); // Edits that arrived during the request remain queued.
+      await hydrate($("entryDate").value);
+    }
   }
-  async function connect(){
-    if(authorizing||connecting)return;
-    const cfg=config();
-    if(!/^[\w-]+\.apps\.googleusercontent\.com$/.test(cfg.clientId)){
-      status("Paste the Google OAuth web client ID ending in .apps.googleusercontent.com.","error");return;
-    }
-    if(!/^[\w-]{20,}$/.test(cfg.spreadsheetId)){
-      status("Paste the private Google Sheet URL or its spreadsheet ID.","error");return;
-    }
-    if(!window.google?.accounts?.oauth2?.initTokenClient){
-      status("Google sign-in library is not available. Reload this page and check browser privacy blockers.","error");return;
-    }
-    persistConfig();
-    authorizing=true;
-    connectButton.disabled=true;
-    status("Opening Google's authorization window…","idle");
-    try{
-      tokenClient=google.accounts.oauth2.initTokenClient({
-        client_id:cfg.clientId,scope:SCOPE,
-        callback:async resp=>{
-          authorizing=false;
-          connectButton.disabled=false;
-          if(resp.error||!resp.access_token){
-            status("Google authorization was not completed. Nothing was sent.","error");return;
+  function setup() {
+    const cfg = config();
+    if (!/^[\w-]{20,}$/.test(cfg.spreadsheetId)) throw new Error("Enter a valid private Google Sheet URL.");
+    engine = new Engine({ spreadsheetId: cfg.spreadsheetId, storage: localStorage, request });
+    engine.migrate(localStorage, DATA_PREFIX);
+    storageError = false;
+  }
+  function connect() {
+    if (busy || authorizing) return;
+    if (!navigator.onLine) { status("Offline · your entries remain saved on this device."); return; }
+    const cfg = config();
+    if (!/^[\w-]+\.apps\.googleusercontent\.com$/.test(cfg.clientId)) { status("Google sign-in setup is incomplete: a web OAuth client ID is required.", "error"); return; }
+    if (!window.google?.accounts?.oauth2) { status("Google sign-in is still loading or blocked. Reload when online and retry.", "error"); return; }
+    try { localStorage.setItem(CONFIG_KEY, JSON.stringify(cfg)); if (!engine) setup(); }
+    catch { storageError = true; status("Browser storage is unavailable. Export your local backup before retrying.", "error"); updateUI(); return; }
+    authorizing = true; updateUI();
+    status("Choose your Google account and approve Sheets access…");
+    const currentGeneration = generation;
+    try {
+      const client = google.accounts.oauth2.initTokenClient({
+        client_id: cfg.clientId, scope: SCOPE, include_granted_scopes: false,
+        callback: async response => {
+          authorizing = false;
+          if (generation !== currentGeneration) return;
+          if (response.error || !response.access_token || !google.accounts.oauth2.hasGrantedAllScopes(response, SCOPE)) {
+            clearToken(); status("Sheets permission was not approved. Your entries remain on this device.", "error"); return;
           }
-          accessToken=resp.access_token;
-          expiry=Date.now()+(Number(resp.expires_in||3600)*1000);
-          updateAuthUI();
-          status("Google authorized. Checking spreadsheet access…","idle");
-          try{
-            const date=document.getElementById("entryDate").value;
-            await verifySheet(date);
-            status("Connected. Entries will automatically sync after edits.","success");
-            queue(date);
-            await drain();
-          }catch(e){status(e.message,"error");}
+          token = response.access_token;
+          expires = Date.now() + Number(response.expires_in || 3600) * 1000;
+          clearTimeout(expiryTimer);
+          expiryTimer = setTimeout(() => { clearToken(); status("Google session expired. Tap Connect Google to resume automatic sync."); }, Math.max(0, expires - Date.now() - 60000));
+          updateUI();
+          status("Google connected. Edits sync automatically while this session is active.", "success");
+          await drain();
         },
-        error_callback:()=>{
-          authorizing=false;connectButton.disabled=false;
-          status("Google authorization window was closed or blocked.","error");
-        }
+        error_callback: () => { authorizing = false; updateUI(); status("Google sign-in was closed or blocked. Tap Connect Google to retry.", "error"); }
       });
-      tokenClient.requestAccessToken({prompt:""});
-    }catch(e){
-      authorizing=false;connectButton.disabled=false;
-      status("Could not start Google authorization: "+(e.message||"unknown error"),"error");
-    }
+      client.requestAccessToken({ prompt: "" });
+    } catch { authorizing = false; updateUI(); status("Could not open Google sign-in. Check popup blocking and retry.", "error"); }
   }
-  connectButton.addEventListener("click",connect);
-  syncButton.addEventListener("click",async()=>{
-    const d=document.getElementById("entryDate").value;
-    document.getElementById("saveEntry").click();
-    queue(d);
-    await drain();
+  $("connectGoogle").addEventListener("click", connect);
+  $("syncGoogleNow").addEventListener("click", () => {
+    $("saveEntry").click();
+    if (hasToken()) drain(); else connect();
   });
-  for(const el of [idInput,sheetInput])el.addEventListener("change",()=>{
-    persistConfig();
-    accessToken="";expiry=0;pending.clear();updateAuthUI();
-    status("Settings saved on this device. Connect Google to authorize.","idle");
+  for (const el of [$("googleClientId"), $("googleSheetId")]) el.addEventListener("change", () => {
+    generation++; clearToken(); clearTimeout(timer);
+    try { localStorage.setItem(CONFIG_KEY, JSON.stringify(config())); setup(); status("Settings saved. Tap Connect Google."); }
+    catch (error) { storageError = true; status(error.message, "error"); }
+    updateUI();
   });
-  window.addEventListener("nutrition:local-saved",event=>{
-    if(event.detail?.date)queue(event.detail.date);
+  window.addEventListener("nutrition:local-saved", event => {
+    hydrationRevision++;
+    if (!engine) return;
+    try {
+      engine.queue(event.detail.date, event.detail.changes || {});
+      storageError = false;
+      if (Object.keys(event.detail.changes || {}).length) {
+        status(navigator.onLine ? "Saved on device · waiting to sync." : "Offline · saved on device. Will retry when online.");
+      }
+      updateUI(); schedule();
+    } catch (error) {
+      storageError = true;
+      status(error.message.startsWith("Invalid") ? error.message : "Could not persist the sync queue. Keep this page open and export a backup.", "error");
+      updateUI();
+    }
   });
-  loadConfig();
-  updateAuthUI();
-  status("Saved entries stay local until you connect Google. Access expires periodically; reconnect when prompted.","idle");
+  window.addEventListener("nutrition:date-selected", event => hydrate(event.detail.date));
+  window.addEventListener("nutrition:local-cleared", event => {
+    try { engine?.discard(event.detail.date); status("Local copy and queued edits cleared. Existing Sheet values are preserved."); updateUI(); }
+    catch { storageError = true; status("Could not clear the sync queue. Export a backup before resetting storage.", "error"); updateUI(); }
+  });
+  window.addEventListener("online", () => { status("Back online · checking queued changes."); drain(); });
+  window.addEventListener("offline", () => { clearTimeout(timer); status("Offline · entries save on device and retry when online."); });
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) { updateUI(); drain(); } });
+  try {
+    const cfg = JSON.parse(localStorage.getItem(CONFIG_KEY) || "{}");
+    $("googleClientId").value = cfg.clientId || DEFAULT_CLIENT;
+    $("googleSheetId").value = cfg.spreadsheetId || DEFAULT_SHEET;
+    setup();
+    status(engine.dates().length ? "Saved entries are queued. Tap Connect Google to sync." : "Tap Connect Google once per session. New edits will sync automatically.");
+  } catch { storageError = true; status("Browser storage is unavailable or unreadable. Export a local backup before resetting it.", "error"); }
+  updateUI();
+  if ("serviceWorker" in navigator && location.protocol !== "file:") {
+    navigator.serviceWorker.register("nutrition-sw.js", { scope: "./" }).catch(() => { /* Local saves still work without an offline shell. */ });
+  }
 })();

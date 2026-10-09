@@ -16,6 +16,9 @@
   let canStore = true;
   let saveHandle = null;
   let activeDate = null;
+  let loadedFields = {};
+  let followsToday = true;
+  const TRAINING_ALIASES = { "Long run":"Long / hard run", "Threshold + strength":"Run + strength", "Sprint / speed":"Sprint + lifting", "Run + upper body":"Run + strength", "Bike / row / cross-train":"Other" };
   function todayEastern() {
     const parts = new Intl.DateTimeFormat("en-US", { timeZone:TZ,year:"numeric",month:"2-digit",day:"2-digit" }).formatToParts(new Date());
     const get = t => parts.find(x => x.type === t).value;
@@ -28,7 +31,11 @@
   }
   function validateDate(value) { return /^\d{4}-\d{2}-\d{2}$/.test(value) && !Number.isNaN(new Date(value + "T12:00:00Z").getTime()); }
   function load(date) {
-    try { return JSON.parse(localStorage.getItem(PREFIX + date) || "{}") || {}; }
+    try {
+      const data = JSON.parse(localStorage.getItem(PREFIX + date) || "{}") || {};
+      if (TRAINING_ALIASES[data.training]) data.training = TRAINING_ALIASES[data.training];
+      return data;
+    }
     catch { return {}; }
   }
   function stored(date, obj) {
@@ -54,8 +61,15 @@
     saveHandle = null;
     if (!validateDate(activeDate)) return;
     const values = currentFields();
+    const changes = {};
+    for (const [key, value] of Object.entries(values)) {
+      if (value !== loadedFields[key]) changes[key] = value;
+    }
     const ok = stored(activeDate, values);
-    if (ok) window.dispatchEvent(new CustomEvent("nutrition:local-saved", { detail: { date: activeDate } }));
+    if (ok) {
+      loadedFields = { ...values };
+      window.dispatchEvent(new CustomEvent("nutrition:local-saved", { detail: { date: activeDate, changes } }));
+    }
     document.getElementById("saveState").textContent = ok ? "Saved on device" : "Storage unavailable";
     render();
   }
@@ -70,16 +84,19 @@
     clearTimeout(saveHandle);
     saveHandle = null;
     activeDate = date;
+    followsToday = date === todayEastern();
     dateInput.value = date;
     form.reset();
     dateInput.value = date;
     const data = load(date);
+    loadedFields = { ...data };
     for (const name of FIELDS) {
       const field = form.elements.namedItem(name);
       if (field) field.value = data[name] === undefined ? "" : data[name];
     }
     document.getElementById("saveState").textContent = Object.keys(data).length ? "Saved on device" : "No entry yet";
     render();
+    window.dispatchEvent(new CustomEvent("nutrition:date-selected", { detail: { date } }));
   }
   function numeric(data, key) {
     const val = data[key];
@@ -191,9 +208,30 @@
   document.getElementById("copyAll").addEventListener("click",copyWeek);
   document.getElementById("exportCsv").addEventListener("click",exportCSV);
   document.getElementById("clearEntry").addEventListener("click",()=>{
-    if(!confirm("Clear the locally saved entry for "+dateInput.value+"? This cannot be undone."))return;
-    stored(dateInput.value,{});selectDate(dateInput.value);
+    if(!confirm("Clear the local copy and queued edits for "+dateInput.value+"? This cannot be undone. Existing Google Sheet values will remain."))return;
+    if (stored(dateInput.value,{})) {
+      window.dispatchEvent(new CustomEvent("nutrition:local-cleared", { detail: { date: dateInput.value } }));
+      selectDate(dateInput.value);
+    }
   });
   window.addEventListener("pagehide",()=>{if(saveHandle!==null)save();});
+  window.addEventListener("nutrition:cloud-loaded", event => {
+    const { date, entry, pending } = event.detail;
+    if (date !== activeDate) return;
+    const values = currentFields();
+    for (const [name, value] of Object.entries(entry)) {
+      if (!FIELDS.includes(name) || pending.includes(name) || values[name] !== loadedFields[name]) continue;
+      const field = form.elements.namedItem(name);
+      if (field) { field.value = value; loadedFields[name] = value; }
+    }
+    stored(date, currentFields());
+    render();
+  });
+  document.addEventListener("visibilitychange",()=>{if(document.hidden && saveHandle!==null)save();});
+  function followEasternDay() {
+    if (!document.hidden && followsToday && activeDate !== todayEastern()) selectDate(todayEastern());
+  }
+  document.addEventListener("visibilitychange", followEasternDay);
+  setInterval(followEasternDay, 60000);
   selectDate(todayEastern());
 })();

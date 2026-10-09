@@ -38,14 +38,19 @@
     queue(date, changes, onlyIfBlank = false) {
       serial(date);
       const updates = {};
+      let invalid;
       for (const [key, raw] of Object.entries(changes)) {
         if (!fields[key] || raw == null || String(raw).trim() === "") continue;
         const value = numeric.has(key) ? Number(raw) : (key === "training" ? trainingAliases[raw] || String(raw) : String(raw));
-        if (numeric.has(key) && (!Number.isFinite(value) || value < 0)) throw new Error("Invalid " + key + ". Correct it before syncing.");
+        if (numeric.has(key) && (!Number.isFinite(value) || value < 0)) {
+          invalid = "Invalid " + key + ". Correct it before syncing.";
+          continue;
+        }
         updates[key] = { value, id: crypto.randomUUID(), onlyIfBlank };
       }
       if (Object.keys(updates).length) this.state.outbox[date] = { ...this.state.outbox[date], ...updates };
       this.persist();
+      if (invalid) throw new Error(invalid);
     }
     migrate(storage, prefix) {
       if (this.state.migrated) return;

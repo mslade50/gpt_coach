@@ -93,4 +93,3 @@ test('blocked popup allows another connection attempt without losing queued data
   assert.match(f.node('cloudSyncStatus').textContent, /blocked/);
   assert.match(f.node('googleConnectionLabel').textContent, /1 day/);
 });
-

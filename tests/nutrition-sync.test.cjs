@@ -121,3 +121,10 @@ test('invalid calendar dates and nonfinite numeric entries are rejected', () => 
   assert.throws(() => f.engine.queue('2026-02-30', { calories: '100' }));
   assert.throws(() => f.engine.queue('2026-10-09', { calories: 'NaN' }));
 });
+test('an invalid field does not lose valid sibling edits', () => {
+  const f = fixture();
+  assert.throws(() => f.engine.queue('2026-10-09', { weight: '201', calories: '-1' }));
+  const reloaded = new Engine({ spreadsheetId: 'test-sheet', storage: f.storage, request: f.request });
+  assert.equal(reloaded.state.outbox['2026-10-09'].weight.value, 201);
+  assert.equal(reloaded.state.outbox['2026-10-09'].calories, undefined);
+});

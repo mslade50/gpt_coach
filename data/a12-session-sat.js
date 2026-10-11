@@ -1,0 +1,5 @@
+window.a12Session(6,"Long easy aerobic run","85 min default, 90 min green ceiling","85 min easy RPE 2–3; no fast finish","Tested trainers, predictable terrain","Oct 10 results not verified. Match or reduce last completed long-run duration rather than forcing progression.",[
+["Readiness",[["Gate","Normal gait, quiet calf/Achilles/foot/hamstring/adductor and acceptable energy. If prior long run shorter, match it."]]],
+["Long run",[["85 min easy","First 15 min deliberately slow then RPE 2–3 conversational; flat/gentle terrain, no progression."],["90 min ceiling","ONLY if last week's 90 min was completed comfortably and next-morning tissues were green."]]],
+["Fuel / options",[["Fuel","Carbs before, ~30–45 g per hour during as tolerated, fluid/sodium by conditions/sweat, carb/protein meal after."],["Amber","65–75 min easy, or last comfortably completed duration if shorter."],["Impact alternative","70–90 min easy bike if non-impact is pain-free."],["Red stop","Stop for sharp/increasing pain, altered gait, dizziness; no make-up miles."]]]
+]);

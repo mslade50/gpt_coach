@@ -1,0 +1,1 @@
+window.a12Session(2,'Speed + primary strength','70 min track + 60 min lift','3 accels + 2 flies, then lifting','Trainers','Green readiness only', [['Speed',[['Accelerate','3 x 20 m, 4 min rest.']]]]);

@@ -1,0 +1,5 @@
+window.a12Session(4,"Controlled subthreshold aerobic","55–60 min","3 × 8 min RPE 5–6, 2 min easy jog between","Known trainers, flat route","Medium effort, NOT threshold or another high day; no lifting.",[
+["Readiness",[["Gate","Normal gait and improving Tuesday soreness. If legs heavy or lower-leg/hamstring symptoms worsen, use easy-only."]]],
+["Aerobic session",[["Warm-up","12–15 min easy RPE 2–3."],["Main work","3 × 8 min at RPE 5–6, 2 min easy jog; below true threshold, finish with 1–2 reps in reserve."],["Effort rule","No pace chasing; if rep one exceeds RPE 6.5, slow or revert to easy."],["Cooldown","10–15 min easy. No extra miles."]]],
+["Fuel / options",[["Fuel","Carbohydrate-containing meal/snack when needed, fluid to conditions; protein/carbs afterward."],["Amber","45–50 min easy RPE 2–3; no work reps."],["Red","Rest or non-impact if tolerable; stop for sharp/worsening pain or gait change."]]]
+]);

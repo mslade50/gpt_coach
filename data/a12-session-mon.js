@@ -1,0 +1,1 @@
+window.SESSION_PLANS=window.SESSION_PLANS||{};window.SESSION_PLANS.w12d1={purpose:'Upper A then easy run',duration:'90-105 min',volume:'14 sets upper + 40-45 min easy',footwear:'Trainers',note:'Lift first, run easy. No lower body lifting.',blocks:[{name:'Upper A',items:[{id:'a12m1',name:'Incline DB press',dosage:'3 x 8-10 RPE 7-8; rest 90 sec.'}]}]};

@@ -1,0 +1,5 @@
+window.a12Session(7,"Complete rest and readiness review","Rest day","No structured training","None","Do not make up mileage; review verified workout outcomes before programming next B week.",[
+["Rest",[["Full day off","No run, bike, gym or sprint workout; ordinary daily activity is fine."]]],
+["Record actual completion",[["Training totals","Record miles/minutes run, bike minutes, Tuesday acceleration/flying reps and lift loads/RPE, Thursday subthreshold paces/HR/RPE, Saturday long-run duration."],["Recovery","Record sleep, energy, hamstring, adductor/hip, calf/Achilles and foot/ankle 0–10 including next morning. Do not mark planned sessions as completed."]],
+["Next week",[["B-week direction","Tuesday controlled threshold + primary strength; Thursday medium-long easy run with optional 4 × 8-second smooth hill strides only if legs fully green; no jogging after hills required."]]]
+]);

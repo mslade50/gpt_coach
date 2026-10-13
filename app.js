@@ -20,16 +20,19 @@
   };
 
   function startOfLocalDay(date) {
-    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", year: "numeric", month: "numeric", day: "numeric" }).formatToParts(date);
+    const get = type => Number(parts.find(part => part.type === type).value);
+    return new Date(Date.UTC(get("year"), get("month") - 1, get("day")));
   }
 
   function getAutoProgramWeek(now = new Date()) {
     const today = startOfLocalDay(now);
-    const elapsedDays = Math.floor((today - programStart) / msPerDay);
+    const elapsedDays = Math.floor((today - Date.UTC(2026, 6, 27)) / msPerDay);
     let week = Math.floor(Math.max(elapsedDays, 0) / 7) + 1;
 
-    // Saturday night preview: show the next planned week after 6:00 PM local time.
-    if (now.getDay() === 6 && now.getHours() >= 18) week += 1;
+    // Saturday night preview: show the next planned week after 6:00 PM Eastern time.
+    const easternHour = Number(new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", hourCycle: "h23" }).format(now));
+    if (today.getUTCDay() === 6 && easternHour >= 18) week += 1;
 
     if (!weeklyPlans.length) return 1;
     return Math.min(Math.max(week, 1), weeklyPlans.length);
@@ -37,7 +40,7 @@
 
   function getAutoSession(now = new Date()) {
     const today = startOfLocalDay(now);
-    const elapsedDays = Math.floor((today - programStart) / msPerDay);
+    const elapsedDays = Math.floor((today - Date.UTC(2026, 6, 27)) / msPerDay);
     const totalDays = Math.max((weeklyPlans.length || 1) * 7, 1);
     const clampedDay = Math.min(Math.max(elapsedDays, 0), totalDays - 1);
     return {
@@ -64,6 +67,7 @@
   }
 
   const autoSession = getAutoSession();
+  let followingToday = true;
   const state = {
     category: "All",
     query: "",
@@ -279,6 +283,9 @@
     if (sessionTitle) { const plan = getWeekPlan(week); sessionTitle.textContent = plan && plan.blockWeekLabel ? `${plan.blockWeekLabel} · Day ${dayIndex + 1}` : `Week ${week} · Day ${dayIndex + 1}`; }
     if (sessionName) sessionName.textContent = definition.purpose || (day ? day.title : "Planned session");
     if (sessionDate) sessionDate.textContent = formatSessionDate(date);
+    const isoDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    window.TrainingSession = { key: isoDate, isoDate, week, day: dayIndex + 1, purpose: sessionName?.textContent || "Planned session", date: sessionDate?.textContent || isoDate };
+    window.dispatchEvent(new CustomEvent("training:context", { detail: window.TrainingSession }));
     if (sessionDuration) sessionDuration.textContent = definition.duration || "See plan";
     if (sessionVolume) sessionVolume.textContent = definition.volume || (day ? day.volume : "Not loaded");
     if (sessionFootwear) sessionFootwear.textContent = definition.footwear || "See plan";
@@ -319,13 +326,17 @@
     updateProgress();
   }
 
-  function updateProgress() {
+  function updateProgress(publish = false) {
     if (!progressText || !progressBar) return;
     const validCompleted = state.currentItemIds.filter((id) => state.completed.has(id)).length;
     const total = state.currentItemIds.length;
     const percent = total ? (validCompleted / total) * 100 : 0;
     progressText.textContent = `${validCompleted} of ${total} session items checked`;
     progressBar.style.width = `${percent}%`;
+    if (publish && window.TrainingSession) {
+      const checked = [...sessionTimeline.querySelectorAll("[data-complete]:checked")].map(input => input.closest("label").querySelector("strong").textContent);
+      window.dispatchEvent(new CustomEvent("training:checklist-changed", { detail: { date: window.TrainingSession.isoDate, checklist: `${validCompleted} of ${total} checked` + (checked.length ? ": " + checked.join("; ") : "") } }));
+    }
   }
 
   function renderWeekPlan() {
@@ -336,7 +347,7 @@
     const range = formatDateRange(plan.week);
     const viewMode = plan.week === autoSelectedWeek ? "auto view" : "manual view";
 
-    weekPlanMeta.textContent = `${plan.blockWeekLabel || `Week ${plan.week}`} · ${range} · ${viewMode}. Auto-rolls Saturday after 6 PM local time.`;
+    weekPlanMeta.textContent = `${plan.blockWeekLabel || `Week ${plan.week}`} · ${range} · ${viewMode}. Auto-rolls Saturday after 6 PM Eastern time.`;
 
     weekSummary.innerHTML = `
       <article class="week-summary-card">
@@ -384,6 +395,7 @@
   }
 
   function selectSession(week, dayIndex, options = {}) {
+    followingToday = Boolean(options.followToday);
     const safeWeek = Math.min(Math.max(Number(week) || 1, 1), weeklyPlans.length || 1);
     const safeDay = Math.min(Math.max(Number(dayIndex) || 0, 0), 6);
     state.selectedSession = { week: safeWeek, dayIndex: safeDay };
@@ -495,7 +507,7 @@
       if (checkbox.checked) state.completed.add(checkbox.dataset.complete);
       else state.completed.delete(checkbox.dataset.complete);
       saveSet(completionStorageKey(state.selectedSession.week, state.selectedSession.dayIndex), state.completed);
-      updateProgress();
+      updateProgress(true);
     });
   }
 
@@ -504,6 +516,7 @@
       state.completed.clear();
       saveSet(completionStorageKey(state.selectedSession.week, state.selectedSession.dayIndex), state.completed);
       renderTimeline();
+      updateProgress(true);
     });
   }
 
@@ -512,7 +525,7 @@
   if (todaySession) {
     todaySession.addEventListener("click", () => {
       const today = getAutoSession();
-      selectSession(today.week, today.dayIndex, { scroll: true });
+      selectSession(today.week, today.dayIndex, { scroll: true, followToday: true });
     });
   }
 
@@ -567,4 +580,11 @@
   renderSessionHeader();
   renderTimeline();
   renderWeekPlan();
+  function followEasternToday() {
+    if (!followingToday) return;
+    const next = getAutoSession();
+    if (next.week !== state.selectedSession.week || next.dayIndex !== state.selectedSession.dayIndex) selectSession(next.week, next.dayIndex, { followToday: true });
+  }
+  setInterval(followEasternToday, 60000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) followEasternToday(); });
 })();

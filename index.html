@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="styles.css?v=20261009" />
   <link rel="stylesheet" href="schedule.css" />
   <link rel="stylesheet" href="session.css" />
-  <link rel="stylesheet" href="session-log.css" />
+  <link rel="stylesheet" href="session-log.css?v=20261012" />
 </head>
 <body>
   <a class="skip-link" href="#session">Skip to current session</a>
@@ -84,7 +84,7 @@
       <div class="section-heading log-heading-row">
         <div>
           <p class="eyebrow">SESSION LOG</p>
-          <h2 id="session-log-heading">Build the coach report</h2>
+          <h2 id="session-log-heading">Log your training</h2>
         </div>
         <p class="muted" id="logSessionMeta">Loads the selected session automatically.</p>
       </div>
@@ -93,7 +93,7 @@
         <form class="log-form" id="sessionLogForm" autocomplete="off">
           <div class="log-form-intro">
             <h3>Enter only the useful data</h3>
-            <p>Daily volume, timed work, main lift(s), and anything noteworthy. This saves on your current browser as you type.</p>
+            <p>Enter actual volume, timed work, lifts, and notes. Entries save as you type and sync to your private Sheet while Google is connected.</p>
           </div>
 
           <div class="log-field-grid">
@@ -131,22 +131,36 @@
 
           <div class="log-form-actions">
             <span id="logSaveState" aria-live="polite">Not logged yet</span>
-            <button class="log-clear-button" id="clearSessionLog" type="button">Clear this log</button>
+            <button class="primary-button" id="saveTrainingLog" type="button">Save &amp; sync</button>
+            <button class="log-clear-button" id="clearSessionLog" type="button">Clear device copy</button>
           </div>
         </form>
 
-        <aside class="coach-report-card" aria-labelledby="coach-report-heading">
+        <aside class="coach-report-card" aria-labelledby="training-sync-heading">
           <div class="coach-report-top">
             <div>
-              <p class="eyebrow">PASTE INTO CHAT</p>
-              <h3 id="coach-report-heading">Coach report</h3>
+              <p class="eyebrow">PRIVATE TRAINING LOG</p>
+              <h3 id="training-sync-heading">Automatic Sheets sync</h3>
             </div>
-            <span class="local-only">Local only</span>
+            <span class="local-only">Device + Sheets</span>
           </div>
 
-          <textarea id="coachReportPreview" readonly aria-label="Generated coach report">Select a session to build a coach report.</textarea>
-          <button class="primary-button" id="copyCoachReport" type="button" disabled>Copy coach report</button>
-          <p class="copy-status" id="copyReportStatus" aria-live="polite">Nothing is sent automatically.</p>
+          <div class="training-sync-panel">
+            <p>Connect Google with the account that owns your nutrition Sheet. Training results go to its separate Training Log tab. The selected workout date stays attached to your entry.</p>
+            <div class="training-sync-actions"><button class="primary-button" id="connectTrainingGoogle" type="button">Connect Google</button><button class="ghost-button" id="retryTrainingSync" type="button">Retry sync</button></div>
+            <strong id="trainingConnectionLabel">Google connection needed</strong>
+            <p id="trainingCloudStatus" role="status">Tap Connect Google to start automatic sync.</p>
+            <p class="training-sync-help">Offline edits remain queued. Reconnect after reloading or when Google expires. Blank fields preserve Sheet values. Checklist progress does not mark a workout completed; choose its status above.</p>
+            <details><summary>Connection settings</summary><label class="log-field"><span>Google OAuth client ID</span><input id="trainingClientId" type="text" autocapitalize="off" spellcheck="false"></label><label class="log-field"><span>Private Google Sheet URL</span><input id="trainingSheetId" type="text" autocapitalize="off" spellcheck="false"></label></details>
+            <button class="ghost-button" id="exportTrainingBackup" type="button">Export training backup</button>
+            <p class="training-sync-help">Older device logs are preserved in the backup. Their old week labels can be ambiguous, so they are not uploaded automatically. <a href="TRAINING-LOGGER.md">Sync details</a></p>
+          </div>
+          <details class="optional-coach-report">
+            <summary>Optional coach report</summary>
+            <textarea id="coachReportPreview" readonly aria-label="Generated coach report">Select a session to build a coach report.</textarea>
+            <button class="ghost-button" id="copyCoachReport" type="button" disabled>Copy coach report</button>
+            <p class="copy-status" id="copyReportStatus" aria-live="polite">Copying is optional when Google sync is connected.</p>
+          </details>
         </aside>
       </div>
     </section>
@@ -227,7 +241,7 @@
 
   <footer>
     <p>Hybrid 400 Coach Dashboard · Coaching descriptions are the source of truth; video links are visual references.</p>
-    <p>Session logs remain on the current browser until you copy and paste the generated coach report into chat.</p>
+    <p>Training logs save on this device and sync to your private Sheet while Google is connected.</p>
   </footer>
 
   <dialog id="exerciseDialog" aria-labelledby="dialogTitle">
@@ -255,8 +269,13 @@
   <script src="data/week7-plan.js"></script>
   <script src="data/aerobic-rebuild-week1.js"></script>
   <script src="data/aerobic-rebuild-b-week1.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=20261012"></script>
   <script src="sunday-preview.js"></script>
-  <script src="session-log.js"></script>
+  <script src="session-log.js?v=20261012"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="nutrition-sync-core.js?v=20261012"></script>
+  <script src="training-sync-core.js?v=20261012"></script>
+  <script src="training-sync.js?v=20261012"></script>
+  <script src="nutrition-sync.js?v=20261012"></script>
 </body>
 </html>

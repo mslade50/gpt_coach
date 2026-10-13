@@ -25,7 +25,8 @@ The exercise registry is split into small ordered files under `data/` so it can 
 - One primary coaching cue and one main error to avoid
 - Monday’s exact dose displayed on each card
 - Targeted YouTube demonstration searches, including a preferred coaching source where available
-- A Week 1 Day 1 session checklist with locally saved progress
+- Dated session checklists with locally saved progress
+- Automatic private Google Sheets training sync, with offline queues and retries
 - A locally saved exercise shortlist
 - Green/amber/red-quality stop rules
 - Responsive desktop and mobile layouts
@@ -55,6 +56,12 @@ DEPLOY.md                           # publishing instructions
 - The public GitHub repository contains no personal logs, access tokens, or OAuth secrets.
 - [Example weekly meal plan](meal-plan.html) includes the existing meal-template portions, a seven-day dinner rotation, and shopping/prep quantities. It is a reference, not tracked intake.
 - Read [nutrition setup and privacy notes](NUTRITION-LOGGER.md).
+
+## Training logger
+
+- [Log your training](https://mslade50.github.io/gpt_coach/#session-log) on the existing dashboard. Actual results and checklist progress sync to the private workbook's separate Training Log tab.
+- Connect Google once per active page session; edits auto-save and sync without copying reports into chat.
+- Read [training sync, privacy, and recovery details](TRAINING-LOGGER.md).
 
 ## Add future exercises
 

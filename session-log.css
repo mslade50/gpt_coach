@@ -269,3 +269,22 @@
     background: #fff;
   }
 }
+.log-field{min-width:0}.log-field input,.log-field select,.log-field textarea{font-size:16px;min-width:0}
+.training-sync-panel{margin-top:0}
+.training-sync-panel h3{margin:0 0 12px}.training-sync-panel p{font-size:.85rem;color:#b6c5cf;line-height:1.6}
+.training-sync-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.training-sync-actions .primary-button{margin-top:0}
+.training-sync-panel button:disabled{opacity:.45;cursor:not-allowed}
+#trainingConnectionLabel{display:block;font-size:.8rem;color:var(--accent-2);margin-top:16px}
+#trainingConnectionLabel[data-connected="true"]{color:var(--green)}
+#trainingCloudStatus{border:1px solid var(--line);background:#0e1a23;border-radius:10px;padding:12px;overflow-wrap:anywhere}
+#trainingCloudStatus[data-state="success"]{color:var(--green);border-color:rgba(139,232,176,.4)}
+#trainingCloudStatus[data-state="error"]{color:#ffb2b2;border-color:rgba(255,142,142,.4)}
+.training-sync-panel .training-sync-help{font-size:.76rem;color:var(--muted)}
+.training-sync-panel details{margin:18px 0}.training-sync-panel summary{cursor:pointer;font-size:.85rem;color:var(--accent-2)}
+.training-sync-panel details .log-field{margin-top:14px}.training-sync-panel a{color:var(--accent-2)}
+.log-form-actions{flex-wrap:wrap}.log-form-actions .primary-button{border:0;cursor:pointer;padding:9px 14px;width:auto;white-space:nowrap}
+.optional-coach-report{border-top:1px solid var(--line);padding-top:18px;margin-top:20px}
+.optional-coach-report summary{cursor:pointer;font-size:.85rem;color:var(--accent-2);margin-bottom:14px}
+.optional-coach-report button{margin-top:12px}
+@media print{.training-sync-panel{display:none}}

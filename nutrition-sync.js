@@ -1,12 +1,15 @@
 (() => {
   "use strict";
-  const { Engine, SyncError } = window.NutritionSyncCore;
+  const settings = window.TrainingSyncConfig;
+  const { Engine, SyncError } = settings ? window.TrainingSyncCore : window.NutritionSyncCore;
+  const eventPrefix = settings ? "training" : "nutrition";
+  const selectedDate = () => settings ? window.TrainingLog?.context?.isoDate : $("entryDate").value;
   const SCOPE = "https://www.googleapis.com/auth/spreadsheets";
   const CONFIG_KEY = "become-fast-google-oauth-config-v1";
-  const DATA_PREFIX = "become-fast-nutrition-v1:";
+  const DATA_PREFIX = settings?.dataPrefix || "become-fast-nutrition-v1:";
   const DEFAULT_SHEET = "1kcFtPe_-5ng3wdKaEA720P7e9vbjXhvJDBf8wMVwK8Y";
   const DEFAULT_CLIENT = "198647292636-ada505h67lnob9ldu5baf4jno9vdj9f0.apps.googleusercontent.com"; // Public identifier, not a secret.
-  const $ = id => document.getElementById(id);
+  const $ = id => document.getElementById(settings?.ids[id] || id);
   let token = "", expires = 0, engine, busy = false, authorizing = false;
   let timer, expiryTimer, attempts = 0, generation = 0;
   let storageError = false;
@@ -52,13 +55,13 @@
     if (hasToken() && navigator.onLine && engine?.dates().length) timer = setTimeout(drain, delay);
   }
   async function hydrate(date) {
-    if (!hasToken() || busy || !navigator.onLine) return;
+    if (!date || !hasToken() || busy || !navigator.onLine) return;
     const source = engine;
     const revision = hydrationRevision;
     try {
       const remote = await source.read(date);
       if (engine !== source || hydrationRevision !== revision || busy) return;
-      window.dispatchEvent(new CustomEvent("nutrition:cloud-loaded", { detail: {
+      window.dispatchEvent(new CustomEvent(eventPrefix + ":cloud-loaded", { detail: {
         date, entry: remote.entry, pending: Object.keys(source.state.outbox[date] || {})
       } }));
     } catch (error) { status(error.message, "error"); }
@@ -76,7 +79,7 @@
         try {
           const row = await engine.sync(date);
           attempts = 0;
-          status("Verified in Google Sheets: " + date + " · Daily Log row " + row, "success");
+          status("Verified in Google Sheets: " + date + " · " + (settings ? "Training Log" : "Daily Log") + " row " + row, "success");
         } catch (error) {
           failed.push(error);
           status(error.message, "error");
@@ -89,7 +92,7 @@
       if (failed.some(error => error.retryable)) schedule(Math.min(60000, 2000 * 2 ** Math.min(attempts++, 5)));
     } else {
       if (engine.dates().length) schedule(); // Edits that arrived during the request remain queued.
-      await hydrate($("entryDate").value);
+      await hydrate(selectedDate());
     }
   }
   function setup() {
@@ -143,7 +146,7 @@
     catch (error) { storageError = true; status(error.message, "error"); }
     updateUI();
   });
-  window.addEventListener("nutrition:local-saved", event => {
+  window.addEventListener(eventPrefix + ":local-saved", event => {
     hydrationRevision++;
     if (!engine) return;
     try {
@@ -159,8 +162,8 @@
       updateUI();
     }
   });
-  window.addEventListener("nutrition:date-selected", event => hydrate(event.detail.date));
-  window.addEventListener("nutrition:local-cleared", event => {
+  window.addEventListener(eventPrefix + ":date-selected", event => hydrate(event.detail.date));
+  window.addEventListener(eventPrefix + ":local-cleared", event => {
     try { engine?.discard(event.detail.date); status("Local copy and queued edits cleared. Existing Sheet values are preserved."); updateUI(); }
     catch { storageError = true; status("Could not clear the sync queue. Export a backup before resetting storage.", "error"); updateUI(); }
   });

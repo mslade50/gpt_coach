@@ -13,6 +13,6 @@
     "SITE_PATH": "/gpt_coach/",
     "SPREADSHEET_ID": "1kcFtPe_-5ng3wdKaEA720P7e9vbjXhvJDBf8wMVwK8Y"
   },
-  "d1_databases": [{"binding": "DB", "database_name": "become-fast-connections", "database_id": "00000000-0000-0000-0000-000000000000"}],
+  "d1_databases": [{"binding": "DB", "database_name": "become-fast-connections", "database_id": "29084289-684d-40b0-862e-9227c87fab71"}],
   "triggers": {"crons": ["17 * * * *"]}
 }

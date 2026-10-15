@@ -171,3 +171,9 @@ test('hourly maintenance clears expired connection credentials without touching 
   assert.notEqual(f.sql.prepare('SELECT credentials FROM devices WHERE id=?').get(active.id).credentials,'');
   assert.equal(f.sheets.length,0);
 });
+test('an owner-signed connection check can verify live renewal without expiring or revealing credentials', async () => {
+  const f = await fixture(), device = await f.newDevice(); await f.pair(device);
+  const response = await f.run(await f.signed(device, '/connection', {renew:true}));
+  assert.equal(response.status,200); assert.equal(f.renewals(),1);
+  assert.deepEqual(await response.json(), {connected:true,spreadsheetId:'synthetic-sheet'});
+});

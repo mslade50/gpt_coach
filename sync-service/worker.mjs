@@ -162,7 +162,11 @@ export async function handle(request, env, fetcher = fetch) {
         response = json({connected: false});
       } else {
         const credentials = await box(device.credentials, env, true);
-        if (credentials.expires < Date.now() + 60000) {
+        let connectionOptions = {};
+        if (url.pathname === '/connection') {
+          try { connectionOptions = JSON.parse(body); } catch { fail(400, 'Invalid connection check.'); }
+        }
+        if (credentials.expires < Date.now() + 60000 || connectionOptions.renew === true) {
           await renewCredentials(device, credentials, env, fetcher);
         }
         if (url.pathname === '/connection') response = json({connected: true, spreadsheetId: env.SPREADSHEET_ID});

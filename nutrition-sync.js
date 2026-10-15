@@ -3,7 +3,6 @@
   const settings = window.TrainingSyncConfig;
   const { Engine, SyncError } = settings ? window.TrainingSyncCore : window.NutritionSyncCore;
   const eventPrefix = settings ? "training" : "nutrition";
-  const selectedDate = () => settings ? window.TrainingLog?.context?.isoDate : $("entryDate").value;
   const SCOPE = "https://www.googleapis.com/auth/spreadsheets";
   const CONFIG_KEY = "become-fast-google-oauth-config-v1";
   const DATA_PREFIX = settings?.dataPrefix || "become-fast-nutrition-v1:";
@@ -13,7 +12,7 @@
   let token = "", expires = 0, engine, busy = false, authorizing = false;
   let timer, expiryTimer, attempts = 0, generation = 0;
   let storageError = false;
-  let hydrationRevision = 0;
+  let pollTimer;
   function status(message, level = "idle") {
     $("cloudSyncStatus").textContent = message;
     $("cloudSyncStatus").dataset.state = level;
@@ -22,18 +21,25 @@
   function updateUI() {
     const count = engine?.dates().length || 0;
     $("connectGoogle").disabled = authorizing || busy;
+    const top = $("connectGoogleTop");
+    if (top) { top.disabled = authorizing || busy; top.textContent = hasToken() ? "Refresh shared logs" : "Connect Google to load shared logs"; }
     $("googleClientId").disabled = authorizing || busy;
     $("googleSheetId").disabled = authorizing || busy;
     $("clearEntry").disabled = busy;
     $("syncGoogleNow").disabled = busy || authorizing || storageError;
     $("googleConnectionLabel").textContent = (hasToken() ? "Google connected" : "Google connection needed") + (count ? " · " + count + " day(s) waiting" : "");
     $("googleConnectionLabel").dataset.connected = String(Boolean(hasToken()));
+    const date = Object.keys(engine?.state.conflicts || {}).find(day => Object.keys(engine.state.conflicts[day]).length);
+    const panel = $("syncConflicts");
+    if (panel) panel.hidden = !date;
+    const label = $("syncConflictLabel");
+    if (label && date) label.textContent = date + " · Different edits in: " + Object.keys(engine.state.conflicts[date]).join(", ") + ". Both versions are retained until you choose.";
   }
   function config() {
     const raw = $("googleSheetId").value.trim();
     return { clientId: $("googleClientId").value.trim(), spreadsheetId: raw.match(/\/spreadsheets\/d\/([\w-]+)/)?.[1] || raw };
   }
-  function clearToken() { token = ""; expires = 0; clearTimeout(expiryTimer); updateUI(); }
+  function clearToken() { token = ""; expires = 0; clearTimeout(expiryTimer); clearTimeout(pollTimer); updateUI(); }
   async function request(url, init = {}) {
     if (!hasToken()) { clearToken(); throw new SyncError("Saved on device. Tap Connect Google to resume sync."); }
     let response;
@@ -54,46 +60,59 @@
     clearTimeout(timer);
     if (hasToken() && navigator.onLine && engine?.dates().length) timer = setTimeout(drain, delay);
   }
-  async function hydrate(date) {
-    if (!date || !hasToken() || busy || !navigator.onLine) return;
+  async function pullHistory() {
     const source = engine;
-    const revision = hydrationRevision;
-    try {
-      const remote = await source.read(date);
-      if (engine !== source || hydrationRevision !== revision || busy) return;
+    const rows = await source.history();
+    if (engine !== source) return 0;
+    let count = 0;
+    for (const remote of rows) {
+      if (Object.values(remote.entry).some(value => value !== "")) count++;
       window.dispatchEvent(new CustomEvent(eventPrefix + ":cloud-loaded", { detail: {
-        date, entry: remote.entry, pending: Object.keys(source.state.outbox[date] || {})
+        date: remote.date, entry: remote.entry, previous: source.state.remote[remote.date] || {}, pending: Object.keys(source.state.outbox[remote.date] || {})
       } }));
-    } catch (error) { status(error.message, "error"); }
+      source.state.remote[remote.date] = remote.entry;
+    }
+    source.persist();
+    window.dispatchEvent(new CustomEvent(eventPrefix + ":history-loaded", { detail: { count } }));
+    return count;
   }
   async function drain() {
     clearTimeout(timer);
-    if (busy || !engine || storageError) return;
+    clearTimeout(pollTimer);
+    if (busy) return;
+    if (!engine || storageError) return;
     if (!navigator.onLine) { status("Offline · saved on device. Queued entries retry when this page is online."); updateUI(); return; }
     if (!hasToken()) { status("Saved on device. Tap Connect Google to sync queued entries."); updateUI(); return; }
     busy = true; updateUI();
     const failed = [];
+    let verified = "";
     try {
       for (const date of engine.dates()) {
         status("Syncing " + date + "…");
         try {
           const row = await engine.sync(date);
           attempts = 0;
-          status("Verified in Google Sheets: " + date + " · " + (settings ? "Training Log" : "Daily Log") + " row " + row, "success");
+          verified = "Verified in Google Sheets: " + date + " · " + (settings ? "Training Log" : "Daily Log") + " row " + row;
+          status(verified, "success");
         } catch (error) {
           failed.push(error);
           status(error.message, "error");
           if (error.retryable || !hasToken()) break;
         }
       }
-    } finally { busy = false; updateUI(); }
+      if (hasToken() && navigator.onLine) {
+        const count = await pullHistory();
+        if (!failed.length) status((verified ? verified + ". " : "") + "History refreshed · " + count + " saved day(s). Updates check every 30 seconds while this page is visible.", "success");
+      }
+    } catch (error) { failed.push(error); }
+    finally { busy = false; updateUI(); }
     if (failed.length) {
       status(failed[0].message + " " + engine.dates().length + " day(s) still waiting.", "error");
       if (failed.some(error => error.retryable)) schedule(Math.min(60000, 2000 * 2 ** Math.min(attempts++, 5)));
     } else {
       if (engine.dates().length) schedule(); // Edits that arrived during the request remain queued.
-      await hydrate(selectedDate());
     }
+    if (hasToken() && navigator.onLine && !document.hidden) pollTimer = setTimeout(drain, 30000);
   }
   function setup() {
     const cfg = config();
@@ -136,9 +155,11 @@
     } catch { authorizing = false; updateUI(); status("Could not open Google sign-in. Check popup blocking and retry.", "error"); }
   }
   $("connectGoogle").addEventListener("click", connect);
+  $("connectGoogleTop")?.addEventListener("click", () => { if (hasToken()) drain(); else connect(); });
+  $("saveEntry").addEventListener("click", () => { if (hasToken()) drain(); });
   $("syncGoogleNow").addEventListener("click", () => {
     $("saveEntry").click();
-    if (hasToken()) drain(); else connect();
+    if (!hasToken()) connect();
   });
   for (const el of [$("googleClientId"), $("googleSheetId")]) el.addEventListener("change", () => {
     generation++; clearToken(); clearTimeout(timer);
@@ -147,10 +168,9 @@
     updateUI();
   });
   window.addEventListener(eventPrefix + ":local-saved", event => {
-    hydrationRevision++;
     if (!engine) return;
     try {
-      engine.queue(event.detail.date, event.detail.changes || {});
+      engine.queue(event.detail.date, event.detail.changes || {}, false, event.detail.baseline || {});
       storageError = false;
       if (Object.keys(event.detail.changes || {}).length) {
         status(navigator.onLine ? "Saved on device · waiting to sync." : "Offline · saved on device. Will retry when online.");
@@ -162,7 +182,18 @@
       updateUI();
     }
   });
-  window.addEventListener(eventPrefix + ":date-selected", event => hydrate(event.detail.date));
+  window.addEventListener(eventPrefix + ":date-selected", () => { if (hasToken()) drain(); });
+  for (const [id, choice] of [["useSheetConflict", "sheet"], ["keepDeviceConflict", "device"]]) {
+    $(id)?.addEventListener("click", () => {
+      const date = Object.keys(engine?.state.conflicts || {}).find(day => Object.keys(engine.state.conflicts[day]).length);
+      if (!date || busy) return;
+      try {
+        // Preserve the losing version locally for recovery; never send this backup to Sheets.
+        localStorage.setItem("become-fast-conflict-backup:" + eventPrefix + ":" + date + ":" + Date.now(), JSON.stringify(engine.state.conflicts[date]));
+        engine.resolve(date, choice); updateUI(); drain();
+      } catch { status("Could not save the conflict backup. Export your device backup before retrying.", "error"); }
+    });
+  }
   window.addEventListener(eventPrefix + ":local-cleared", event => {
     try { engine?.discard(event.detail.date); status("Local copy and queued edits cleared. Existing Sheet values are preserved."); updateUI(); }
     catch { storageError = true; status("Could not clear the sync queue. Export a backup before resetting storage.", "error"); updateUI(); }
@@ -170,6 +201,7 @@
   window.addEventListener("online", () => { status("Back online · checking queued changes."); drain(); });
   window.addEventListener("offline", () => { clearTimeout(timer); status("Offline · entries save on device and retry when online."); });
   document.addEventListener("visibilitychange", () => { if (!document.hidden) { updateUI(); drain(); } });
+  window.addEventListener("focus", () => { if (hasToken() && !document.hidden) drain(); });
   try {
     const cfg = JSON.parse(localStorage.getItem(CONFIG_KEY) || "{}");
     $("googleClientId").value = cfg.clientId || DEFAULT_CLIENT;

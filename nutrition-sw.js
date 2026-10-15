@@ -1,5 +1,5 @@
 /* Cache only the public dashboard and logger shell. Never cache OAuth or Google API responses. */
-const CACHE = "nutrition-shell-v4";
+const CACHE = "nutrition-shell-v5";
 const ASSETS = [
   "nutrition.html",
   "nutrition.css",
@@ -61,7 +61,7 @@ const ASSETS = [
 ];
 self.addEventListener("install", event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS.map(asset =>
-    new Request(asset + (/\.(js|css)$/.test(asset) ? "?v=20261012" : ""), { cache: "reload" })))));
+    new Request(asset + (/\.(js|css)$/.test(asset) ? "?v=20261015" : ""), { cache: "reload" })))));
 });
 self.addEventListener("activate", event => {
   // This worker owns only nutrition-shell-* caches; other apps' caches are untouched.

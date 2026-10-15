@@ -10,6 +10,7 @@ function app(time) {
   };
   const window = {WEEK_PLANS: Array.from({length: 14}, (_, i) => ({week: i+1, blockWeekLabel: i === 11 ? 'A WEEK 1' : undefined, days: Array.from({length: 7}, (_, day) => ({day: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][day], title: 'Synthetic workout', type: 'Low', status: 'Planned', volume: 'Test', detail: 'Test'}))})), localStorage: {getItem: () => null, setItem() {}}, dispatchEvent() {}};
   class Clock extends Date {constructor(...args) {super(...(args.length ? args : [now]));}}
+  window.addEventListener = (type, fn) => {listeners[type] = fn;};
   vm.runInNewContext(fs.readFileSync(require.resolve('../app.js'), 'utf8'), {window, document: {getElementById: get, addEventListener: (type, fn) => {listeners[type] = fn;}}, Date: Clock, Intl, setInterval: fn => intervals.push(fn), CustomEvent: class {constructor(type, init) {this.type = type; this.detail = init.detail;}}});
   return {window, get, tick: value => {now = value; intervals[0]();}};
 }

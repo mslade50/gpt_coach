@@ -1,5 +1,13 @@
 # Become Fast nutrition logger — private Google Sheets synchronization
 
+## Two-way sync across devices
+
+Connect Google on each device with the same account and workbook. The logger downloads the full dated Daily Log history after connecting; forms, recent days, and weekly summaries then use the shared records. Connected visible pages refresh every 30 seconds and when returning to the page. **Sync & refresh** also uploads queued changes and downloads history immediately. Downloads are cached locally for offline viewing and never generate uploads themselves.
+
+Unsaved form input and queued changes remain protected during downloads. Independent edits to different fields merge. If a cloud field changed since a device began editing it, sync retains both versions and shows **Use Sheet version** / **Keep this device's edits**. Older queues without a known baseline also pause before replacing a different populated Sheet cell. Conflict choices save a local recovery copy. Blank form fields still never delete Sheet data.
+
+Refresh both devices once after the October 15, 2026 release, then connect Google to load shared history. Do not clear browser storage or reset the Sheet to get the update. Google tokens remain in page memory, so reloads and session expiry still require another connection tap. There is no background sync while the browser is closed.
+
 **Site:** https://mslade50.github.io/gpt_coach/nutrition.html
 
 ## What works today
@@ -14,7 +22,7 @@ The logged fields map to the existing Google Sheet's "Daily Log" columns A–Q. 
 
 This is **browser-only OAuth**, not a permanent unattended login. Google issues a short-lived access token to the browser. The OAuth token is kept **in memory only**, never in the public repo or localStorage. When it expires, tap **Connect Google** again. Google typically retains the prior consent, but a user interaction is required for a new browser token.
 
-Local saves continue working with no Google connection; **"Saved on device" does not mean "Saved to Google Sheets."** Check the separate cloud status message for **Verified in Google Sheets**. Changed fields remain in a durable per-Sheet queue across reloads. Network errors, HTTP 429, and server errors retry with backoff up to one minute while the page is online and connected. Returning online or tapping **Retry sync** also drains queued days. If authorization expires, tap **Connect Google**; the queue resumes without copying anything into ChatGPT. Browser-only sync cannot run while the page is closed.
+Local saves continue working with no Google connection; **"Saved on device" does not mean "Saved to Google Sheets."** Check the separate cloud status message for **Verified in Google Sheets**. Changed fields remain in a durable per-Sheet queue across reloads. Network errors, HTTP 429, and server errors retry with backoff up to one minute while the page is online and connected. Returning online or tapping **Sync & refresh** also drains queued days. If authorization expires, tap **Connect Google**; the queue resumes without copying anything into ChatGPT. Browser-only sync cannot run while the page is closed.
 
 After an initial online visit, a service worker caches only the public logger HTML, CSS, and JavaScript for offline reopening. Google sign-in and Google API responses are never cached. Clearing browser site data removes local records and pending edits; export a CSV backup first. Use one logger tab per browser while editing.
 

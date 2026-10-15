@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#101820">
   <meta name="description" content="Mobile nutrition and training logger for the Become Fast project. Entries stay private on this device until shared.">
   <title>Nutrition Log | Hybrid Performance</title>
-  <link rel="stylesheet" href="styles.css?v=20261009">
+  <link rel="stylesheet" href="styles.css?v=20261015">
   <link rel="stylesheet" href="nutrition.css?v=20261009">
 </head>
 <body>
@@ -24,7 +24,8 @@
       <p class="eyebrow">BECOME FAST / DAILY CHECK-IN</p>
       <h1>Nutrition Log</h1>
       <p>Fast logging for food, weight and training. Automatically selects today's Eastern-time date. Connect Google for automatic sync during this session.</p>
-      <div class="nutrition-status"><span class="privacy-dot" aria-hidden="true"></span><strong>Local save available</strong><span> · Connect Google below for Sheets sync</span></div>
+      <div class="nutrition-status"><span class="privacy-dot" aria-hidden="true"></span><strong>Local save available</strong><span> · Connect Google on each device for shared logs</span></div>
+      <button class="ghost-button shared-logs-connect" id="connectGoogleTop" type="button">Connect Google to load shared logs</button>
     </div>
   </header>
 
@@ -135,10 +136,11 @@
           </details>
           <div class="nutrition-sync-controls">
             <button type="button" class="nutrition-primary" id="connectGoogle">Connect Google</button>
-            <button type="button" class="nutrition-copy" id="syncGoogleNow">Retry sync</button>
+            <button type="button" class="nutrition-copy" id="syncGoogleNow">Sync &amp; refresh</button>
           </div>
           <span class="cloud-status-label" id="googleConnectionLabel">Local-only until Google connected</span>
-          <p id="cloudSyncStatus" class="cloud-status" aria-live="polite">Not connected to Google Sheets.</p>
+          <p id="cloudSyncStatus" class="cloud-status" aria-live="polite">Connect Google on this device to load your shared logs and history.</p>
+          <div class="sync-conflicts" id="syncConflicts" hidden><p id="syncConflictLabel"></p><button class="ghost-button" id="useSheetConflict" type="button">Use Sheet version</button><button class="ghost-button" id="keepDeviceConflict" type="button">Keep this device's edits</button></div>
           <p class="help">Edits sync automatically while Google is connected. Offline changes remain queued across reloads and retry when this page is online. Google sessions expire; tap Connect Google again when prompted. Tokens stay in memory. Clear local copy cancels that day's queued edits and keeps existing Sheet values. Make intentional Sheet deletions directly in Sheets.</p>
           <div class="sync-fallback">
             <button type="button" id="copyAll" class="nutrition-copy wide-button">Copy 7-day report for ChatGPT</button>
@@ -151,8 +153,8 @@
   </main>
   <footer class="nutrition-footer"><a href="index.html">← Back to training dashboard</a><span>Become Fast · Private nutrition logging</span></footer>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="nutrition.js?v=20261012" defer></script>
-  <script src="nutrition-sync-core.js?v=20261012" defer></script>
-  <script src="nutrition-sync.js?v=20261012" defer></script>
+  <script src="nutrition.js?v=20261015" defer></script>
+  <script src="nutrition-sync-core.js?v=20261015" defer></script>
+  <script src="nutrition-sync.js?v=20261015" defer></script>
 </body>
 </html>

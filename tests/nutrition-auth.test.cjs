@@ -40,6 +40,7 @@ function setup(training = false) {
     else {
       const range = decodeURIComponent(new URL(url).pathname.split('/values/')[1]).split('!')[1];
       if (range === 'A1:' + lastColumn + '1') result = { values: [core.headers] };
+      else if (range === 'A2:' + lastColumn + '120') result = {values: [[core.serial('2026-10-08')], cells.slice()]};
       else if (range === 'A2:A120') result = { values: [[core.serial('2026-10-08')], [cells[0]]] };
       else if (range === 'A3') result = { values: [[cells[0]]] };
       else if (range === 'A3:' + lastColumn + '3') result = { values: [cells.slice()] };

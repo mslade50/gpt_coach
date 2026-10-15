@@ -2,7 +2,17 @@
 
 Open the [training dashboard](https://mslade50.github.io/gpt_coach/#session-log), select the workout, and enter what you actually did. Fields save automatically on this device. Tap **Connect Google** with the account that owns your nutrition workbook; subsequent edits sync automatically to its private **Training Log** tab. Copying the coach report is optional.
 
-The page shows separate device-save and Google-sync status. **Verified in Google Sheets** means the write was read back successfully. **Save & sync** saves immediately; **Retry sync** retries queued changes and opens sign-in if needed. Google sign-in may need another tap after a reload or session expiry. Keep the page open or reopen it to send offline changes; there is no background upload while the browser is closed.
+The page shows separate device-save and Google-sync status. **Verified in Google Sheets** means the write was read back successfully. **Save & sync** saves immediately; **Sync & refresh** retries queued changes and downloads history, opening sign-in if needed. Google sign-in may need another tap after a reload or session expiry. Connect on each device with the same account and workbook. Keep the page open or reopen it to send offline changes; there is no background upload while the browser is closed.
+
+## Shared history and conflict handling
+
+After connecting, the page downloads every dated Training Log row into the device cache. **Training history** lists all saved days; selecting a day restores its form and checklist. Connected, visible pages refresh every 30 seconds, on focus, and when returning from another app. Nutrition uses the same full-history refresh for its forms and weekly summaries.
+
+Downloads never generate uploads. Unsaved form input and queued edits are protected while other cloud fields update. Downloads are cached so returning to a date or reopening the page offline preserves the latest downloaded results. A blank cloud cell never clears an unknown device-only value.
+
+If two devices edit the same field from different starting values, sync holds that date and retains both versions. **Use Sheet version** keeps the cloud record; **Keep this device's edits** explicitly applies the queued version. The losing version is backed up locally. Older queues without a baseline also stop before replacing a different existing cloud value. Independent edits to different fields merge automatically. Conflict detection runs before the write; a change made by another device during the final network request remains a limitation.
+
+New checklist values use versioned JSON containing stable exercise IDs, labels, and the item count. Existing readable checklists are still accepted. Checking, unchecking, and resetting progress all sync without marking the workout completed.
 
 ## What is recorded
 

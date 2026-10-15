@@ -334,10 +334,47 @@
     progressText.textContent = `${validCompleted} of ${total} session items checked`;
     progressBar.style.width = `${percent}%`;
     if (publish && window.TrainingSession) {
-      const checked = [...sessionTimeline.querySelectorAll("[data-complete]:checked")].map(input => input.closest("label").querySelector("strong").textContent);
-      window.dispatchEvent(new CustomEvent("training:checklist-changed", { detail: { date: window.TrainingSession.isoDate, checklist: `${validCompleted} of ${total} checked` + (checked.length ? ": " + checked.join("; ") : "") } }));
+      const items = selectedSessionBlocks().flatMap(block => block.items);
+      const checked = items.filter(item => state.completed.has(item.id));
+      const checklist = JSON.stringify({ version: 1, checked: checked.map(item => item.id), labels: checked.map(item => item.name), total });
+      window.dispatchEvent(new CustomEvent("training:checklist-changed", { detail: { date: window.TrainingSession.isoDate, checklist } }));
     }
   }
+
+  window.addEventListener("training:checklist-loaded", event => {
+    if (event.detail.date !== window.TrainingSession?.isoDate || !event.detail.checklist) return;
+    const items = selectedSessionBlocks().flatMap(block => block.items);
+    let ids;
+    try {
+      const parsed = JSON.parse(event.detail.checklist);
+      if (parsed.version === 1 && Array.isArray(parsed.checked)) ids = parsed.checked.filter(id => typeof id === "string");
+    } catch {
+      // Existing rows used readable names. Retain compatibility without guessing a completed workout.
+      const text = event.detail.checklist;
+      if (/^0 of \d+ checked$/.test(text)) ids = [];
+      else if (/^\d+ of \d+ checked: /.test(text)) {
+        const names = text.replace(/^\d+ of \d+ checked: /, "").split("; ");
+        ids = items.filter(item => names.includes(item.name)).map(item => item.id);
+        if (names.length && !ids.length) return;
+      }
+    }
+    if (!ids) return;
+    state.completed = new Set(ids);
+    saveSet(completionStorageKey(state.selectedSession.week, state.selectedSession.dayIndex), state.completed);
+    renderTimeline();
+  });
+
+  window.addEventListener("training:open-date", event => {
+    const date = event.detail.date;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return;
+    const position = Math.round((Date.parse(date + "T00:00:00Z") - Date.UTC(2026, 6, 27)) / msPerDay);
+    if (position < 0 || position >= weeklyPlans.length * 7) {
+      const label = document.getElementById("logSaveState");
+      if (label) label.textContent = "That date is outside the loaded training plan.";
+      return;
+    }
+    selectSession(Math.floor(position / 7) + 1, position % 7, { scroll: true });
+  });
 
   function renderWeekPlan() {
     if (!weekGrid || !weekSummary || !weekPlanMeta || !weeklyPlans.length) return;

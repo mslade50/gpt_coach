@@ -80,6 +80,14 @@ test('an edit during an in-flight write is not acknowledged or lost', async () =
   assert.equal(f.cells[2], 4000);
   assert.equal(engine.state.outbox['2026-10-09'].calories.value, 4200);
 });
+
+test('a newer in-flight edit rebases onto our confirmed write without a false device conflict', async () => {
+  let engine, first = true;
+  const f = fixture({duringWrite: () => {if (first) {first = false; engine.queue('2026-10-09', {calories: '4200'}, false, {calories: '4000'});}}});
+  engine = f.engine; engine.queue('2026-10-09', {calories: '4000'}, false, {calories: ''});
+  await engine.sync('2026-10-09'); await engine.sync('2026-10-09');
+  assert.equal(f.cells[2], 4200); assert.deepEqual(engine.dates(), []);
+});
 test('legacy entries fill only missing cloud cells and migrate once', async () => {
   const f = fixture();
   f.cells[1] = 205;

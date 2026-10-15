@@ -101,6 +101,7 @@
     notesField.value = safeLog.notes || "";
     checklist = safeLog.checklist || "";
     loadedFields = readFields();
+    if (checklist) window.dispatchEvent(new CustomEvent("training:checklist-loaded", { detail: { date: activeContext.isoDate, checklist } }));
 
     if (safeLog.updatedAt) {
       const saved = new Date(safeLog.updatedAt);
@@ -172,13 +173,14 @@
     const changes = Object.fromEntries([...Object.keys(fields), "checklist"].filter(key => log[key] && log[key] !== baseline[key]).map(key => [key, key === "status" ? statusLabels[log[key]] : log[key]]));
     if (Object.keys(changes).length) {
       Object.assign(changes, { week: context.week, day: context.day, purpose: context.purpose, updatedAt: log.updatedAt });
-      window.dispatchEvent(new CustomEvent("training:local-saved", { detail: { date: context.isoDate, changes } }));
+      window.dispatchEvent(new CustomEvent("training:local-saved", { detail: { date: context.isoDate, changes, baseline: Object.fromEntries(Object.keys(changes).map(key => [key, baseline[key] ?? ""])) } }));
     }
     if (activeContext && activeContext.key === context.key) {
       const time = new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(new Date(log.updatedAt));
       saveState.textContent = saved ? `Saved locally ${time}` : "Could not save locally";
       loadedFields = { ...log };
       renderReport();
+      renderHistory();
     }
   }
 
@@ -204,6 +206,28 @@
       window.dispatchEvent(new CustomEvent("training:date-selected", { detail: { date: activeContext.isoDate } }));
     }
     else renderReport();
+  }
+
+  function renderHistory() {
+    const list = document.getElementById("trainingHistory");
+    if (!list?.replaceChildren) return;
+    list.replaceChildren();
+    const dates = [];
+    for (let i = 0; i < window.localStorage.length; i++) {
+      const key = window.localStorage.key(i);
+      if (key?.startsWith(STORAGE_PREFIX)) dates.push(key.slice(STORAGE_PREFIX.length));
+    }
+    for (const date of dates.sort().reverse()) {
+      let entry;
+      try { entry = JSON.parse(storageGet(STORAGE_PREFIX + date) || "{}"); } catch { continue; }
+      if (![...Object.keys(fields), "checklist"].some(key => entry[key])) continue;
+      const button = document.createElement("button");
+      button.type = "button"; button.className = "ghost-button training-history-day";
+      button.textContent = date + " · " + (statusLabels[entry.status] || "Status not entered") + (entry.volume ? " · " + entry.volume : "");
+      button.addEventListener("click", () => window.dispatchEvent(new CustomEvent("training:open-date", { detail: { date } })));
+      list.appendChild(button);
+    }
+    if (!list.childElementCount) list.textContent = "Connect Google to load shared history. Device entries also appear here.";
   }
 
   async function copyReport() {
@@ -255,27 +279,39 @@
     queueSave();
   });
   window.addEventListener("training:cloud-loaded", event => {
-    if (event.detail.date !== activeContext?.isoDate) return;
-    const current = readFields();
+    const selected = event.detail.date === activeContext?.isoDate;
+    let saved = {};
+    try { saved = JSON.parse(storageGet(STORAGE_PREFIX + event.detail.date) || "{}"); } catch { /* Preserve queued edits below. */ }
+    const current = selected ? readFields() : saved;
+    const merged = { ...saved, ...current };
     const entry = event.detail.entry;
-    for (const [key, field] of Object.entries(fields)) {
-      if (event.detail.pending.includes(key) || current[key] !== loadedFields[key]) continue;
-      const value = key === "status" ? Object.keys(statusLabels).find(code => statusLabels[code] === entry.status) : entry[key];
-      if (value != null) {
-        field.value = value;
+    const previous = event.detail.previous || {};
+    for (const key of [...Object.keys(fields), "checklist", "week", "day", "purpose", "updatedAt"]) {
+      if (selected && pendingSave && key === "updatedAt") continue;
+      if (event.detail.pending.includes(key) || (selected && [...Object.keys(fields), "checklist"].includes(key) && current[key] !== loadedFields[key])) continue;
+      const raw = entry[key];
+      if (raw == null) continue;
+      const oldCloud = key === "status" ? Object.keys(statusLabels).find(code => statusLabels[code] === previous.status) || "" : previous[key];
+      if (raw === "" && !(Object.hasOwn(previous, key) && String(current[key] ?? "") === String(oldCloud))) continue;
+      const value = key === "status" ? Object.keys(statusLabels).find(code => statusLabels[code] === raw) || "" : raw;
+      merged[key] = value;
+      if (selected) {
+        if (fields[key]) fields[key].value = value;
+        if (key === "checklist") {
+          checklist = value;
+          window.dispatchEvent(new CustomEvent("training:checklist-loaded", { detail: { date: event.detail.date, checklist: value } }));
+        }
+        loadedFields[key] = value;
         if (pendingSave) { pendingSave.log[key] = value; pendingSave.baseline[key] = value; }
       }
     }
-    if (!event.detail.pending.includes("checklist") && checklist === loadedFields.checklist && entry.checklist) {
-      checklist = entry.checklist;
-      loadedFields.checklist = checklist;
-      if (pendingSave) { pendingSave.log.checklist = checklist; pendingSave.baseline.checklist = checklist; }
+    if (Object.values(merged).some(value => value !== "" && value != null)) storageSet(STORAGE_PREFIX + event.detail.date, JSON.stringify(merged));
+    if (selected) {
+      if (!pendingSave && Object.values(entry).some(value => value !== "")) saveState.textContent = "Loaded from Google Sheets";
+      renderReport();
     }
-    // Keep the baseline for unsaved fields so they are still emitted by the pending save.
-    const merged = readFields();
-    for (const key of Object.keys(fields)) if (current[key] === loadedFields[key]) loadedFields[key] = merged[key];
-    renderReport();
   });
+  window.addEventListener("training:history-loaded", renderHistory);
   window.addEventListener("pagehide", persistPendingSave);
   document.addEventListener("visibilitychange", () => { if (document.hidden) persistPendingSave(); });
   document.getElementById("exportTrainingBackup").addEventListener("click", () => {
@@ -283,7 +319,7 @@
     const logs = {};
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key.startsWith("hybrid400-session-log-") || key.startsWith("become-fast-training-sync-v1:")) {
+      if (key.startsWith("hybrid400-session-log-") || key.startsWith("become-fast-training-sync-v1:") || key.startsWith("become-fast-conflict-backup:training:")) {
         const raw = localStorage.getItem(key);
         try { logs[key] = JSON.parse(raw); } catch { logs[key] = raw; }
       }
@@ -303,4 +339,5 @@
   });
 
   syncContext();
+  renderHistory();
 })();

@@ -201,6 +201,14 @@ h3 { margin: 0; line-height: 1.16; }
   font-weight: 850;
   text-decoration: none;
 }
+.shared-logs-connect { margin: 12px 0 20px; white-space: normal; }
+.sync-conflicts { border: 1px solid var(--accent); border-radius: 12px; padding: 12px; margin: 14px 0; }
+.sync-conflicts button { white-space: normal; margin: 5px 4px 0 0; }
+.training-history { margin-top: 24px; }
+.training-history summary { cursor: pointer; color: var(--accent-2); }
+#trainingHistory { max-height: 420px; overflow-y: auto; margin-top: 12px; }
+.training-history-day { display: block; width: 100%; white-space: normal; text-align: left; margin: 8px 0; }
+
 .primary-button:hover,
 .primary-button:focus-visible { background: var(--accent-2); }
 

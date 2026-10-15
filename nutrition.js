@@ -61,6 +61,7 @@
     saveHandle = null;
     if (!validateDate(activeDate)) return;
     const values = currentFields();
+    const loadedBeforeSave = { ...loadedFields };
     const changes = {};
     for (const [key, value] of Object.entries(values)) {
       if (value !== loadedFields[key]) changes[key] = value;
@@ -68,7 +69,7 @@
     const ok = stored(activeDate, values);
     if (ok) {
       loadedFields = { ...values };
-      window.dispatchEvent(new CustomEvent("nutrition:local-saved", { detail: { date: activeDate, changes } }));
+      window.dispatchEvent(new CustomEvent("nutrition:local-saved", { detail: { date: activeDate, changes, baseline: Object.fromEntries(Object.keys(changes).map(key => [key, loadedBeforeSave[key] ?? ""])) } }));
     }
     document.getElementById("saveState").textContent = ok ? "Saved on device" : "Storage unavailable";
     render();
@@ -216,17 +217,27 @@
   });
   window.addEventListener("pagehide",()=>{if(saveHandle!==null)save();});
   window.addEventListener("nutrition:cloud-loaded", event => {
-    const { date, entry, pending } = event.detail;
-    if (date !== activeDate) return;
-    const values = currentFields();
+    const { date, entry, pending, previous = {} } = event.detail;
+    const selected = date === activeDate;
+    const values = selected ? currentFields() : load(date);
     for (const [name, value] of Object.entries(entry)) {
-      if (!FIELDS.includes(name) || pending.includes(name) || values[name] !== loadedFields[name]) continue;
-      const field = form.elements.namedItem(name);
-      if (field) { field.value = value; loadedFields[name] = value; }
+      if (!FIELDS.includes(name) || pending.includes(name) || (selected && values[name] !== loadedFields[name])) continue;
+      // A blank cloud cell may clear an earlier cloud mirror, never an unknown device-only entry.
+      if (value === "" && !(Object.hasOwn(previous, name) && String(values[name] ?? "") === String(previous[name]))) continue;
+      if (value === "") delete values[name]; else values[name] = value;
+      if (selected) {
+        const field = form.elements.namedItem(name);
+        if (field) field.value = value;
+        if (value === "") delete loadedFields[name]; else loadedFields[name] = value;
+      }
     }
-    stored(date, currentFields());
-    render();
+    stored(date, values);
+    if (selected) {
+      if (saveHandle === null) document.getElementById("saveState").textContent = "Loaded from Google Sheets";
+      render();
+    }
   });
+  window.addEventListener("nutrition:history-loaded", render);
   document.addEventListener("visibilitychange",()=>{if(document.hidden && saveHandle!==null)save();});
   function followEasternDay() {
     if (!document.hidden && followsToday && activeDate !== todayEastern()) selectDate(todayEastern());

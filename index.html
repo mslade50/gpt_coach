@@ -6,10 +6,10 @@
   <meta name="description" content="McKinley’s Hybrid 400 session, weekly schedule, exercise library and copy-ready coach reporting dashboard." />
   <title>Hybrid Performance — Coach Dashboard</title>
   <link rel="preconnect" href="https://www.youtube.com" />
-  <link rel="stylesheet" href="styles.css?v=20261009" />
+  <link rel="stylesheet" href="styles.css?v=20261015" />
   <link rel="stylesheet" href="schedule.css" />
   <link rel="stylesheet" href="session.css" />
-  <link rel="stylesheet" href="session-log.css?v=20261012" />
+  <link rel="stylesheet" href="session-log.css?v=20261015" />
 </head>
 <body>
   <a class="skip-link" href="#session">Skip to current session</a>
@@ -93,8 +93,9 @@
         <form class="log-form" id="sessionLogForm" autocomplete="off">
           <div class="log-form-intro">
             <h3>Enter only the useful data</h3>
-            <p>Enter actual volume, timed work, lifts, and notes. Entries save as you type and sync to your private Sheet while Google is connected.</p>
+            <p>Enter actual volume, timed work, lifts, and notes. Connect Google on each device to load shared logs and keep them up to date.</p>
           </div>
+          <button class="ghost-button shared-logs-connect" id="connectTrainingTop" type="button">Connect Google to load shared logs</button>
 
           <div class="log-field-grid">
             <label class="log-field">
@@ -147,10 +148,11 @@
 
           <div class="training-sync-panel">
             <p>Connect Google with the account that owns your nutrition Sheet. Training results go to its separate Training Log tab. The selected workout date stays attached to your entry.</p>
-            <div class="training-sync-actions"><button class="primary-button" id="connectTrainingGoogle" type="button">Connect Google</button><button class="ghost-button" id="retryTrainingSync" type="button">Retry sync</button></div>
+            <div class="training-sync-actions"><button class="primary-button" id="connectTrainingGoogle" type="button">Connect Google</button><button class="ghost-button" id="retryTrainingSync" type="button">Sync &amp; refresh</button></div>
             <strong id="trainingConnectionLabel">Google connection needed</strong>
             <p id="trainingCloudStatus" role="status">Tap Connect Google to start automatic sync.</p>
-            <p class="training-sync-help">Offline edits remain queued. Reconnect after reloading or when Google expires. Blank fields preserve Sheet values. Checklist progress does not mark a workout completed; choose its status above.</p>
+            <div class="sync-conflicts" id="trainingSyncConflicts" hidden><p id="trainingConflictLabel"></p><button class="ghost-button" id="useTrainingSheetConflict" type="button">Use Sheet version</button><button class="ghost-button" id="keepTrainingDeviceConflict" type="button">Keep this device's edits</button></div>
+            <p class="training-sync-help">All history and checklists download after connecting. Visible pages refresh every 30 seconds and when you return. Offline edits remain queued. Reconnect after reloading or when Google expires. Blank fields preserve Sheet values. Checklist progress does not mark a workout completed; choose its status above.</p>
             <details><summary>Connection settings</summary><label class="log-field"><span>Google OAuth client ID</span><input id="trainingClientId" type="text" autocapitalize="off" spellcheck="false"></label><label class="log-field"><span>Private Google Sheet URL</span><input id="trainingSheetId" type="text" autocapitalize="off" spellcheck="false"></label></details>
             <button class="ghost-button" id="exportTrainingBackup" type="button">Export training backup</button>
             <p class="training-sync-help">Older device logs are preserved in the backup. Their old week labels can be ambiguous, so they are not uploaded automatically. <a href="TRAINING-LOGGER.md">Sync details</a></p>
@@ -163,6 +165,7 @@
           </details>
         </aside>
       </div>
+      <details class="training-history"><summary>Training history · all saved days</summary><div id="trainingHistory" aria-live="polite"></div></details>
     </section>
 
     <section class="week-section" id="week-plan" aria-labelledby="week-plan-heading">
@@ -269,13 +272,13 @@
   <script src="data/week7-plan.js"></script>
   <script src="data/aerobic-rebuild-week1.js"></script>
   <script src="data/aerobic-rebuild-b-week1.js"></script>
-  <script src="app.js?v=20261012"></script>
+  <script src="app.js?v=20261015"></script>
   <script src="sunday-preview.js"></script>
-  <script src="session-log.js?v=20261012"></script>
+  <script src="session-log.js?v=20261015"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="nutrition-sync-core.js?v=20261012"></script>
-  <script src="training-sync-core.js?v=20261012"></script>
-  <script src="training-sync.js?v=20261012"></script>
-  <script src="nutrition-sync.js?v=20261012"></script>
+  <script src="nutrition-sync-core.js?v=20261015"></script>
+  <script src="training-sync-core.js?v=20261015"></script>
+  <script src="training-sync.js?v=20261015"></script>
+  <script src="nutrition-sync.js?v=20261015"></script>
 </body>
 </html>

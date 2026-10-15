@@ -31,6 +31,7 @@
       this.aliases = schema.aliases || trainingAliases;
       this.sheetName = schema.sheetName || "Daily Log";
       this.lastColumn = schema.lastColumn || "Q";
+      this.conflictFields = schema.conflictFields || new Set(Object.keys(this.fields));
       this.spreadsheetId = spreadsheetId;
       this.storage = storage;
       this.request = request;
@@ -38,10 +39,12 @@
       const raw = storage.getItem(this.key);
       this.state = raw ? JSON.parse(raw) : { outbox: {}, receipts: {}, migrated: false };
       if (!this.state.outbox || !this.state.receipts) throw new Error("Sync queue is unreadable. Export a local backup before resetting browser storage.");
+      this.state.remote ||= {};
+      this.state.conflicts ||= {};
       this.base = "https://sheets.googleapis.com/v4/spreadsheets/" + encodeURIComponent(spreadsheetId);
     }
     persist() { this.storage.setItem(this.key, JSON.stringify(this.state)); }
-    queue(date, changes, onlyIfBlank = false) {
+    queue(date, changes, onlyIfBlank = false, baseline = {}) {
       serial(date);
       const updates = {};
       let invalid;
@@ -52,7 +55,11 @@
           invalid = "Invalid " + key + ". Correct it before syncing.";
           continue;
         }
-        updates[key] = { value, id: crypto.randomUUID(), onlyIfBlank };
+        const previous = this.state.outbox[date]?.[key];
+        const base = previous && Object.hasOwn(previous, "base") ? previous.base :
+          Object.hasOwn(baseline, key) ? baseline[key] : this.state.remote[date]?.[key];
+        updates[key] = { value, id: crypto.randomUUID(), onlyIfBlank, ...(base !== undefined ? { base: String(this.numeric.has(key) && base !== "" ? Number(base) : base) } : {}) };
+        if (this.state.conflicts[date]) delete this.state.conflicts[date][key];
       }
       if (Object.keys(updates).length) this.state.outbox[date] = { ...this.state.outbox[date], ...updates };
       this.persist();
@@ -71,17 +78,45 @@
       this.persist();
     }
     dates() { return Object.keys(this.state.outbox).sort(); }
-    discard(date) { delete this.state.outbox[date]; this.persist(); }
+    discard(date) { delete this.state.outbox[date]; delete this.state.conflicts[date]; this.persist(); }
+    resolve(date, choice) {
+      for (const [key, conflict] of Object.entries(this.state.conflicts[date] || {})) {
+        const change = this.state.outbox[date]?.[key];
+        if (!change || change.id !== conflict.id) continue;
+        if (choice === "sheet") delete this.state.outbox[date][key];
+        else if (choice === "device") change.base = String(conflict.remote ?? "");
+        else throw new Error("Choose which version to keep.");
+      }
+      if (!Object.keys(this.state.outbox[date] || {}).length) delete this.state.outbox[date];
+      delete this.state.conflicts[date]; this.persist();
+    }
     async values(range, render = "UNFORMATTED_VALUE") {
       return this.request(this.base + "/values/" + encodeURIComponent("'" + this.sheetName + "'!" + range) + "?valueRenderOption=" + render);
     }
-    async locate(date) {
-      const target = serial(date);
+    async layout() {
       const meta = await this.request(this.base + "?fields=sheets.properties");
       const sheet = meta.sheets?.find(s => s.properties.title === this.sheetName)?.properties;
       if (!sheet || sheet.gridProperties.rowCount > 10000) throw new SyncError(this.sheetName + " is missing or too large. No data written.");
       const head = (await this.values("A1:" + this.lastColumn + "1")).values?.[0] || [];
       if (this.headers.some((value, index) => head[index] !== value)) throw new SyncError(this.sheetName + " columns changed. No data written; restore the original headers before retrying.");
+      return sheet;
+    }
+    async history() {
+      const sheet = await this.layout();
+      const rows = (await this.values("A2:" + this.lastColumn + sheet.gridProperties.rowCount)).values || [];
+      const seen = new Set();
+      return rows.flatMap((cells, index) => {
+        if (cells[0] == null || cells[0] === "") return [];
+        const date = typeof cells[0] === "number" ? new Date(Date.UTC(1899, 11, 30) + cells[0] * 86400000).toISOString().slice(0, 10) : String(cells[0]);
+        serial(date);
+        if (seen.has(date)) throw new SyncError("Duplicate date rows. Fix " + this.sheetName + " before retrying.");
+        seen.add(date);
+        return [{ date, row: index + 2, entry: Object.fromEntries(Object.entries(this.fields).map(([key, col]) => [key, String(cells[col.charCodeAt(0) - 65] ?? "")])) }];
+      });
+    }
+    async locate(date) {
+      const target = serial(date);
+      const sheet = await this.layout();
       const rows = (await this.values("A2:A" + sheet.gridProperties.rowCount)).values || [];
       const matches = rows.flatMap((row, i) => (row[0] === target || row[0] === date) ? [i + 2] : []);
       if (matches.length !== 1) throw new SyncError(matches.length ? "Duplicate date rows. Fix " + this.sheetName + " before retrying." : "Date is missing from " + this.sheetName + ". Extend the Sheet dates before retrying.");
@@ -102,10 +137,18 @@
       const grid = await this.request(this.base + "?ranges=" + encodeURIComponent("'" + this.sheetName + "'!A" + remote.row + ":" + this.lastColumn + remote.row) + "&fields=sheets.data.rowData.values(userEnteredValue,dataValidation)");
       const cells = grid.sheets?.[0]?.data?.[0]?.rowData?.[0]?.values || [];
       const data = [];
+      const conflicts = {};
       for (const [key, change] of Object.entries(snapshot)) {
         const col = this.fields[key];
         const index = col.charCodeAt(0) - 65;
         if (change.onlyIfBlank && remote.cells[index] != null && remote.cells[index] !== "") continue;
+        const cloud = String(remote.cells[index] ?? "");
+        // Older queues have no baseline: never replace an existing, different cloud value silently.
+        if (this.conflictFields.has(key) && !change.onlyIfBlank && cloud !== String(change.value) &&
+            (Object.hasOwn(change, "base") ? cloud !== String(change.base) : cloud !== "")) {
+          conflicts[key] = { id: change.id, local: change.value, remote: cloud };
+          continue;
+        }
         if (cells[index]?.userEnteredValue?.formulaValue) throw new SyncError("A logged field contains a Sheet formula. No data written; check column " + col + ".");
         const rule = cells[index]?.dataValidation?.condition;
         if (rule?.type === "ONE_OF_LIST" && !rule.values.some(item => item.userEnteredValue === String(change.value))) {
@@ -113,6 +156,11 @@
         }
         data.push({ range: "'" + this.sheetName + "'!" + col + remote.row, values: [[change.value]] });
       }
+      if (Object.keys(conflicts).length) {
+        this.state.conflicts[date] = conflicts; this.persist();
+        throw new SyncError("Different edits on " + date + ". Nothing overwritten. Choose the Sheet version or this device's edits below.");
+      }
+      delete this.state.conflicts[date];
       // Recheck the date immediately before writing. RAW keeps notes literal, even if they start with '='.
       if (data.length) {
         const dateCell = (await this.values("A" + remote.row)).values?.[0]?.[0];
@@ -126,9 +174,16 @@
           const col = update.range.split("!")[1].charCodeAt(0) - 65;
           if (check[col] !== update.values[0][0]) throw new SyncError("Google write could not be confirmed. Your changes remain queued.", true);
         }
+        this.state.remote[date] = Object.fromEntries(Object.entries(this.fields).map(([key, col]) => [key, String(check[col.charCodeAt(0) - 65] ?? "")]));
+      } else {
+        this.state.remote[date] = remote.entry;
       }
       for (const [key, change] of Object.entries(snapshot)) {
         if (this.state.outbox[date]?.[key]?.id === change.id) delete this.state.outbox[date][key];
+        else if (this.state.outbox[date]?.[key] && data.some(update => update.range === "'" + this.sheetName + "'!" + this.fields[key] + remote.row)) {
+          // A newer edit made while our own write was in flight starts from that confirmed write.
+          this.state.outbox[date][key].base = String(change.value);
+        }
       }
       if (!Object.keys(this.state.outbox[date] || {}).length) delete this.state.outbox[date];
       this.state.receipts[date] = new Date().toISOString();

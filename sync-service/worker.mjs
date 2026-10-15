@@ -40,7 +40,9 @@ async function limitedText(response, limit = 1048576) {
   return new TextDecoder().decode(bytes);
 }
 async function googleJson(url, init, fetcher) {
-  const response = await fetcher(url, {...init, signal: AbortSignal.timeout(15000), redirect: 'error'});
+  // workerd implements manual/follow; enforce redirect rejection explicitly.
+  const response = await fetcher(url, {...init, signal: AbortSignal.timeout(15000), redirect: 'manual'});
+  if (response.status >= 300 && response.status < 400) { await response.body?.cancel(); fail(502, 'Google returned an unexpected redirect. Your entries are safe.'); }
   let value;
   try { value = JSON.parse(await limitedText(response)); } catch { fail(502, 'Google returned an unreadable response.'); }
   return {response, value};
@@ -116,7 +118,7 @@ export async function handle(request, env, fetcher = fetch) {
   const url = new URL(request.url);
   const origin = request.headers.get('Origin');
   const api = ['/connection', '/sheets', '/disconnect'].includes(url.pathname);
-  let response;
+  let response, stage = 'request';
   try {
     if (request.method === 'OPTIONS' && api) {
       if (origin !== env.SITE_ORIGIN) fail(403, 'Origin not permitted.');
@@ -140,17 +142,22 @@ export async function handle(request, env, fetcher = fetch) {
       target.search = new URLSearchParams({client_id: env.GOOGLE_CLIENT_ID, redirect_uri: url.origin + '/auth/callback', response_type: 'code', scope: SCOPE, access_type: 'offline', prompt: 'consent', state, code_challenge: await digest(verifier), code_challenge_method: 'S256', login_hint: env.OWNER_EMAIL}).toString();
       response = new Response(null, {status: 302, headers: {Location: target.href, 'Set-Cookie': '__Host-bf-auth=' + cookie + '; Secure; HttpOnly; SameSite=Lax; Path=/; Max-Age=600'}});
     } else if (url.pathname === '/auth/callback' && request.method === 'GET') {
+      stage = 'oauth-state';
       let pending;
       try { pending = await box(request.headers.get('Cookie')?.match(/(?:^|; )__Host-bf-auth=([^;]+)/)?.[1] || '', env, true); } catch { fail(400, 'Sign-in expired. Return to the logger and reconnect.'); }
       if (pending.expires < Date.now() || !url.searchParams.get('state') || await digest(pending.state) !== await digest(url.searchParams.get('state'))) fail(400, 'Sign-in expired. Return to the logger and reconnect.');
       if (url.searchParams.has('error')) fail(403, 'Google permission was not approved. Your entries remain on your device.');
+      stage = 'oauth-token-exchange';
       const {response: tokenResponse, value: tokens} = await tokenRequest({grant_type: 'authorization_code', code: url.searchParams.get('code') || '', code_verifier: pending.verifier, redirect_uri: url.origin + '/auth/callback'}, env, fetcher);
       if (!tokenResponse.ok || !tokens.access_token || !tokens.refresh_token || !String(tokens.scope).split(' ').includes('https://www.googleapis.com/auth/spreadsheets')) fail(401, 'Google did not grant a renewable Sheets connection. Return to the logger and reconnect.');
+      stage = 'oauth-owner-check';
       const {response: identityResponse, value: identity} = await googleJson('https://openidconnect.googleapis.com/v1/userinfo', {headers: {Authorization: 'Bearer ' + tokens.access_token}}, fetcher);
       if (!identityResponse.ok || !identity.email_verified || identity.email?.toLowerCase() !== env.OWNER_EMAIL.toLowerCase()) fail(403, 'Only the owner of this logger can connect. Return and choose the Sheet owner account.');
       const publicKey = canonicalKey(pending.key);
       const id = await digest(publicKey);
+      stage = 'oauth-encrypt';
       const credentials = await box({refresh: tokens.refresh_token, access: tokens.access_token, expires: Date.now() + Number(tokens.expires_in || 3600) * 1000}, env);
+      stage = 'oauth-save-device';
       await env.DB.prepare('INSERT INTO devices (id, public_key, credentials, expires) VALUES (?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET credentials=excluded.credentials, expires=excluded.expires').bind(id, publicKey, credentials, Date.now() + 180 * DAY).run();
       response = new Response(null, {status: 303, headers: {Location: allowedReturn(pending.returnUrl, env), 'Set-Cookie': '__Host-bf-auth=; Secure; HttpOnly; SameSite=Lax; Path=/; Max-Age=0'}});
     } else if (api && request.method === 'POST') {
@@ -173,7 +180,7 @@ export async function handle(request, env, fetcher = fetch) {
         else {
           let payload; try { payload = JSON.parse(body); } catch { fail(400, 'Invalid request.'); }
           const target = validateSheetRequest(payload, env);
-          const send = () => fetcher(target.url, {method: target.method, ...(target.body ? {body: target.body} : {}), headers: {...target.headers, Authorization: 'Bearer ' + credentials.access}, redirect: 'error', signal: AbortSignal.timeout(15000)});
+          const send = () => fetcher(target.url, {method: target.method, ...(target.body ? {body: target.body} : {}), headers: {...target.headers, Authorization: 'Bearer ' + credentials.access}, redirect: 'manual', signal: AbortSignal.timeout(15000)});
           let upstream = await send();
           if (upstream.status === 401) {
             await upstream.body?.cancel();
@@ -181,13 +188,14 @@ export async function handle(request, env, fetcher = fetch) {
             upstream = await send();
           }
           // Never return Google error bodies or credentials to the browser.
+          if (upstream.status >= 300 && upstream.status < 400) { await upstream.body?.cancel(); fail(502, 'Google Sheets returned an unexpected redirect. Your entries are safe.'); }
           if (!upstream.ok) fail(upstream.status === 401 ? 503 : upstream.status, 'Google Sheets could not complete the request. Your queued entries are safe.');
           response = new Response(await limitedText(upstream, 4000000), {headers: {'Content-Type': 'application/json'}});
         }
       }
     } else fail(404, 'Not found.');
   } catch (error) {
-    response = json({error: error instanceof Failure ? error.message : 'Connection interrupted. Your saved entries are safe.'}, error instanceof Failure ? error.status : 503);
+    response = json({error: error instanceof Failure ? error.message : 'Connection interrupted. Your saved entries are safe.', ...(error instanceof Failure ? {} : {reference: stage + ':' + (['Error', 'TypeError', 'OperationError', 'TimeoutError', 'DataError', 'SyntaxError', 'AbortError'].includes(error.name) ? error.name : 'Error')})}, error instanceof Failure ? error.status : 503);
   }
   const headers = new Headers(response.headers);
   headers.set('Cache-Control', 'no-store'); headers.set('Referrer-Policy', 'no-referrer'); headers.set('X-Content-Type-Options', 'nosniff');

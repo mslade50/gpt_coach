@@ -52,7 +52,7 @@ DEPLOY.md                           # publishing instructions
 ## Nutrition logger
 
 - [Mobile nutrition log](nutrition.html) is on the same GitHub Pages site as the training dashboard.
-- Entries auto-save on the device and sync directly to the private Google Sheet while Google is connected. Offline changes queue for retry; reconnect after a browser reload or token expiry.
+- Entries auto-save on the device and sync to the private Google Sheet through the private sync service. Google connects once per device and renews automatically across visits. Offline changes queue for retry.
 - The public GitHub repository contains no personal logs, access tokens, or OAuth secrets.
 - [Example weekly meal plan](meal-plan.html) includes the existing meal-template portions, a seven-day dinner rotation, and shopping/prep quantities. It is a reference, not tracked intake.
 - Read [nutrition setup and privacy notes](NUTRITION-LOGGER.md).
@@ -60,7 +60,7 @@ DEPLOY.md                           # publishing instructions
 ## Training logger
 
 - [Log your training](https://mslade50.github.io/gpt_coach/#session-log) on the existing dashboard. Actual results and checklist progress sync to the private workbook's separate Training Log tab.
-- Connect Google once per active page session; edits auto-save and sync without copying reports into chat.
+- Connect Google once per device; nutrition and training share the remembered connection across reloads and visits. Edits auto-save and sync without copying reports into chat.
 - Read [training sync, privacy, and recovery details](TRAINING-LOGGER.md).
 
 ## Add future exercises

@@ -19,6 +19,7 @@ async function fixture() {
   let wrongOwner = false, revoked = false, unavailable = false, renewals = 0, rejectAccess = false;
   const sheets = [];
   const upstream = async (url, init) => {
+    assert.equal(init.redirect, 'manual', 'Workers must reject redirects explicitly without unsupported redirect:error');
     if (url === 'https://oauth2.googleapis.com/token') {
       const params = new URLSearchParams(init.body);
       assert.equal(params.get('client_secret'), env.GOOGLE_CLIENT_SECRET);
@@ -176,4 +177,22 @@ test('an owner-signed connection check can verify live renewal without expiring 
   const response = await f.run(await f.signed(device, '/connection', {renew:true}));
   assert.equal(response.status,200); assert.equal(f.renewals(),1);
   assert.deepEqual(await response.json(), {connected:true,spreadsheetId:'synthetic-sheet'});
+});
+test('OAuth never follows a redirect or forwards credentials to its destination', async () => {
+  const f = await fixture(), device = await f.newDevice();
+  const start=await f.start(device), state=new URL(start.headers.get('Location')).searchParams.get('state');
+  let calls=0;
+  const response=await f.api.handle(new Request(endpoint+'/auth/callback?code=synthetic&state='+state,{headers:{Cookie:start.headers.get('Set-Cookie').split(';')[0]}}),f.env,async (_url,init)=>{
+    calls++; assert.equal(init.redirect,'manual'); return new Response(null,{status:302,headers:{Location:'https://attacker.example/'}});
+  });
+  assert.equal(response.status,502);assert.equal(calls,1);assert.equal(response.headers.get('Location'),null);
+  assert.ok(!JSON.stringify(await response.json()).includes('synthetic-client-secret'));
+});
+test('unexpected callback failures expose only a static reference and never error contents', async () => {
+  const f=await fixture(), device=await f.newDevice();
+  const start=await f.start(device),state=new URL(start.headers.get('Location')).searchParams.get('state');
+  const response=await f.api.handle(new Request(endpoint+'/auth/callback?code=synthetic&state='+state,{headers:{Cookie:start.headers.get('Set-Cookie').split(';')[0]}}),f.env,async()=>{throw new TypeError('synthetic-private-error-detail');});
+  assert.equal(response.status,503);
+  const value=await response.json();assert.equal(value.reference,'oauth-token-exchange:TypeError');
+  assert.ok(!JSON.stringify(value).includes('synthetic-private-error-detail'));
 });

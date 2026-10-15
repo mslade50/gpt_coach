@@ -1,7 +1,7 @@
 /* The browser stores a non-exportable device key, never a Google token or client secret. */
 (() => {
   'use strict';
-  const ENDPOINT = ''; // Enable only after the private service and owner authorization are verified.
+  const ENDPOINT = 'https://become-fast-sync.mckinleyslade.workers.dev';
   const encoder = new TextEncoder();
   const b64 = bytes => btoa(String.fromCharCode(...new Uint8Array(bytes))).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, '');
   const digest = async value => b64(await crypto.subtle.digest('SHA-256', encoder.encode(value)));
@@ -47,10 +47,13 @@
       const proof = ['POST', url, time, nonce, await digest(body)].join('\n');
       const signature = b64(await crypto.subtle.sign({name: 'ECDSA', hash: 'SHA-256'}, device.privateKey, encoder.encode(proof)));
       let response;
+      const abort = new AbortController();
+      const timeout = setTimeout(() => abort.abort(), 20000);
       try {
-        response = await fetch(url, {method: 'POST', cache: 'no-store', credentials: 'omit', signal: AbortSignal.timeout(20000),
+        response = await fetch(url, {method: 'POST', cache: 'no-store', credentials: 'omit', signal: abort.signal,
           headers: {'Content-Type': 'application/json', 'X-Device': device.id, 'X-Time': time, 'X-Nonce': nonce, 'X-Signature': signature}, body});
       } catch { throw new error('Connection interrupted. Saved on device; automatic retry is queued.', true); }
+      finally { clearTimeout(timeout); }
       let value;
       try { value = await response.json(); } catch { throw new error('Sync service is temporarily unavailable. Your entries are safe.', true); }
       if (!response.ok) {

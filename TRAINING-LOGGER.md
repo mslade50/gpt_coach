@@ -1,10 +1,10 @@
 # Automatic training log
 
-A remembered connection release is prepared in [sync-service/README.md](sync-service/README.md). It shares one persistent browser identity between nutrition and training and renews Google access on the server. The frontend endpoint remains disabled pending Google configuration, owner authorization and deployment verification; the deployed behavior below remains available meanwhile.
+Nutrition and training share one remembered Google connection per browser. Connect once on each device; reloads and navigation restore access automatically. Google tokens renew on the private server. See [connection security and maintenance](sync-service/README.md).
 
 Open the [training dashboard](https://mslade50.github.io/gpt_coach/#session-log), select the workout, and enter what you actually did. Fields save automatically on this device. Tap **Connect Google** with the account that owns your nutrition workbook; subsequent edits sync automatically to its private **Training Log** tab. Copying the coach report is optional.
 
-The page shows separate device-save and Google-sync status. **Verified in Google Sheets** means the write was read back successfully. **Save & sync** saves immediately; **Sync & refresh** retries queued changes and downloads history, opening sign-in if needed. Google sign-in may need another tap after a reload or session expiry. Connect on each device with the same account and workbook. Keep the page open or reopen it to send offline changes; there is no background upload while the browser is closed.
+The page shows separate device-save and Google-sync status. **Verified in Google Sheets** means the write was read back successfully. **Save & sync** saves immediately; **Sync & refresh** retries queued changes and downloads history, opening sign-in only if needed. **Google connected · remembered on this device** confirms the saved connection. Connect once on each device with the same owner account and workbook. Clearing site storage, revoking Google permission or 180 days of inactivity requires reconnecting. **Disconnect this device** preserves logs and does not disconnect other devices. Keep the page open or reopen it to send offline changes; there is no background upload while the browser is closed.
 
 ## Shared history and conflict handling
 
@@ -26,7 +26,7 @@ Only changed, nonblank fields are written. An evening addition or later edit pre
 
 ## Privacy and recovery
 
-The workbook stays private. OAuth tokens live only in page memory; they are never saved in browser storage or the repository. The shared public OAuth client ID and spreadsheet ID are identifiers, not credentials. The service worker caches public site assets only, not Google API responses or Sheet records.
+The workbook stays private. Google access and refresh tokens are encrypted in the owner's private Cloudflare service; secrets remain in server secret storage. The browser stores a non-exportable device key in IndexedDB. No Google token is saved in browser storage or the repository. The fallback public OAuth client ID and spreadsheet ID are identifiers, not credentials. The service worker caches public site assets only, not private API responses or Sheet records.
 
 Device entries and the retry queue use separate training storage keys. **Export training backup** downloads those records locally. Older logs keyed by ambiguous block-week labels are retained and included in the backup; they are not automatically assigned to dates or uploaded.
 

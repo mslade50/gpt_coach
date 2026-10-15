@@ -9,3 +9,11 @@ dashboard-mobile.png
 Thumbs.db
 .vscode/
 .idea/
+
+# Server credentials, local worker state, and development dependencies
+.dev.vars*
+.env*
+client_secret*.json
+node_modules/
+.wrangler/
+worker-configuration.d.ts

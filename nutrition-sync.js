@@ -13,21 +13,28 @@
   let timer, expiryTimer, attempts = 0, generation = 0;
   let storageError = false;
   let pollTimer;
+  let remembered, rememberedConnected = false, restoring = false;
+  function configureRemembered() {
+    remembered = config().spreadsheetId === DEFAULT_SHEET ? window.GoogleConnection?.create({spreadsheetId: DEFAULT_SHEET, error: SyncError}) : null;
+  }
   function status(message, level = "idle") {
     $("cloudSyncStatus").textContent = message;
     $("cloudSyncStatus").dataset.state = level;
   }
-  function hasToken() { return token && Date.now() < expires - 60000; }
+  function hasToken() { return rememberedConnected || (token && Date.now() < expires - 60000); }
   function updateUI() {
     const count = engine?.dates().length || 0;
-    $("connectGoogle").disabled = authorizing || busy;
+    $("connectGoogle").disabled = authorizing || busy || restoring;
+    $("connectGoogle").textContent = hasToken() ? "Google connected" : "Connect Google";
     const top = $("connectGoogleTop");
-    if (top) { top.disabled = authorizing || busy; top.textContent = hasToken() ? "Refresh shared logs" : "Connect Google to load shared logs"; }
+    if (top) { top.disabled = authorizing || busy || restoring; top.textContent = hasToken() ? "Refresh shared logs" : "Connect Google to load shared logs"; }
+    const disconnect = $("disconnectGoogle");
+    if (disconnect) { disconnect.hidden = !rememberedConnected; disconnect.disabled = busy || authorizing; }
     $("googleClientId").disabled = authorizing || busy;
     $("googleSheetId").disabled = authorizing || busy;
     $("clearEntry").disabled = busy;
     $("syncGoogleNow").disabled = busy || authorizing || storageError;
-    $("googleConnectionLabel").textContent = (hasToken() ? "Google connected" : "Google connection needed") + (count ? " · " + count + " day(s) waiting" : "");
+    $("googleConnectionLabel").textContent = (restoring ? "Checking saved Google connection…" : rememberedConnected ? "Google connected · remembered on this device" : hasToken() ? "Google connected" : "Google connection needed") + (count ? " · " + count + " day(s) waiting" : "");
     $("googleConnectionLabel").dataset.connected = String(Boolean(hasToken()));
     const date = Object.keys(engine?.state.conflicts || {}).find(day => Object.keys(engine.state.conflicts[day]).length);
     const panel = $("syncConflicts");
@@ -39,9 +46,13 @@
     const raw = $("googleSheetId").value.trim();
     return { clientId: $("googleClientId").value.trim(), spreadsheetId: raw.match(/\/spreadsheets\/d\/([\w-]+)/)?.[1] || raw };
   }
-  function clearToken() { token = ""; expires = 0; clearTimeout(expiryTimer); clearTimeout(pollTimer); updateUI(); }
+  function clearToken() { token = ""; expires = 0; rememberedConnected = false; clearTimeout(expiryTimer); clearTimeout(pollTimer); updateUI(); }
   async function request(url, init = {}) {
     if (!hasToken()) { clearToken(); throw new SyncError("Saved on device. Tap Connect Google to resume sync."); }
+    if (rememberedConnected) {
+      try { return await remembered.request(url, init); }
+      catch (error) { if (error.status === 401) clearToken(); throw error; }
+    }
     let response;
     const abort = new AbortController();
     const timeout = setTimeout(() => abort.abort(), 20000);
@@ -121,9 +132,35 @@
     engine.migrate(localStorage, DATA_PREFIX);
     storageError = false;
   }
-  function connect() {
+  async function restoreConnection() {
+    if (!remembered || restoring || authorizing || busy || !navigator.onLine || storageError) return;
+    restoring = true; updateUI();
+    const currentGeneration = generation, connection = remembered;
+    try {
+      const connected = await connection.restore();
+      if (currentGeneration !== generation || remembered !== connection) return;
+      rememberedConnected = connected;
+      if (!rememberedConnected) status("Connect Google once on this device. Its connection will be remembered across visits and both loggers.");
+    } catch (error) {
+      if (currentGeneration !== generation) return;
+      status(error.message, "error");
+      if (error.retryable && navigator.onLine) { clearTimeout(timer); timer = setTimeout(restoreConnection, 10000); }
+    }
+    finally { restoring = false; updateUI(); }
+    if (rememberedConnected) await drain();
+  }
+  async function connect() {
     if (busy || authorizing) return;
     if (!navigator.onLine) { status("Offline · your entries remain saved on this device."); return; }
+    if (remembered) {
+      try {
+        $("saveEntry").click(); // Flush pending edits before top-level Google navigation.
+        localStorage.setItem(CONFIG_KEY, JSON.stringify(config()));
+        authorizing = true; updateUI(); status("Opening Google to remember this device…");
+        await remembered.connect();
+      } catch (error) { authorizing = false; updateUI(); status(error.message, "error"); }
+      return;
+    }
     const cfg = config();
     if (!/^[\w-]+\.apps\.googleusercontent\.com$/.test(cfg.clientId)) { status("Google sign-in setup is incomplete: a web OAuth client ID is required.", "error"); return; }
     if (!window.google?.accounts?.oauth2) { status("Google sign-in is still loading or blocked. Reload when online and retry.", "error"); return; }
@@ -154,7 +191,7 @@
       client.requestAccessToken({ prompt: "" });
     } catch { authorizing = false; updateUI(); status("Could not open Google sign-in. Check popup blocking and retry.", "error"); }
   }
-  $("connectGoogle").addEventListener("click", connect);
+  $("connectGoogle").addEventListener("click", () => { if (hasToken()) drain(); else connect(); });
   $("connectGoogleTop")?.addEventListener("click", () => { if (hasToken()) drain(); else connect(); });
   $("saveEntry").addEventListener("click", () => { if (hasToken()) drain(); });
   $("syncGoogleNow").addEventListener("click", () => {
@@ -163,9 +200,16 @@
   });
   for (const el of [$("googleClientId"), $("googleSheetId")]) el.addEventListener("change", () => {
     generation++; clearToken(); clearTimeout(timer);
-    try { localStorage.setItem(CONFIG_KEY, JSON.stringify(config())); setup(); status("Settings saved. Tap Connect Google."); }
+    try { localStorage.setItem(CONFIG_KEY, JSON.stringify(config())); setup(); configureRemembered(); status("Settings saved. Tap Connect Google."); }
     catch (error) { storageError = true; status(error.message, "error"); }
     updateUI();
+  });
+  $("disconnectGoogle")?.addEventListener("click", async () => {
+    if (!rememberedConnected || busy) return;
+    busy = true; updateUI();
+    try { await remembered.disconnect(); clearToken(); status("This device is disconnected. Your local entries and Sheet records are preserved."); }
+    catch (error) { status(error.message, "error"); }
+    finally { busy = false; updateUI(); }
   });
   window.addEventListener(eventPrefix + ":local-saved", event => {
     if (!engine) return;
@@ -198,18 +242,21 @@
     try { engine?.discard(event.detail.date); status("Local copy and queued edits cleared. Existing Sheet values are preserved."); updateUI(); }
     catch { storageError = true; status("Could not clear the sync queue. Export a backup before resetting storage.", "error"); updateUI(); }
   });
-  window.addEventListener("online", () => { status("Back online · checking queued changes."); drain(); });
+  function resume() { if (remembered && !rememberedConnected) restoreConnection(); else drain(); }
+  window.addEventListener("online", () => { status("Back online · checking queued changes."); resume(); });
   window.addEventListener("offline", () => { clearTimeout(timer); status("Offline · entries save on device and retry when online."); });
-  document.addEventListener("visibilitychange", () => { if (!document.hidden) { updateUI(); drain(); } });
-  window.addEventListener("focus", () => { if (hasToken() && !document.hidden) drain(); });
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) { updateUI(); resume(); } });
+  window.addEventListener("focus", () => { if (!document.hidden && (hasToken() || remembered)) resume(); });
   try {
     const cfg = JSON.parse(localStorage.getItem(CONFIG_KEY) || "{}");
     $("googleClientId").value = cfg.clientId || DEFAULT_CLIENT;
     $("googleSheetId").value = cfg.spreadsheetId || DEFAULT_SHEET;
     setup();
-    status(engine.dates().length ? "Saved entries are queued. Tap Connect Google to sync." : "Tap Connect Google once per session. New edits will sync automatically.");
+    configureRemembered();
+    status(remembered ? (navigator.onLine ? "Checking your remembered Google connection…" : "Offline · saved entries remain on this device. Your remembered connection will resume online.") : engine.dates().length ? "Saved entries are queued. Tap Connect Google to sync." : "Tap Connect Google once per session. New edits will sync automatically.");
   } catch { storageError = true; status("Browser storage is unavailable or unreadable. Export a local backup before resetting it.", "error"); }
   updateUI();
+  if (remembered) restoreConnection();
   if ("serviceWorker" in navigator && location.protocol !== "file:") {
     navigator.serviceWorker.register("nutrition-sw.js", { scope: "./" }).catch(() => { /* Local saves still work without an offline shell. */ });
   }

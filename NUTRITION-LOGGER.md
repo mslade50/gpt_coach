@@ -1,5 +1,9 @@
 # Become Fast nutrition logger — private Google Sheets synchronization
 
+## Remembered connection release in preparation
+
+The server-backed connection in `google-connection.js` and `sync-service/` preserves the existing site URL and storage, remembers each browser with a non-exportable device key, and renews Google access on the server. It shares one connection across nutrition and training. The frontend endpoint stays disabled until the private service, production Google OAuth configuration, owner consent and deployment are verified. See [setup and security details](sync-service/README.md). The currently deployed browser-token behavior described below remains the fallback until activation.
+
 ## Two-way sync across devices
 
 Connect Google on each device with the same account and workbook. The logger downloads the full dated Daily Log history after connecting; forms, recent days, and weekly summaries then use the shared records. Connected visible pages refresh every 30 seconds and when returning to the page. **Sync & refresh** also uploads queued changes and downloads history immediately. Downloads are cached locally for offline viewing and never generate uploads themselves.

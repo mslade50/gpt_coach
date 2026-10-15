@@ -1,5 +1,7 @@
 # Automatic training log
 
+A remembered connection release is prepared in [sync-service/README.md](sync-service/README.md). It shares one persistent browser identity between nutrition and training and renews Google access on the server. The frontend endpoint remains disabled pending Google configuration, owner authorization and deployment verification; the deployed behavior below remains available meanwhile.
+
 Open the [training dashboard](https://mslade50.github.io/gpt_coach/#session-log), select the workout, and enter what you actually did. Fields save automatically on this device. Tap **Connect Google** with the account that owns your nutrition workbook; subsequent edits sync automatically to its private **Training Log** tab. Copying the coach report is optional.
 
 The page shows separate device-save and Google-sync status. **Verified in Google Sheets** means the write was read back successfully. **Save & sync** saves immediately; **Sync & refresh** retries queued changes and downloads history, opening sign-in if needed. Google sign-in may need another tap after a reload or session expiry. Connect on each device with the same account and workbook. Keep the page open or reopen it to send offline changes; there is no background upload while the browser is closed.

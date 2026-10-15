@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy | Become Fast</title>
+  <link rel="stylesheet" href="styles.css?v=20261015a">
+</head>
+<body>
+  <main class="page-shell" style="max-width:760px;margin:40px auto;padding:0 24px;line-height:1.6">
+    <p><a href="index.html">Training dashboard</a> · <a href="nutrition.html">Nutrition log</a></p>
+    <h1>Privacy</h1>
+    <p>Become Fast is a personal nutrition and training logger. The website code is public. Your Google Sheet and saved records remain private.</p>
+    <h2>How your information is used</h2>
+    <p>The logger saves your entries and sync queue in your browser. When you connect Google, it reads and updates your configured private spreadsheet to show the same logs, history and checklists on your devices. It requests your verified Google email to restrict the private sync service to the logger's owner.</p>
+    <p>Google data is used only for these logging and synchronization features. It is not sold, used for advertising, or used to train AI models. Exporting or copying a report is a separate action you choose.</p>
+    <h2>Remembered connections</h2>
+    <p>The private sync service runs in the owner's Cloudflare account. Sheet requests pass through that service to Google. The service does not store nutrition or training records in its database. It stores encrypted Google connection credentials so it can renew access automatically. Encryption keys and the OAuth client secret stay in server secret storage.</p>
+    <p>Your browser stores a non-exportable device key in IndexedDB to prove which device is connecting. Google access and refresh tokens are not stored in browser storage or published with the site. Authentication responses and private API responses are not cached by the site's offline service worker.</p>
+    <h2>Your controls</h2>
+    <p><strong>Disconnect this device</strong> removes that device's stored Google credentials from the private service. Connections also expire after 180 days of inactivity; expired credentials are cleared by hourly maintenance. Disconnecting does not erase your logged records or affect other connected devices.</p>
+    <p>You can revoke the app's Google access in <a href="https://myaccount.google.com/connections">Google Account connections</a>. You control deletion of spreadsheet records in Google Sheets. Browser records remain until you clear them; export a backup before clearing browser data. Do not clear site storage merely to install an update.</p>
+    <p>Google handles account sign-in. The logger never asks for your Google password. Use a private device because downloaded history is available in that browser's local storage.</p>
+    <p>Last updated October 15, 2026.</p>
+  </main>
+</body>
+</html>

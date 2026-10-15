@@ -13,14 +13,14 @@ function worker() {
 }
 test('offline shell installs every existing public dashboard, dynamic workout, and logger asset', async () => {
   const f = worker(); let pending; f.listeners.install({waitUntil: value => {pending = value;}}); await pending;
-  assert.ok(f.assets.includes('training-sync-core.js?v=20261015'));
+  assert.ok(f.assets.includes('training-sync-core.js?v=20261015a'));
   for (const file of f.assets) assert.ok(fs.existsSync(path.join(__dirname, '..', file.split('?')[0])), file);
   const page = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
   for (const [, src] of page.matchAll(/(?:src|href)="([^"?#]+\.(?:js|css))/g)) if (!src.startsWith('https:')) assert.ok(f.assets.some(file => file.split('?')[0] === src), src);
 });
 test('offline root URL uses the current dashboard cache and ignores old versions', async () => {
   const f = worker(); assert.equal(await f.run(f.scope), 'cached shell');
-  assert.equal(f.matches[0].name, 'nutrition-shell-v5'); assert.equal(f.matches[0].url, f.scope + 'index.html');
+  assert.equal(f.matches[0].name, 'nutrition-shell-v6'); assert.equal(f.matches[0].url, f.scope + 'index.html');
   assert.equal(f.matches[0].options.ignoreSearch, true);
 });
 test('Google APIs, OAuth, private records, and POST requests are never handled by the offline cache', async () => {

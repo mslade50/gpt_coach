@@ -148,11 +148,11 @@
 
           <div class="training-sync-panel">
             <p>Connect Google with the account that owns your nutrition Sheet. Training results go to its separate Training Log tab. The selected workout date stays attached to your entry.</p>
-            <div class="training-sync-actions"><button class="primary-button" id="connectTrainingGoogle" type="button">Connect Google</button><button class="ghost-button" id="retryTrainingSync" type="button">Sync &amp; refresh</button></div>
+            <div class="training-sync-actions"><button class="primary-button" id="connectTrainingGoogle" type="button">Connect Google</button><button class="ghost-button" id="retryTrainingSync" type="button">Sync &amp; refresh</button><button class="ghost-button" id="disconnectTrainingGoogle" type="button" hidden>Disconnect this device</button></div>
             <strong id="trainingConnectionLabel">Google connection needed</strong>
             <p id="trainingCloudStatus" role="status">Tap Connect Google to start automatic sync.</p>
             <div class="sync-conflicts" id="trainingSyncConflicts" hidden><p id="trainingConflictLabel"></p><button class="ghost-button" id="useTrainingSheetConflict" type="button">Use Sheet version</button><button class="ghost-button" id="keepTrainingDeviceConflict" type="button">Keep this device's edits</button></div>
-            <p class="training-sync-help">All history and checklists download after connecting. Visible pages refresh every 30 seconds and when you return. Offline edits remain queued. Reconnect after reloading or when Google expires. Blank fields preserve Sheet values. Checklist progress does not mark a workout completed; choose its status above.</p>
+            <p class="training-sync-help">Connect once per device. Your remembered connection also works on the nutrition page and renews Google access automatically. All history and checklists download when you return. Visible pages refresh every 30 seconds. Offline edits remain queued. Clearing browser data or revoking Google access requires reconnecting. Disconnecting preserves your logs. Checklist progress does not mark a workout completed; choose its status above.</p>
             <details><summary>Connection settings</summary><label class="log-field"><span>Google OAuth client ID</span><input id="trainingClientId" type="text" autocapitalize="off" spellcheck="false"></label><label class="log-field"><span>Private Google Sheet URL</span><input id="trainingSheetId" type="text" autocapitalize="off" spellcheck="false"></label></details>
             <button class="ghost-button" id="exportTrainingBackup" type="button">Export training backup</button>
             <p class="training-sync-help">Older device logs are preserved in the backup. Their old week labels can be ambiguous, so they are not uploaded automatically. <a href="TRAINING-LOGGER.md">Sync details</a></p>
@@ -244,7 +244,7 @@
 
   <footer>
     <p>Hybrid 400 Coach Dashboard · Coaching descriptions are the source of truth; video links are visual references.</p>
-    <p>Training logs save on this device and sync to your private Sheet while Google is connected.</p>
+    <p>Training logs save on this device and sync to your private Sheet while Google is connected. <a href="privacy.html">Privacy</a></p>
   </footer>
 
   <dialog id="exerciseDialog" aria-labelledby="dialogTitle">
@@ -278,7 +278,8 @@
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="nutrition-sync-core.js?v=20261015"></script>
   <script src="training-sync-core.js?v=20261015"></script>
-  <script src="training-sync.js?v=20261015"></script>
-  <script src="nutrition-sync.js?v=20261015"></script>
+  <script src="training-sync.js?v=20261015a"></script>
+  <script src="google-connection.js?v=20261015a"></script>
+  <script src="nutrition-sync.js?v=20261015a"></script>
 </body>
 </html>

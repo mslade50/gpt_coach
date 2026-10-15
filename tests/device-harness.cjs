@@ -1,6 +1,6 @@
 // Two independent browser-like contexts running the actual production scripts.
 // transport is injectable so the same round trip can run against a real private Sheet.
-function createDevice(sources, {training = false, transport, records = new Map(), date = '2026-10-31T12:00:00Z'} = {}) {
+function createDevice(sources, {training = false, transport, records = new Map(), date = '2026-10-31T12:00:00Z', connection} = {}) {
   class Events {
     constructor() {this.listeners = {};}
     addEventListener(type, fn) {(this.listeners[type] ||= []).push(fn);}
@@ -50,6 +50,7 @@ function createDevice(sources, {training = false, transport, records = new Map()
     run('app.js'); run('session-log.js'); run('training-sync.js');
   } else run('nutrition.js');
   globals.google = window.google = {accounts: {oauth2: {initTokenClient(options) {oauth = options; return {requestAccessToken() {}};}, hasGrantedAllScopes: () => true}}};
+  if (connection) window.GoogleConnection = {create: () => connection};
   run('nutrition-sync.js');
   const id = name => training ? window.TrainingSyncConfig.ids[name] || name : name;
   async function settled() {

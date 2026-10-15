@@ -29,6 +29,26 @@ function cloud(training) {
   return {transport, rows, writes};
 }
 for (const training of [false, true]) {
+  test((training ? 'training' : 'nutrition') + ': remembered sessions restore after reload and upload offline edits without another consent', async () => {
+    const c = cloud(training); let restores = 0, connectCalls = 0, active = true;
+    const connection = {restore: async () => {restores++; return active;}, request: c.transport, connect: async () => {connectCalls++;}, disconnect: async () => {active = false;}};
+    const phone = createDevice(sources, {training, transport: c.transport, connection}); await phone.settled();
+    assert.match(phone.status(), /History refreshed/);
+    phone.input('notes', 'Phone record before reload'); await phone.save();
+    const desktop = createDevice(sources, {training, transport: c.transport, connection}); await desktop.settled();
+    assert.equal(desktop.value('notes'), 'Phone record before reload');
+    phone.navigator.onLine = false; phone.input(training ? 'volume' : 'calories', training ? '5 mi easy' : '3900'); await phone.save();
+    const reloaded = createDevice(sources, {training, transport: c.transport, connection, records: phone.records}); await reloaded.settled();
+    await desktop.focus(); assert.equal(desktop.value(training ? 'volume' : 'calories'), training ? '5 mi easy' : '3900');
+    assert.equal(restores, 3); assert.equal(connectCalls, 0);
+    const disconnectId = training ? 'disconnectTrainingGoogle' : 'disconnectGoogle';
+    reloaded.node(disconnectId).click(); await reloaded.settled();
+    assert.match(reloaded.status(), /disconnected/);
+    assert.equal(reloaded.value('notes'), 'Phone record before reload');
+    assert.equal(c.rows[6][training ? 8 : 16], 'Phone record before reload');
+  });
+}
+for (const training of [false, true]) {
   const kind = training ? 'training' : 'nutrition';
   test(kind + ': phone → Sheet → fresh desktop history → edit → phone → reload', async () => {
     const c = cloud(training), phone = createDevice(sources, {training, transport: c.transport});

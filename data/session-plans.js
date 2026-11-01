@@ -275,7 +275,7 @@ window.SESSION_PLANS = {
   "w15d2": {
     "purpose": "Conservative controlled threshold AM; primary strength PM — only true two-a-day",
     "duration": "Run approximately 50–55 min; strength approximately 45–60 min, separated by at least 3 h",
-    "volume": "3 × 6 min threshold, 2 min jog recoveries; 11–12 strength working sets",
+    "volume": "3 × 6 min threshold, 2 min jog recoveries; 10–11 strength working sets",
     "footwear": "Comfortable trainers on flat safe pavement/track for threshold; stable gym shoes for lift",
     "note": "No documented threshold splits or Tuesday lower-body strength last week. Use a consolidation dose, not 4 × 6 progression. First rep should feel controlled; a fourth rep should remain clearly possible. Lifting does not need to be a maximal-strength test.",
     "blocks": [

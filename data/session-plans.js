@@ -192,5 +192,484 @@ window.SESSION_PLANS = {
         ]
       }
     ]
+  },
+  "w15d1": {
+    "purpose": "Upper A first + short easy run, one continuous session",
+    "duration": "Approximately 90–105 min combined",
+    "volume": "14 upper work sets + 40–45 min RPE 2–3 running",
+    "footwear": "Gym shoes for upper work; cushioned trainers on flat/gentle terrain for run",
+    "note": "Bench adjustment: Oct 26 barbell incline 145 lb × 8 × 3 reached RPE 9. Use only a load that stays at RPE 7–8 throughout; do not add weight merely because reps were completed. No lower-body strength or hard running.",
+    "blocks": [
+      {
+        "name": "Readiness and Upper A — lift first",
+        "items": [
+          {
+            "id": "b15-mon-1",
+            "name": "Readiness gate",
+            "dosage": "Normal gait, no worsening calf/Achilles, hamstring, adductor or foot pain. Limit lifting if systemic fatigue or pain changes mechanics."
+          },
+          {
+            "id": "b15-mon-2",
+            "name": "Incline barbell press OR incline DB press",
+            "dosage": "3 × 8 at RPE 7–8, ~2 reps in reserve; 90–120 sec rest. Reduce from Oct 26's 145 lb if necessary to avoid RPE 9."
+          },
+          {
+            "id": "b15-mon-3",
+            "name": "Neutral-grip pulldown or pull-up",
+            "dosage": "3 × 8–10 at RPE 7–8; 90 sec rest."
+          },
+          {
+            "id": "b15-mon-4",
+            "name": "Chest-supported row",
+            "dosage": "2 × 10–12 at RPE 7–8; 75–90 sec rest."
+          },
+          {
+            "id": "b15-mon-5",
+            "name": "Lateral raises",
+            "dosage": "2 × 15–20 at RPE 7–8; 45–60 sec rest."
+          },
+          {
+            "id": "b15-mon-6",
+            "name": "Curl",
+            "dosage": "2 × 10–15, 1–2 reps in reserve; 60 sec rest."
+          },
+          {
+            "id": "b15-mon-7",
+            "name": "Pressdown",
+            "dosage": "2 × 10–15, 1–2 reps in reserve; 60 sec rest."
+          }
+        ]
+      },
+      {
+        "name": "Easy aerobic — immediately afterward",
+        "items": [
+          {
+            "id": "b15-mon-8",
+            "name": "Easy run",
+            "dosage": "40–45 min, flat/gently rolling, RPE 2–3 conversational; first 10 min extra easy. No strides or fast finish."
+          }
+        ]
+      },
+      {
+        "name": "Fueling and alternatives",
+        "items": [
+          {
+            "id": "b15-mon-9",
+            "name": "Fueling",
+            "dosage": "Carbohydrate-containing snack/meal beforehand; 25–40 g protein and carbohydrate afterward; fluids to thirst and conditions."
+          },
+          {
+            "id": "b15-mon-10",
+            "name": "Amber",
+            "dosage": "2 upper sets per exercise + 30–35 min easy run or bike. If impact tenderness, bike instead."
+          },
+          {
+            "id": "b15-mon-11",
+            "name": "Red / stop",
+            "dosage": "Stop running for sharp, worsening, asymmetric, or gait-altering pain; skip the whole session for illness or serious systemic fatigue."
+          }
+        ]
+      }
+    ]
+  },
+  "w15d2": {
+    "purpose": "Conservative controlled threshold AM; primary strength PM — only true two-a-day",
+    "duration": "Run approximately 50–55 min; strength approximately 45–60 min, separated by at least 3 h",
+    "volume": "3 × 6 min threshold, 2 min jog recoveries; 11–12 strength working sets",
+    "footwear": "Comfortable trainers on flat safe pavement/track for threshold; stable gym shoes for lift",
+    "note": "No documented threshold splits or Tuesday lower-body strength last week. Use a consolidation dose, not 4 × 6 progression. First rep should feel controlled; a fourth rep should remain clearly possible. Lifting does not need to be a maximal-strength test.",
+    "blocks": [
+      {
+        "name": "AM — readiness and warm-up",
+        "items": [
+          {
+            "id": "b15-tue-1",
+            "name": "Go/no-go",
+            "dosage": "Green: normal gait, stable sleep/energy, hamstring, calf/Achilles, foot and adductor/hip pain 0–1/10 with no worsening. If questionable, choose amber. Do not treat unlogged prior work as completed."
+          },
+          {
+            "id": "b15-tue-2",
+            "name": "Easy warm-up",
+            "dosage": "12–15 min jogging at RPE 2–3; ankle rockers 8/side; leg swings 8/side; walking lunges 5/side."
+          },
+          {
+            "id": "b15-tue-3",
+            "name": "Warm-up strides",
+            "dosage": "2 × 20 seconds relaxed progressive strides around 5K rhythm, with ~60–90 sec easy jog. These are not maximal sprints."
+          }
+        ]
+      },
+      {
+        "name": "AM — threshold",
+        "items": [
+          {
+            "id": "b15-tue-4",
+            "name": "Main set",
+            "dosage": "3 × 6 min controlled threshold at RPE 6–7, with 2:00 very easy jogging between reps. Begin conservatively. No pace chasing."
+          },
+          {
+            "id": "b15-tue-5",
+            "name": "Record quality",
+            "dosage": "Log each rep's pace, average HR, RPE, and whether an additional rep felt possible. If rep 1 exceeds RPE 7.5, slow down; if form deteriorates, finish easy."
+          },
+          {
+            "id": "b15-tue-6",
+            "name": "Cooldown",
+            "dosage": "10–15 min very easy jogging; no extra mileage."
+          }
+        ]
+      },
+      {
+        "name": "PM — controlled primary strength",
+        "items": [
+          {
+            "id": "b15-tue-7",
+            "name": "Back squat",
+            "dosage": "After warm-up sets, 2 × 4 at RPE 7; 3 min rest; smooth reps, no grinder. Avoid if lower-body soreness or tissue symptoms."
+          },
+          {
+            "id": "b15-tue-8",
+            "name": "Barbell bench press",
+            "dosage": "3 × 5 at RPE 7–7.5; 2½–3 min rest. Account for Monday incline pressing; reduce if shoulders/chest are fatigued."
+          },
+          {
+            "id": "b15-tue-9",
+            "name": "Rear-foot-elevated split squat",
+            "dosage": "2 × 5 each leg at RPE 6.5–7; 90–120 sec rest. Omit if legs are significantly taxed by running."
+          },
+          {
+            "id": "b15-tue-10",
+            "name": "Chest-supported row",
+            "dosage": "2 × 8–10 at RPE 7–8; 90 sec rest."
+          },
+          {
+            "id": "b15-tue-11",
+            "name": "Standing calf raise — optional",
+            "dosage": "1–2 × 8–10 at RPE 7; 75–90 sec rest, only if calf/Achilles fully quiet. No AMRAP."
+          }
+        ]
+      },
+      {
+        "name": "Fueling and readiness modifications",
+        "items": [
+          {
+            "id": "b15-tue-12",
+            "name": "Between-session fueling",
+            "dosage": "Eat carbohydrate plus 25–40 g protein after the run; a substantial meal and fluids/sodium commensurate with sweat loss during the separation. Target normal high-training-day intake."
+          },
+          {
+            "id": "b15-tue-13",
+            "name": "Amber",
+            "dosage": "2 × 6 min threshold only if gait and tissues normal; otherwise 35–45 min easy. Limit lift to bench/rows; no squat, RFESS or calf loading when leg response is uncertain."
+          },
+          {
+            "id": "b15-tue-14",
+            "name": "Red / stop",
+            "dosage": "No hard running or heavy legs for sharp/worsening/gait-altering pain, illness, or severe fatigue; rest or pain-free very easy non-impact. No makeup intervals."
+          }
+        ]
+      }
+    ]
+  },
+  "w15d3": {
+    "purpose": "Post-threshold recovery through non-impact aerobic work",
+    "duration": "50–55 min",
+    "volume": "50–55 min easy bike or elliptical RPE 2–3",
+    "footwear": "Cycling or elliptical shoes",
+    "note": "Deliberately no running and no lifting. Last Wednesday had a 6-mile easy run instead of the recovery cross-training prescription; the planned session is non-impact this week to control cumulative loading.",
+    "blocks": [
+      {
+        "name": "Easy cross-training",
+        "items": [
+          {
+            "id": "b15-wed-1",
+            "name": "Bike or elliptical",
+            "dosage": "50–55 min at RPE 2–3, conversational; start 5 min extra easy. Bike cadence comfortable ~80–95 rpm if applicable."
+          },
+          {
+            "id": "b15-wed-2",
+            "name": "No intensity",
+            "dosage": "No intervals, resistance surges, hills, strides, or fast finish. Leave feeling fresher."
+          }
+        ]
+      },
+      {
+        "name": "Optional mobility",
+        "items": [
+          {
+            "id": "b15-wed-3",
+            "name": "Foot, calf and hip",
+            "dosage": "Ankle rocker 8/side, soleus isometric 20 sec/side, straight-knee calf isometric 20 sec/side and adductor rockbacks 6/side; only comfortable ranges."
+          }
+        ]
+      },
+      {
+        "name": "Contingencies",
+        "items": [
+          {
+            "id": "b15-wed-4",
+            "name": "Amber",
+            "dosage": "25–40 min very easy bike or complete rest."
+          },
+          {
+            "id": "b15-wed-5",
+            "name": "Red / stop",
+            "dosage": "Rest for gait-altering pain, acute illness, or worsening localized symptoms. No compensatory running."
+          }
+        ]
+      }
+    ]
+  },
+  "w15d4": {
+    "purpose": "Medium-long easy aerobic run; optional smooth uphill strides",
+    "duration": "65–70 min easy running; add only the time needed for 0–4 optional hill strides and walking recoveries",
+    "volume": "65–70 min RPE 2–3 easy + up to 4 × 8 sec uphill at 85–90% only fully green",
+    "footwear": "Cushioned trainers on predictable flat/gentle route; safe dry ~3–5% hill for optional strides",
+    "note": "This is an aerobic durability session, not a high-speed workout. A-week true acceleration/flying sprint remains the maximum-velocity exposure. Finish with walking after hills—no additional jogging cooldown.",
+    "blocks": [
+      {
+        "name": "Aerobic volume",
+        "items": [
+          {
+            "id": "b15-thu-1",
+            "name": "Readiness check",
+            "dosage": "Tuesday soreness is improving and gait normal. If not, shorten and omit all strides. No lifting Thursday."
+          },
+          {
+            "id": "b15-thu-2",
+            "name": "Easy run",
+            "dosage": "65–70 min RPE 2–3, flat or gentle rolling terrain, first 10–15 min especially relaxed. No tempo, moderate progression or fast finish."
+          },
+          {
+            "id": "b15-thu-3",
+            "name": "Pace cue",
+            "dosage": "Conversation possible in full sentences; prioritize controlled duration over speed."
+          }
+        ]
+      },
+      {
+        "name": "Optional strides at END — green tissues only",
+        "items": [
+          {
+            "id": "b15-thu-4",
+            "name": "Gate",
+            "dosage": "Only if calf/Achilles, hamstring, adductor/hip and foot remain 0–1/10 and mechanics are springy, no protective gait or unusual soreness."
+          },
+          {
+            "id": "b15-thu-5",
+            "name": "Uphill strides",
+            "dosage": "0–4 × 8 sec controlled uphill accelerations on moderate ~3–5% grade; smoothly build to ~85–90% effort, not max; 2–3 min walking back/standing recovery between."
+          },
+          {
+            "id": "b15-thu-6",
+            "name": "Finish",
+            "dosage": "Walk a few minutes, done. No easy jog after the last hill. If legs are heavy after easy run, omit strides entirely."
+          }
+        ]
+      },
+      {
+        "name": "Fueling and alternatives",
+        "items": [
+          {
+            "id": "b15-thu-7",
+            "name": "Fuel",
+            "dosage": "Normal carb-containing meal/snack beforehand as needed; hydration per conditions, protein + carbohydrate after. Midrun carbohydrate optional at this intensity/duration unless underfueled."
+          },
+          {
+            "id": "b15-thu-8",
+            "name": "Amber",
+            "dosage": "45–55 min easy running with no hills; use non-impact cardio for impact soreness."
+          },
+          {
+            "id": "b15-thu-9",
+            "name": "Red / stop",
+            "dosage": "Stop the strides for calf/Achilles tightness, hamstring grabbing, asymmetry or altered push-off. Stop running for sharp or escalating pain."
+          }
+        ]
+      }
+    ]
+  },
+  "w15d5": {
+    "purpose": "Upper B first + low-cost aerobic in one training window",
+    "duration": "Approximately 85–105 min",
+    "volume": "16 upper-body sets + 35–40 min easy running OR 50–55 min bike/elliptical",
+    "footwear": "Gym shoes, then trainers or bike shoes",
+    "note": "No heavy leg work or lower-body isolation that compromises Saturday. Friday Oct 30 was a rest day with 18,500 walk-only steps; accumulated daily activity can affect recovery even with zero running.",
+    "blocks": [
+      {
+        "name": "Upper B — lift first",
+        "items": [
+          {
+            "id": "b15-fri-1",
+            "name": "Shoulder press — DB or machine",
+            "dosage": "3 × 8–10 at RPE 7–8; 90 sec rest."
+          },
+          {
+            "id": "b15-fri-2",
+            "name": "Neutral-grip pull-up or pulldown",
+            "dosage": "3 × 8–10 at RPE 7–8; 90 sec rest."
+          },
+          {
+            "id": "b15-fri-3",
+            "name": "Flat DB or machine chest press",
+            "dosage": "2 × 8–12 at RPE 7–8; 90 sec rest."
+          },
+          {
+            "id": "b15-fri-4",
+            "name": "Cable/chest-supported row",
+            "dosage": "2 × 10–12 at RPE 7–8; 75–90 sec rest."
+          },
+          {
+            "id": "b15-fri-5",
+            "name": "Rear-delt fly",
+            "dosage": "2 × 15–20; 45–60 sec rest."
+          },
+          {
+            "id": "b15-fri-6",
+            "name": "Curl",
+            "dosage": "2 × 10–15, 1–2 reps in reserve; 60 sec rest."
+          },
+          {
+            "id": "b15-fri-7",
+            "name": "Triceps pressdown",
+            "dosage": "2 × 10–15, 1–2 reps in reserve; 60 sec rest."
+          }
+        ]
+      },
+      {
+        "name": "Easy aerobic — immediately afterward",
+        "items": [
+          {
+            "id": "b15-fri-8",
+            "name": "Primary run",
+            "dosage": "35–40 min at RPE 2–3, relaxed flat terrain, no strides/fast finish."
+          },
+          {
+            "id": "b15-fri-9",
+            "name": "Non-impact swap",
+            "dosage": "50–55 min easy bike or elliptical instead when legs, feet or lower legs are carrying fatigue."
+          }
+        ]
+      },
+      {
+        "name": "Fueling, readiness",
+        "items": [
+          {
+            "id": "b15-fri-10",
+            "name": "Fuel",
+            "dosage": "Carbohydrate-containing meal/snack before, 25–40 g protein plus carbohydrate after; fluids for conditions."
+          },
+          {
+            "id": "b15-fri-11",
+            "name": "Amber",
+            "dosage": "2 sets per upper lift and 25–30 min easy cardio, preferably bike if impact fatigue."
+          },
+          {
+            "id": "b15-fri-12",
+            "name": "Red / stop",
+            "dosage": "Rest during acute illness or severe systemic fatigue; no impact with gait-altering pain or escalating symptoms."
+          }
+        ]
+      }
+    ]
+  },
+  "w15d6": {
+    "purpose": "Long easy run — primary weekly aerobic anchor",
+    "duration": "80–85 min",
+    "volume": "80–85 min easy RPE 2–3, no fast finish",
+    "footwear": "Comfortable trainers on predictable terrain",
+    "note": "Oct 31 shows 10.6 running miles but no duration, average HR, RPE or tissue response. Last verified timed long run was Oct 17: 84 min/10.05 mi/127 bpm. Hold duration near that instead of assuming tolerance for a longer run.",
+    "blocks": [
+      {
+        "name": "Long run",
+        "items": [
+          {
+            "id": "b15-sat-1",
+            "name": "Readiness gate",
+            "dosage": "Normal gait, improving soreness, no focal calf/Achilles/hamstring/adductor/foot symptoms. Consider Fri training and the week's cumulative running."
+          },
+          {
+            "id": "b15-sat-2",
+            "name": "Easy long run",
+            "dosage": "80–85 min RPE 2–3; first 15 min deliberately easy, then steady conversational cruising. Flat/gently rolling route, no progression or fast finish."
+          },
+          {
+            "id": "b15-sat-3",
+            "name": "Primary cue",
+            "dosage": "Accumulate comfortable aerobic time. Do not run faster to hit an unverified mileage target."
+          }
+        ]
+      },
+      {
+        "name": "Fueling and fluids",
+        "items": [
+          {
+            "id": "b15-sat-4",
+            "name": "Pre- and during-run carbohydrate",
+            "dosage": "30–60 g carbohydrate in a pre-run snack/meal as tolerated; ~30–45 g/hour during for an 80+ minute run if useful, particularly when starting with low glycogen."
+          },
+          {
+            "id": "b15-sat-5",
+            "name": "Post-run recovery",
+            "dosage": "Protein 25–40 g plus carbohydrate, fluids and sodium consistent with sweat losses."
+          }
+        ]
+      },
+      {
+        "name": "Alternatives",
+        "items": [
+          {
+            "id": "b15-sat-6",
+            "name": "Amber",
+            "dosage": "65–75 min easy; no fast finish, shorten again for accumulating lower-leg fatigue."
+          },
+          {
+            "id": "b15-sat-7",
+            "name": "Red / stop",
+            "dosage": "For focal or gait-altering pain skip impact; choose comfortable non-impact aerobic only if genuinely pain-free or rest. Seek medical evaluation for severe symptoms."
+          }
+        ]
+      }
+    ]
+  },
+  "w15d7": {
+    "purpose": "Full rest and data-quality review",
+    "duration": "All day",
+    "volume": "No training",
+    "footwear": "Not applicable",
+    "note": "Keep Sunday fully off. No make-up runs or lifting. Next A-week sprint dose depends on actual recent speed tolerance and green tissue response, not prescribed entries.",
+    "blocks": [
+      {
+        "name": "Rest",
+        "items": [
+          {
+            "id": "b15-sun-1",
+            "name": "Full rest",
+            "dosage": "Normal life movement only. No prescribed cardio, mobility session, lifting, sprinting or mileage make-up."
+          }
+        ]
+      },
+      {
+        "name": "Review for A week",
+        "items": [
+          {
+            "id": "b15-sun-2",
+            "name": "Log training details",
+            "dosage": "Record each run's duration/distance and easy HR, Tuesday rep pace/HR/RPE, lower-lift loads/RPE, Thursday hill reps (0–4) and any symptoms, Saturday duration/HR, sleep and readiness."
+          },
+          {
+            "id": "b15-sun-3",
+            "name": "Next-week speed readiness",
+            "dosage": "Full A-week flying sprints require recent fast-running tolerance, pain-free mechanics and acceptable recovery; otherwise use controlled starts only."
+          },
+          {
+            "id": "b15-sun-4",
+            "name": "Red flags",
+            "dosage": "Worsening localized pain, altered gait, systemic illness or unusual exhaustion warrants recovery and appropriate evaluation, not catch-up training."
+          }
+        ]
+      }
+    ]
   }
+
 };

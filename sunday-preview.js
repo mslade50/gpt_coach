@@ -2,7 +2,7 @@
 "use strict";
 const applySundayPreview = () => {
 const now = new Date();
-if (now.getDay() !== 0) return;
+if (new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", weekday: "short" }).format(now) !== "Sun") return;
 const nextWeek = document.getElementById("nextWeek");
 const meta = document.getElementById("weekPlanMeta");
 if (!nextWeek || nextWeek.disabled || !meta) return;
@@ -37,7 +37,8 @@ const overrideSources = [
 "data/a12-session-fri.js",
 "data/a12-session-sat.js",
 "data/a12-session-sun.js",
-"data/aerobic-rebuild-a-week2.js"
+"data/aerobic-rebuild-a-week2.js",
+"data/current-athlete-state-2026-11-02.js"
 ];
 const loadSequentially = (index = 0) => {
 if (index >= overrideSources.length) {

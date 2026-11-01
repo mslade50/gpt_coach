@@ -257,5 +257,71 @@ window.WEEK_PLANS = [
       { day: "Sat", type: "High", status: "Planned", title: "400 m formal time trial", detail: "Race setup when appropriate; record lane, weather, wind, timing and conditions.", volume: "1 × 400 m" },
       { day: "Sun", type: "Recovery", status: "Locked", title: "Full rest + post-race review", detail: "Complete post-race and next-morning review.", volume: "No training" }
     ]
+  },
+  {
+    "week": 15,
+    "blockWeekLabel": "AEROBIC REBUILD · B WEEK 3 · NOV 2–8, 2026",
+    "title": "Aerobic consolidation + controlled threshold — B Week 3",
+    "focus": "Build 10K/aerobic durability while preserving strength and allowing speed retention in next A week. Monday and Friday combine upper lifting before easy aerobic in one window; Tuesday is the only two-a-day and high lower-body day; Wednesday low impact; Thursday easy medium-long run with only conditional hill strides; Saturday long easy run; Sunday off.",
+    "statusNote": "Provisional as of Nov 1, 2026: Daily Log reports Oct 26–31 running distances 6 + 2 + 6 + 8 + 0 + 10.6 = 32.6 mi. Training Log verifies Oct 26 6 easy miles (8:38 pace/127 bpm) and incline barbell bench 145 × 8 × 3 at RPE 7.5–9. Oct 27–31 exercise labels do not verify threshold splits, sprint dosage, lower-body lifting, or tissue recovery. No compensatory mileage or intensity progression. Tue nutrition entry of 3 kcal appears malformed and is not interpreted as actual intake.",
+    "days": [
+      {
+        "day": "Mon",
+        "type": "Low–moderate",
+        "status": "Provisional",
+        "title": "Upper A + easy run",
+        "detail": "One visit, lift first. Prior Oct 26 incline barbell bench 145 × 8 × 3 was RPE 7.5–9; adjust rather than progressing load. Keep legs fresh for threshold.",
+        "volume": "Upper A 14 sets + 40–45 min easy run"
+      },
+      {
+        "day": "Tue",
+        "type": "High",
+        "status": "Provisional",
+        "title": "Controlled threshold + primary strength",
+        "detail": "Only true two-a-day and hard lower-body day. Threshold completion and recent lower lifting unverified: use conservative 3 × 6 min and restrained strength.",
+        "volume": "3 × 6 min RPE 6–7 / 2 min jog; primary lift later"
+      },
+      {
+        "day": "Wed",
+        "type": "Recovery",
+        "status": "Provisional",
+        "title": "Non-impact aerobic recovery",
+        "detail": "Easy bike or elliptical rather than running, to recover after Tuesday. No lifting.",
+        "volume": "50–55 min bike/elliptical RPE 2–3"
+      },
+      {
+        "day": "Thu",
+        "type": "Low–moderate",
+        "status": "Provisional",
+        "title": "Medium-long easy + optional uphill strides",
+        "detail": "Aerobic durability first. Only with fully green lower legs, hamstring and adductor, finish with up to four 8-sec controlled uphill strides; walk off, no jogging cooldown.",
+        "volume": "65–70 min easy + 0–4 × 8 sec uphill strides"
+      },
+      {
+        "day": "Fri",
+        "type": "Low–moderate",
+        "status": "Provisional",
+        "title": "Upper B + easy aerobic",
+        "detail": "Upper lifting first, then short easy run or low-impact alternative; avoid meaningful leg work before Saturday.",
+        "volume": "Upper B 16 sets + 35–40 min easy run OR 50–55 min bike"
+      },
+      {
+        "day": "Sat",
+        "type": "Aerobic volume",
+        "status": "Provisional",
+        "title": "Long easy run",
+        "detail": "Hold duration near the last timed long run (84 min on Oct 17). Oct 31 has 10.6 miles but no recorded duration or effort; do not automatically progress.",
+        "volume": "80–85 min easy, no fast finish"
+      },
+      {
+        "day": "Sun",
+        "type": "Recovery",
+        "status": "Locked",
+        "title": "Full rest + logging review",
+        "detail": "No workout and no make-up running. Review actual completion, tissue response, sleep and running load before the next A week.",
+        "volume": "Full rest"
+      }
+    ]
   }
+
 ];

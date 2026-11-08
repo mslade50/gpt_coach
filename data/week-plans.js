@@ -322,6 +322,70 @@ window.WEEK_PLANS = [
         "volume": "Full rest"
       }
     ]
+  },
+  {
+    "week": 16,
+    "blockWeekLabel": "AEROBIC REBUILD · A WEEK 3 · NOV 9–15, 2026",
+    "title": "Speed retention + controlled aerobic development — A Week 3",
+    "focus": "Tuesday is the only genuine lower-body high day and only two-a-day. Monday and Friday combine upper-first strength with easy aerobic in one session. Wednesday is low-impact recovery, Thursday modest subthreshold aerobic, Saturday easy long run, Sunday rest. Do not progress from undocumented work.",
+    "statusNote": "Nov 8 evidence: Daily Log Nov 2–6 reports 6+8+6+8+5.6=33.6 running miles in five days; Nov 7 run distance/effort and Nov 8 data absent. Recorded sleep Nov 2–7 approximately 7–7.5 h. Training Log lacks completed Nov 2–7 details; last detailed Oct 26: 6 mi easy (8:38/mi, HR 127), incline bench 145×8×3 RPE 7.5–9. Recent sprint/threshold splits, lower-lift loads/RPE and tissue scores not verified. Recent reported calories (Nov 2,4,5,6) 3485,3325,2969,3201, below nominal 4000 goal, but these are estimates, not measured energy deficit. Keep intensity/volume conservative and avoid compensatory mileage.",
+    "days": [
+      {
+        "day": "Mon",
+        "type": "Low–moderate",
+        "status": "Provisional",
+        "title": "Upper A + easy run",
+        "detail": "One session: lift first then genuinely easy run. No lower-body work.",
+        "volume": "Upper A 14 sets + 40–45 min easy"
+      },
+      {
+        "day": "Tue",
+        "type": "High",
+        "status": "Provisional",
+        "title": "Speed retention + primary strength",
+        "detail": "Only high lower-body day and true two-a-day. Full flying sprint dose only with GREEN tissues and recent confirmed fast-running tolerance; otherwise controlled accelerations.",
+        "volume": "GREEN: 3×20–30 m accelerations + 2×flying 20; lift later"
+      },
+      {
+        "day": "Wed",
+        "type": "Recovery",
+        "status": "Provisional",
+        "title": "Low-impact aerobic recovery",
+        "detail": "Bike or elliptical only; no replacement running miles.",
+        "volume": "45–55 min easy bike/elliptical RPE 2–3"
+      },
+      {
+        "day": "Thu",
+        "type": "Medium",
+        "status": "Provisional",
+        "title": "Controlled subthreshold aerobic",
+        "detail": "Hold/reduce Thursday dose because true Tuesday response and recent running intensity are undocumented. No lifting.",
+        "volume": "2×8 min RPE 5–6, 2 min easy jog"
+      },
+      {
+        "day": "Fri",
+        "type": "Low–moderate",
+        "status": "Provisional",
+        "title": "Upper B + easy aerobic",
+        "detail": "Lift first then easy aerobic in a single session. Do not tire legs ahead of Saturday.",
+        "volume": "Upper B 16 sets + 35–40 min easy run OR 45–55 min bike"
+      },
+      {
+        "day": "Sat",
+        "type": "Aerobic volume",
+        "status": "Provisional",
+        "title": "Long easy run",
+        "detail": "Nov 7 long-run duration and effort missing; no pace chasing, no fast finish.",
+        "volume": "75–80 min easy; 65–70 if amber"
+      },
+      {
+        "day": "Sun",
+        "type": "Recovery",
+        "status": "Locked",
+        "title": "Full rest + review",
+        "detail": "No make-up running or lifting; log actual workouts and tissue responses.",
+        "volume": "Full rest"
+      }
+    ]
   }
-
 ];

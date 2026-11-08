@@ -38,7 +38,8 @@ const overrideSources = [
 "data/a12-session-sat.js",
 "data/a12-session-sun.js",
 "data/aerobic-rebuild-a-week2.js",
-"data/current-athlete-state-2026-11-02.js"
+"data/current-athlete-state-2026-11-02.js",
+"data/current-athlete-state-2026-11-09.js"
 ];
 const loadSequentially = (index = 0) => {
 if (index >= overrideSources.length) {

@@ -1,3 +1,4 @@
+import {verifySignature, applyHelmLog} from './helm-log.mjs';
 const SCOPE = 'openid email https://www.googleapis.com/auth/spreadsheets';
 const GOOGLE_TOKEN = 'https://oauth2.googleapis.com/token';
 const encoder = new TextEncoder();
@@ -114,6 +115,37 @@ function validateSheetRequest(payload, env) {
   }
   return {url: url.href, method, body: JSON.stringify(body), headers: {'Content-Type': 'application/json'}};
 }
+// Owner-only server-to-server route for Helm. No new D1 write path: it reads the owner's newest live device grant
+// and reuses renewCredentials (the existing token persistence) unchanged.
+async function helmLog(request, env, fetcher) {
+  if (!env.HELM_SYNC_KEY) fail(404, 'Not found.');
+  const url = new URL(request.url);
+  const body = await limitedText(request, 8000);
+  if (!await verifySignature(env.HELM_SYNC_KEY, request.method, url.pathname, request.headers.get('X-Time'), body, request.headers.get('X-Signature'))) fail(401, 'Not authorised.');
+  if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET || !env.TOKEN_ENCRYPTION_KEY || !env.DB) fail(503, 'Sheet connection is not configured.');
+  const {results} = await env.DB.prepare("SELECT id, credentials FROM devices WHERE credentials != '' AND expires > ? ORDER BY expires DESC LIMIT 3").bind(Date.now()).all();
+  let lastError = new Failure(503, 'No connected Google device. Reconnect once in the logger.');
+  for (const device of results || []) {
+    try {
+      const credentials = await box(device.credentials, env, true);
+      if (credentials.expires < Date.now() + 60000) await renewCredentials(device, credentials, env, fetcher);
+      const request1 = async payload => {
+        const target = validateSheetRequest(payload, env);
+        const send = () => fetcher(target.url, {method: target.method, ...(target.body ? {body: target.body} : {}), headers: {...target.headers, Authorization: 'Bearer ' + credentials.access}, redirect: 'manual', signal: AbortSignal.timeout(15000)});
+        let upstream = await send();
+        if (upstream.status === 401) { await upstream.body?.cancel(); await renewCredentials(device, credentials, env, fetcher); upstream = await send(); }
+        if (!upstream.ok) { await upstream.body?.cancel(); fail(upstream.status === 401 ? 503 : 502, 'Google Sheets could not complete the request.'); }
+        return JSON.parse(await limitedText(upstream, 4000000));
+      };
+      try { return await applyHelmLog(body, request1, env.SPREADSHEET_ID); }
+      catch (error) { if (error instanceof RangeError) fail(400, error.message); throw error; }
+    } catch (error) {
+      if (!(error instanceof Failure) || error.status !== 401) throw error;
+      lastError = error;
+    }
+  }
+  throw lastError;
+}
 export async function handle(request, env, fetcher = fetch) {
   const url = new URL(request.url);
   const origin = request.headers.get('Origin');
@@ -193,6 +225,8 @@ export async function handle(request, env, fetcher = fetch) {
           response = new Response(await limitedText(upstream, 4000000), {headers: {'Content-Type': 'application/json'}});
         }
       }
+    } else if (url.pathname === '/helm/log' && request.method === 'POST') {
+      response = json(await helmLog(request, env, fetcher));
     } else fail(404, 'Not found.');
   } catch (error) {
     response = json({error: error instanceof Failure ? error.message : 'Connection interrupted. Your saved entries are safe.', ...(error instanceof Failure ? {} : {reference: stage + ':' + (['Error', 'TypeError', 'OperationError', 'TimeoutError', 'DataError', 'SyntaxError', 'AbortError'].includes(error.name) ? error.name : 'Error')})}, error instanceof Failure ? error.status : 503);

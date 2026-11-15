@@ -387,5 +387,71 @@ window.WEEK_PLANS = [
         "volume": "Full rest"
       }
     ]
-  }
+  },
+  {
+  "week": 17,
+  "blockWeekLabel": "AEROBIC REBUILD · B WEEK 4 · NOV 16–22, 2026",
+  "title": "Controlled threshold and aerobic recovery — B Week 4",
+  "focus": "Only Tuesday is a high lower-body day and split-session day. After 46.8 logged running miles and a hard Nov 14 long run, hold/decrease load, restore easy intensity, keep Wed non-impact, and make Thursday's uphill strides conditional. Upper A Monday / primary strength Tuesday / Upper B Friday are the three strength exposures.",
+  "statusNote": "Verified from connected logs Nov 9–14: Daily Log 6.8+8.6+6.2+8.1+6.5+10.6=46.8 running miles over six days; Training Log gives more precise 46.86 mi. Nov 14 10.60 mi in 77:16 (7:17/mi), average HR 147, with mile 5 at 6:01/mi: materially harder than prescribed easy long run. Nov 10 8.60 mi contains several ~6:30–6:50/mi fragments, but completion type, RPE and lift doses are not confirmed. Nov 13–14 readiness 4/5; Nov 15 readiness 3/5 despite 8.25 h sleep. Calorie estimates Nov 9,10,12,13,14: 3950,3650,3400,3225,3750 (mean 3595), not a measured energy deficit. Specific Achilles/hamstring/adductor/foot ratings absent; Training Log dates Nov 9–14 contain run telemetry but no lifting details/status. Reduce total planned running and avoid adding fatigue rather than assuming green tissue tolerance.",
+  "days": [
+    {
+      "day": "Mon",
+      "type": "Low–moderate",
+      "status": "Provisional",
+      "title": "Upper A + easy running",
+      "detail": "One continuous session: lift first, then short easy run. Avoid fatigue before Tuesday controlled threshold.",
+      "volume": "Upper A 14 sets + 40–45 min easy run"
+    },
+    {
+      "day": "Tue",
+      "type": "High",
+      "status": "Readiness-gated",
+      "title": "Controlled threshold + primary strength",
+      "detail": "Only hard lower-body day and two-a-day. Keep threshold submaximal after hard Nov 14 long run. No lower-body AMRAPs.",
+      "volume": "3 × 6 min RPE 6–7 / 2 min jog; controlled lift hours later"
+    },
+    {
+      "day": "Wed",
+      "type": "Recovery",
+      "status": "Provisional",
+      "title": "Low-impact aerobic recovery",
+      "detail": "Bike or elliptical exclusively. This is post-threshold tissue recovery, not mileage replacement.",
+      "volume": "45–55 min bike/elliptical RPE 2–3"
+    },
+    {
+      "day": "Thu",
+      "type": "Low–moderate",
+      "status": "Readiness-gated",
+      "title": "Medium-long easy run + optional hill strides",
+      "detail": "Conversational aerobic development. Four short smooth uphill strides only for fully green legs; finish by walking, without added jogging cooldown.",
+      "volume": "65–70 min easy + up to 4 × 8 sec uphill strides"
+    },
+    {
+      "day": "Fri",
+      "type": "Low–moderate",
+      "status": "Provisional",
+      "title": "Upper B + easy aerobic",
+      "detail": "Lift first, easy aerobic immediately afterward, in one window. Substitute low-impact if legs are carrying fatigue.",
+      "volume": "Upper B 16 sets + 35–40 min easy run OR 45–55 min bike"
+    },
+    {
+      "day": "Sat",
+      "type": "Aerobic volume",
+      "status": "Readiness-gated",
+      "title": "Easy long run (no surges)",
+      "detail": "75–80 min deliberately easy; prior Saturday was fast and should not be repeated as a disguised workout. No progression or fast finish.",
+      "volume": "75–80 min RPE 2–3; amber 60–70"
+    },
+    {
+      "day": "Sun",
+      "type": "Recovery",
+      "status": "Locked",
+      "title": "Full rest + review",
+      "detail": "No training, no make-up mileage. Record actual threshold, strength, long run and tissue responses before next A week.",
+      "volume": "Full rest"
+    }
+  ]
+}
+
 ];

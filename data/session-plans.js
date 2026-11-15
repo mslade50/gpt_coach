@@ -1158,5 +1158,509 @@ window.SESSION_PLANS = {
         ]
       }
     ]
-  }
+  },
+  "w17d1": {
+  "purpose": "Upper A, then easy run in one session",
+  "duration": "~85–100 min combined",
+  "volume": "14 upper working sets + 40–45 min easy run",
+  "footwear": "Stable gym footwear, then supportive trainers on flat/gently rolling roads or paths",
+  "note": "Friday/Saturday prior week carried substantial run volume and a fast long run. Keep today's run relaxed and Upper A below failure. If Sunday readiness stays 3/5, prefer the amber option.",
+  "blocks": [
+    {
+      "name": "Readiness and upper lifting — lift first",
+      "items": [
+        {
+          "id": "a17d1-1-1",
+          "name": "Start check",
+          "dosage": "Check sleep, energy, gait, hamstrings, calves/Achilles, foot and adductors. No maximal sets; leave 2–3 reps in reserve."
+        },
+        {
+          "id": "a17d1-1-2",
+          "name": "Incline DB or barbell press",
+          "dosage": "3 × 8 @ RPE 7–8; 90–120 sec. Oct 26 barbell 145×8×3 reached RPE 7.5–9; do not automatically add load."
+        },
+        {
+          "id": "a17d1-1-3",
+          "name": "Neutral-grip pulldown or pull-up",
+          "dosage": "3 × 8–10 @ RPE 7–8; 90 sec."
+        },
+        {
+          "id": "a17d1-1-4",
+          "name": "Chest-supported row",
+          "dosage": "2 × 10–12 @ RPE 7–8; 75–90 sec."
+        },
+        {
+          "id": "a17d1-1-5",
+          "name": "Lateral raises",
+          "dosage": "2 × 15–20; 45–60 sec; leave 2 RIR."
+        },
+        {
+          "id": "a17d1-1-6",
+          "name": "Curls",
+          "dosage": "2 × 10–15; 60 sec; leave 2 RIR."
+        },
+        {
+          "id": "a17d1-1-7",
+          "name": "Pressdowns",
+          "dosage": "2 × 10–15; 60 sec; leave 2 RIR."
+        }
+      ]
+    },
+    {
+      "name": "Run — immediately after lifting",
+      "items": [
+        {
+          "id": "a17d1-2-1",
+          "name": "40–45 min genuinely easy",
+          "dosage": "RPE 2–3, full-sentence conversation, flat/gently rolling; first 10 min extra easy. No strides, progression or fast finish."
+        }
+      ]
+    },
+    {
+      "name": "Fuel and recovery options",
+      "items": [
+        {
+          "id": "a17d1-3-1",
+          "name": "Fuel",
+          "dosage": "Carbohydrate-containing pre-session meal/snack if needed; drink according to conditions; 25–40 g protein + carbohydrates afterward."
+        },
+        {
+          "id": "a17d1-3-2",
+          "name": "AMBER",
+          "dosage": "2 sets per major exercise, 1 set arms if needed; 25–35 min easy or 35–45 min bike if impact soreness."
+        },
+        {
+          "id": "a17d1-3-3",
+          "name": "RED",
+          "dosage": "Rest or non-painful mobility only if unusual systemic fatigue, sharp/worsening pain or altered gait. Avoid training through pain."
+        }
+      ]
+    }
+  ]
+},
+  "w17d2": {
+  "purpose": "Controlled threshold AM + primary strength PM",
+  "duration": "Run ~55–65 min; lifting ~50–60 min, separated by several hours",
+  "volume": "3 × 6 min RPE 6–7 with 2 min jog + controlled primary strength",
+  "footwear": "Supportive running trainers on flat measured road/track; stable gym shoes for lifting",
+  "note": "Only genuine lower-body high day and true two-a-day. Due to Nov 14's hard long run and absent lift/tissue detail, do not increase to 4 reps or race threshold pace. Green required for any intensity.",
+  "blocks": [
+    {
+      "name": "Decision gate and warm-up",
+      "items": [
+        {
+          "id": "a17d2-1-1",
+          "name": "Green / amber / red check",
+          "dosage": "GREEN: normal gait, typical easy HR/effort, no focal discomfort, prior long-run soreness resolving. AMBER: stale/heavy legs, low readiness or persistent soreness; use shorter option. RED: painful/altered gait, illness or unusual fatigue; no threshold or lower lifting."
+        },
+        {
+          "id": "a17d2-1-2",
+          "name": "Easy warm-up",
+          "dosage": "12–15 min easy RPE 2–3; ankle rocker 8/side, walking lunge 5/side, leg swing 8/side."
+        },
+        {
+          "id": "a17d2-1-3",
+          "name": "Relaxed preparation strides",
+          "dosage": "2–3 × 15–20 sec smooth progressive, NOT sprinting; 60–75 sec easy jog. Skip if lower leg unhappy."
+        }
+      ]
+    },
+    {
+      "name": "Threshold — primary aerobic stimulus",
+      "items": [
+        {
+          "id": "a17d2-2-1",
+          "name": "3 × 6 min controlled threshold",
+          "dosage": "RPE 6–7 (comfortably hard) with 2:00 easy jog after reps 1–2. Rep 1 intentionally conservative; avoid using Nov 10 faster splits as a pace target."
+        },
+        {
+          "id": "a17d2-2-2",
+          "name": "Record each rep",
+          "dosage": "Log rep pace, average HR and RPE, plus whether breathing/stride remained controlled; should be able to do another rep."
+        },
+        {
+          "id": "a17d2-2-3",
+          "name": "Cooldown",
+          "dosage": "10–12 min easy; end early if mechanics deteriorate. Stop if rep 1 >RPE 7.5, pain appears or normal form fails."
+        }
+      ]
+    },
+    {
+      "name": "Primary strength — hours later",
+      "items": [
+        {
+          "id": "a17d2-3-1",
+          "name": "Back squat",
+          "dosage": "2 × 4 at RPE 7–7.5; 3 min rest; no forced reps or load progression."
+        },
+        {
+          "id": "a17d2-3-2",
+          "name": "Bench press",
+          "dosage": "3 × 5 at RPE 7–7.5; 2.5–3 min rest."
+        },
+        {
+          "id": "a17d2-3-3",
+          "name": "Rear-foot-elevated split squat",
+          "dosage": "1–2 × 5 each leg at RPE 6–7; 90–120 sec; omit for lingering fatigue."
+        },
+        {
+          "id": "a17d2-3-4",
+          "name": "Chest-supported row",
+          "dosage": "3 × 8–10 at RPE 7; 90 sec."
+        },
+        {
+          "id": "a17d2-3-5",
+          "name": "Standing calf raise",
+          "dosage": "2 × 8–10 at RPE 7, controlled eccentric; 75–90 sec. Omit if Achilles irritable."
+        }
+      ]
+    },
+    {
+      "name": "Fuel and readiness alternatives",
+      "items": [
+        {
+          "id": "a17d2-4-1",
+          "name": "High-day fueling",
+          "dosage": "Carbohydrate and fluid before running; substantial carb/protein meal between sessions; 25–40 g protein + carbohydrate after lifting. Avoid a large energy shortfall."
+        },
+        {
+          "id": "a17d2-4-2",
+          "name": "AMBER",
+          "dosage": "2 × 6 min threshold at RPE ≤6–6.5, 2 min jog; upper-only bench/row in PM, no lower body; or easy aerobic if recovery not good."
+        },
+        {
+          "id": "a17d2-4-3",
+          "name": "RED",
+          "dosage": "25–40 min very easy bike only if symptom-free; otherwise rest. Skip threshold and lower-body lifting. Seek assessment for worsening/localized symptoms."
+        }
+      ]
+    }
+  ]
+},
+  "w17d3": {
+  "purpose": "Low-impact aerobic recovery",
+  "duration": "45–55 min",
+  "volume": "45–55 min easy bike or elliptical RPE 2–3",
+  "footwear": "Comfortable bike/elliptical shoes, no impact surface",
+  "note": "Low-impact day by design; reported Nov 11 had 6.2 running miles despite planned bike. Do not convert today's recovery to a run to reach an arbitrary mileage total.",
+  "blocks": [
+    {
+      "name": "Easy recovery",
+      "items": [
+        {
+          "id": "a17d3-1-1",
+          "name": "Bike or elliptical",
+          "dosage": "45–55 min @ RPE 2–3, comfortable conversation; bike generally 80–95 rpm without grinding."
+        },
+        {
+          "id": "a17d3-1-2",
+          "name": "Effort discipline",
+          "dosage": "No intervals, tempo segments, fast finish, strength or impact running. Finish feeling refreshed."
+        }
+      ]
+    },
+    {
+      "name": "Maintenance and fuel",
+      "items": [
+        {
+          "id": "a17d3-2-1",
+          "name": "Optional mobility",
+          "dosage": "Ankle rocker 8/side, soleus isometric 20 sec/side, straight-knee calf iso 20 sec/side, adductor rockback 6/side; stop if provocative."
+        },
+        {
+          "id": "a17d3-2-2",
+          "name": "Fuel",
+          "dosage": "Normal balanced meals with carbohydrate plus protein; keep hydration consistent."
+        },
+        {
+          "id": "a17d3-2-3",
+          "name": "AMBER",
+          "dosage": "30–40 min gentle cycling or rest if unusually tired."
+        },
+        {
+          "id": "a17d3-2-4",
+          "name": "RED",
+          "dosage": "Rest for illness, gait alteration or significant pain; do not substitute another hard workout."
+        }
+      ]
+    }
+  ]
+},
+  "w17d4": {
+  "purpose": "Medium-long easy run + conditional uphill strides",
+  "duration": "65–70 min running; strides/walk-back may extend clock time slightly",
+  "volume": "65–70 min easy RPE 2–3, then 0–4 × 8 sec controlled uphill strides",
+  "footwear": "Supportive trainers on flat/gentle running route; dry predictable 3–5% uphill only for optional strides",
+  "note": "Aerobic development first; hill strides provide a little acceleration stimulus, not max velocity. Complete all jogging before the strides; walk home/cool down without extra jogging. Suppress hills if Tuesday still in the legs.",
+  "blocks": [
+    {
+      "name": "Readiness gate",
+      "items": [
+        {
+          "id": "a17d4-1-1",
+          "name": "Tissue and fatigue screen",
+          "dosage": "Only do the full 65–70 min if Tuesday is absorbed, gait normal and no focal calf/Achilles, hamstring, foot or adductor discomfort. Sunday 3/5 readiness and Saturday intensity require restraint."
+        },
+        {
+          "id": "a17d4-1-2",
+          "name": "Start easy",
+          "dosage": "First 10–15 min especially gentle; avoid steep descents, racing companions or an unplanned progression."
+        }
+      ]
+    },
+    {
+      "name": "Easy aerobic volume",
+      "items": [
+        {
+          "id": "a17d4-2-1",
+          "name": "65–70 min easy run",
+          "dosage": "RPE 2–3 conversational, flat-to-gently rolling, no steady section. Hold lower-than-usual pace if needed after Tuesday."
+        },
+        {
+          "id": "a17d4-2-2",
+          "name": "No extra running after strides",
+          "dosage": "Finish the planned easy running before hill strides; walking recovery and a short walk home are sufficient."
+        }
+      ]
+    },
+    {
+      "name": "Optional strides — GREEN tissue only",
+      "items": [
+        {
+          "id": "a17d4-3-1",
+          "name": "4 × 8 sec moderate uphill",
+          "dosage": "Smooth build to ~85–90% effort on dry 3–5% incline. Walk back; at least 2–3 min between; no bounding, timing or racing."
+        },
+        {
+          "id": "a17d4-3-2",
+          "name": "Skip criteria",
+          "dosage": "Omit all strides if tired calves/Achilles, hamstring or adductor, localized discomfort, heavy legs or asymmetrical push-off. No running cooldown."
+        },
+        {
+          "id": "a17d4-3-3",
+          "name": "Stop rule",
+          "dosage": "End the set immediately for sharp sensation, shortened/asymmetric stride or poor coordination."
+        }
+      ]
+    },
+    {
+      "name": "Fuel and alternatives",
+      "items": [
+        {
+          "id": "a17d4-4-1",
+          "name": "Fuel",
+          "dosage": "Normal carbohydrate-containing meal/snack before, fluid as needed, carb/protein meal after. 65–70 min easy generally does not require aggressive midrun fueling."
+        },
+        {
+          "id": "a17d4-4-2",
+          "name": "AMBER",
+          "dosage": "45–55 min easy with no strides; if impact-sensitive, 45–55 min easy bike instead."
+        },
+        {
+          "id": "a17d4-4-3",
+          "name": "RED",
+          "dosage": "Rest or very easy non-impact only if comfortable; no hills or running through altered gait."
+        }
+      ]
+    }
+  ]
+},
+  "w17d5": {
+  "purpose": "Upper B, then easy aerobic in one session",
+  "duration": "~85–105 min combined",
+  "volume": "16 upper sets + 35–40 min easy run OR 45–55 min easy bike/elliptical",
+  "footwear": "Stable gym footwear then trainers/bike shoes",
+  "note": "Lift first, run or cycle immediately after. No meaningful lower-body strength and no adding missed aerobic minutes to Saturday.",
+  "blocks": [
+    {
+      "name": "Upper B — lift first",
+      "items": [
+        {
+          "id": "a17d5-1-1",
+          "name": "DB/machine shoulder press",
+          "dosage": "3 × 8–10 @ RPE 7–8; 90 sec."
+        },
+        {
+          "id": "a17d5-1-2",
+          "name": "Neutral pulldown/pull-up",
+          "dosage": "3 × 8–10 @ RPE 7–8; 90 sec."
+        },
+        {
+          "id": "a17d5-1-3",
+          "name": "Flat DB/machine press",
+          "dosage": "2 × 8–12 @ RPE 7–8; 90 sec."
+        },
+        {
+          "id": "a17d5-1-4",
+          "name": "Cable or chest-supported row",
+          "dosage": "2 × 10–12 @ RPE 7; 75–90 sec."
+        },
+        {
+          "id": "a17d5-1-5",
+          "name": "Rear-delt fly",
+          "dosage": "2 × 15–20; 45–60 sec."
+        },
+        {
+          "id": "a17d5-1-6",
+          "name": "Curl",
+          "dosage": "2 × 10–15; 60 sec; leave 2 RIR."
+        },
+        {
+          "id": "a17d5-1-7",
+          "name": "Pressdown",
+          "dosage": "2 × 10–15; 60 sec; leave 2 RIR."
+        }
+      ]
+    },
+    {
+      "name": "Aerobic — same session",
+      "items": [
+        {
+          "id": "a17d5-2-1",
+          "name": "Default easy run",
+          "dosage": "35–40 min @ RPE 2–3; conversational, no faster finish."
+        },
+        {
+          "id": "a17d5-2-2",
+          "name": "Low-impact replacement",
+          "dosage": "45–55 min easy bike/elliptical if calves/legs feel beaten up. Do one option, not both."
+        }
+      ]
+    },
+    {
+      "name": "Fuel and contingencies",
+      "items": [
+        {
+          "id": "a17d5-3-1",
+          "name": "Fuel",
+          "dosage": "Carbohydrate-containing pre-session meal; 25–40 g protein plus carbohydrate after."
+        },
+        {
+          "id": "a17d5-3-2",
+          "name": "AMBER",
+          "dosage": "Reduce major lifts to 2 sets, choose 25–30 min easy running or bike."
+        },
+        {
+          "id": "a17d5-3-3",
+          "name": "RED",
+          "dosage": "Rest if pain changes gait or unusual fatigue persists."
+        }
+      ]
+    }
+  ]
+},
+  "w17d6": {
+  "purpose": "Easy long run — aerobic only",
+  "duration": "75–80 min",
+  "volume": "75–80 min conversational easy; no tempo, hills surges, or fast finish",
+  "footwear": "Supportive trainers on flat/gentle predictable route",
+  "note": "Nov 14's 10.60 miles in 77:16 (HR147 avg, one 6:01 mile) was not the easy long-run stimulus intended. Correct intensity this week rather than extending duration or chasing distance.",
+  "blocks": [
+    {
+      "name": "Start and long-run execution",
+      "items": [
+        {
+          "id": "a17d6-1-1",
+          "name": "Readiness check",
+          "dosage": "Only run 75–80 min with normal gait, recovered lower legs and routine fatigue. Use 60–70 min when amber."
+        },
+        {
+          "id": "a17d6-1-2",
+          "name": "Easy long run",
+          "dosage": "75–80 min at RPE 2–3, full sentences, first 15 min especially slow. Keep effort near personal genuinely easy range rather than pace from Nov 14."
+        },
+        {
+          "id": "a17d6-1-3",
+          "name": "No fast finish",
+          "dosage": "Do not include threshold repeats, 6-minute miles, pickups or hill sprints; if effort climbs, slow down or shorten."
+        },
+        {
+          "id": "a17d6-1-4",
+          "name": "Stop rule",
+          "dosage": "Stop for focal worsening pain, obvious gait change, dizziness or unusual exhaustion; substitute rest/non-impact only if comfortable."
+        }
+      ]
+    },
+    {
+      "name": "Fuel",
+      "items": [
+        {
+          "id": "a17d6-2-1",
+          "name": "Before",
+          "dosage": "30–60 g carbohydrate 1–2 hr beforehand as tolerated; adjust meal timing to gut comfort."
+        },
+        {
+          "id": "a17d6-2-2",
+          "name": "During",
+          "dosage": "Water/electrolytes according to weather and sweating; ~30–45 g carbohydrate/hr optional-to-useful for 75–80 min, especially if otherwise underfueled."
+        },
+        {
+          "id": "a17d6-2-3",
+          "name": "After",
+          "dosage": "Within a normal meal, 25–40 g protein plus substantial carbohydrates; replace fluids/sodium as needed."
+        }
+      ]
+    },
+    {
+      "name": "Alternatives and logging",
+      "items": [
+        {
+          "id": "a17d6-3-1",
+          "name": "AMBER",
+          "dosage": "60–70 min easy, or 70–80 min easy cycle if impact soreness; no make-up mileage."
+        },
+        {
+          "id": "a17d6-3-2",
+          "name": "RED",
+          "dosage": "Rest for pain/altered gait or illness."
+        },
+        {
+          "id": "a17d6-3-3",
+          "name": "Record",
+          "dosage": "Log actual duration, distance, average HR, pace and RPE; tissue and next-morning response. This is not a time trial."
+        }
+      ]
+    }
+  ]
+},
+  "w17d7": {
+  "purpose": "Full rest + weekly review",
+  "duration": "All day",
+  "volume": "No workout",
+  "footwear": "None",
+  "note": "Next week alternates to A, but true fast running must remain green-tissue and recent-speed-tolerance gated.",
+  "blocks": [
+    {
+      "name": "Recovery",
+      "items": [
+        {
+          "id": "a17d7-1-1",
+          "name": "Complete rest",
+          "dosage": "Normal daily life only. No make-up mileage, gym, intervals or sprinting."
+        }
+      ]
+    },
+    {
+      "name": "Review for next A week",
+      "items": [
+        {
+          "id": "a17d7-2-1",
+          "name": "Document actual work",
+          "dosage": "Record Tuesday threshold rep HR/pace/RPE and lift loads/reps; Thursday strides yes/no; Saturday long-run duration/HR/RPE."
+        },
+        {
+          "id": "a17d7-2-2",
+          "name": "Readiness",
+          "dosage": "Document sleep, lower-leg/hamstring/adductor/foot symptoms and recovery over the next morning. Missing detail remains unknown."
+        },
+        {
+          "id": "a17d7-2-3",
+          "name": "Programming rule",
+          "dosage": "A-week true speed requires fully green tissues and recently tolerated near-maximal running. If unverified, use restrained short accelerations instead."
+        }
+      ]
+    }
+  ]
+}
+
 };

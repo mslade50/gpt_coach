@@ -1,4 +1,5 @@
 import {verifySignature, applyHelmLog} from './helm-log.mjs';
+import {readHistory} from './helm-history.mjs';
 const SCOPE = 'openid email https://www.googleapis.com/auth/spreadsheets';
 const GOOGLE_TOKEN = 'https://oauth2.googleapis.com/token';
 const encoder = new TextEncoder();
@@ -146,6 +147,43 @@ async function helmLog(request, env, fetcher) {
   }
   throw lastError;
 }
+// Owner-only read of the Daily Log for Helm's charts. Signature check is a stateless timestamp-window HMAC (no nonce
+// storage). Read-only end to end: it never persists a renewed token (no D1 write) and sends only Sheets GETs.
+async function helmHistory(request, env, fetcher) {
+  if (!env.HELM_SYNC_KEY) fail(404, 'Not found.');
+  const url = new URL(request.url);
+  const body = await limitedText(request, 2000);
+  if (!await verifySignature(env.HELM_SYNC_KEY, request.method, url.pathname, request.headers.get('X-Time'), body, request.headers.get('X-Signature'))) fail(401, 'Not authorised.');
+  if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET || !env.TOKEN_ENCRYPTION_KEY || !env.DB) fail(503, 'Sheet connection is not configured.');
+  const {results} = await env.DB.prepare("SELECT id, credentials FROM devices WHERE credentials != '' AND expires > ? ORDER BY expires DESC LIMIT 3").bind(Date.now()).all();
+  let lastError = new Failure(503, 'No connected Google device. Reconnect once in the logger.');
+  for (const device of results || []) {
+    try {
+      const credentials = await box(device.credentials, env, true);
+      let access = credentials.access;
+      const renew = async () => {
+        const {response, value} = await tokenRequest({grant_type: 'refresh_token', refresh_token: credentials.refresh}, env, fetcher);
+        if (!response.ok) fail(value.error === 'invalid_grant' ? 401 : 503, 'Google renewal is not available for this read.');
+        if (!value.access_token) fail(503, 'Google renewal is temporarily unavailable.');
+        access = value.access_token;
+      };
+      if (credentials.expires < Date.now() + 60000) await renew();
+      const get = async target => {
+        const send = () => fetcher(target, {method: 'GET', headers: {Authorization: 'Bearer ' + access}, redirect: 'manual', signal: AbortSignal.timeout(15000)});
+        let upstream = await send();
+        if (upstream.status === 401) { await upstream.body?.cancel(); await renew(); upstream = await send(); }
+        if (!upstream.ok) { await upstream.body?.cancel(); fail(upstream.status === 401 ? 503 : 502, 'Google Sheets could not complete the request.'); }
+        return JSON.parse(await limitedText(upstream, 4000000));
+      };
+      try { return await readHistory(body, get, env.SPREADSHEET_ID); }
+      catch (error) { if (error instanceof RangeError) fail(400, error.message); throw error; }
+    } catch (error) {
+      if (!(error instanceof Failure) || error.status !== 401) throw error;
+      lastError = error;
+    }
+  }
+  throw lastError;
+}
 export async function handle(request, env, fetcher = fetch) {
   const url = new URL(request.url);
   const origin = request.headers.get('Origin');
@@ -227,6 +265,8 @@ export async function handle(request, env, fetcher = fetch) {
       }
     } else if (url.pathname === '/helm/log' && request.method === 'POST') {
       response = json(await helmLog(request, env, fetcher));
+    } else if (url.pathname === '/helm/history' && request.method === 'POST') {
+      response = json(await helmHistory(request, env, fetcher));
     } else fail(404, 'Not found.');
   } catch (error) {
     response = json({error: error instanceof Failure ? error.message : 'Connection interrupted. Your saved entries are safe.', ...(error instanceof Failure ? {} : {reference: stage + ':' + (['Error', 'TypeError', 'OperationError', 'TimeoutError', 'DataError', 'SyntaxError', 'AbortError'].includes(error.name) ? error.name : 'Error')})}, error instanceof Failure ? error.status : 503);

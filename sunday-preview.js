@@ -40,7 +40,8 @@ const overrideSources = [
 "data/aerobic-rebuild-a-week2.js",
 "data/current-athlete-state-2026-11-02.js",
 "data/current-athlete-state-2026-11-09.js",
-"data/current-athlete-state-2026-11-16.js"
+"data/current-athlete-state-2026-11-16.js",
+"data/current-athlete-state-2026-11-23.js"
 ];
 const loadSequentially = (index = 0) => {
 if (index >= overrideSources.length) {
